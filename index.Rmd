@@ -1,0 +1,62 @@
+---
+title: "Introduction to landscape ecology with R"
+author: "Jakub Nowosad and Maximilian H.K. Hesselbarth"
+institute: "..."
+date: "2020-05-14"
+output: 
+  xaringan::moon_reader:
+    seal: false
+    css: [default, metropolis, metropolis-fonts, "style.css"]
+    lib_dir: libs
+    self_contained: false
+    nature:
+      highlightStyle: monokai
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: 16:10
+---
+class: inverse, left, nonum, clear
+background-image: url("figs/cover.jpg")
+background-size: cover
+
+.titlestyle[Introduction] 
+<br>
+.titlestyle[to]
+<br>
+.titlestyle[landscape]
+<br>
+.titlestyle[ecology]
+<br>
+.titlestyle[with R]
+
+
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lora" />
+.captionstyle[Jakub Nowosad and Maximilian H.K. Hesselbarth]
+
+.captionstyle[2020-05-14]
+
+
+<!-- https://www.si.edu/object/bright-scene-cattle-near-stream:saam_1983.104.2 -->
+
+---
+class: left, top, clear
+
+.pull-left[
+## Summary:
+
+]
+
+
+.pull-right[
+## Contact:
+
+`r icon::ii_social_twitter()` jakub_nowosad
+
+`r icon::ii_social_twitter()` MHKHesselbarth
+
+## Resources:
+
+https://nowosad.github.io
+
+https://mhesselbarth.rbind.io/
+]
