@@ -1,6 +1,8 @@
 <!--Workshop title-->
 # Introduction to landscape ecology with R
 
+- http://www.ialena.org/workshops.html
+
 ## Abstract
 <!--Abstract (300 words)-->
 
