@@ -25,7 +25,6 @@ These include, among others, removing existing metric implementation errors, add
 A particular advantage is also an ability to integrate this package with other packages for spatial analysis, so it is possible to download spatial data, process it, calculate landscape metrics and visualize them within one tool. 
 
 The workshop will be a mixture of theoretical and practical.
-<!--Each concept will be first described and explained, and next, there will be a time to exercise the topics using provided data sets.-->
 Pointers to further materials will ensure that participants know where to get help and how to take confident next steps after the workshop.
 
 ## AUDIENCE
