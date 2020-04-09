@@ -3,6 +3,8 @@
 
 - http://www.ialena.org/workshops.html
 
+![](figs/readme-image.png)
+
 ## Abstract
 <!--Abstract (300 words)-->
 
