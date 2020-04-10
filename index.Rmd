@@ -33,10 +33,63 @@ background-size: cover
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lora" />
 .captionstyle[Jakub Nowosad and Maximilian H.K. Hesselbarth]
 
-.captionstyle[2020-05-14]
+.captionstyle[2020-05-14, the IALE-North America 2020 Annual Meeting]
 
 
 <!-- https://www.si.edu/object/bright-scene-cattle-near-stream:saam_1983.104.2 -->
+
+---
+class: inverse, left, bottom, clear, nonum
+
+# Part I
+## Introduction to the spatial data analysis in R
+
+---
+# Intro to rspatial
+
+- I would show how to read raster data, understand its structure, visualize it using *tmap*, and provide some links to more resources. In details:
+
+- Intro (lecture)
+
+- Making maps in R (lecture)
+- Making maps in R (practical)
+
+- Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (lecture)
+- Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (practical)
+
+- Summary of the first part (lecture)
+
+---
+class: inverse, left, bottom, clear, nonum
+
+# Break (30 minutes)
+
+---
+# Break (30 minutes)
+
+<!--We could ask for questions during the intro, and then during the break, we could look at them and prepare our answers.-->
+<!--we should use some online timer (or rmarkdown timer), visible to the participants-->
+
+---
+class: inverse, left, bottom, clear, nonum
+
+# Part II
+## How to use the landscapemetrics package
+
+---
+# Intro to landscapemetrics
+
+Introduce *landscapemetrics* and show basic and advanced usage with some focus on integration into workflows.
+
+- Intro (lecture)
+
+- Simple calculation of single and multiple metrics (lecture)
+- Simple calculation of single and multiple metrics (practical)
+
+- Plotting and sampling functions (lecture)
+- Plotting and sampling functions (practical)
+
+- Summary (lecture)
 
 ---
 class: left, top, clear
@@ -44,15 +97,16 @@ class: left, top, clear
 .pull-left[
 ## Summary:
 
+- Questions?
 ]
 
 
 .pull-right[
 ## Contact:
 
-`r icon::ii_social_twitter()` jakub_nowosad
+`r icon::ii_social_twitter()` [jakub_nowosad](https://twitter.com/jakub_nowosad)
 
-`r icon::ii_social_twitter()` MHKHesselbarth
+`r icon::ii_social_twitter()` [MHKHesselbarth](https://twitter.com/mhkhesselbarth)
 
 ## Resources:
 
