@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction to landscape ecology with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Jakub Nowosad and Maximilian H.K. Hesselbarth" />
+    <meta name="date" content="2020-05-14" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link href="libs/ionicons-2.0.1/css/ionicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: inverse, left, nonum, clear
+background-image: url("figs/cover.jpg")
+background-size: cover
+
+.titlestyle[Introduction] 
+&lt;br&gt;
+.titlestyle[to]
+&lt;br&gt;
+.titlestyle[landscape]
+&lt;br&gt;
+.titlestyle[ecology]
+&lt;br&gt;
+.titlestyle[with R]
+
+
+&lt;link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lora" /&gt;
+.captionstyle[Jakub Nowosad and Maximilian H.K. Hesselbarth]
+
+.captionstyle[2020-05-14, the IALE-North America 2020 Annual Meeting]
+
+&lt;!-- https://www.si.edu/object/bright-scene-cattle-near-stream:saam_1983.104.2 --&gt;
+
+---
+class: inverse, left, bottom, clear, nonum
+
+layout: false
+
+background-image: url("figs/landscapemetrics.png")
+background-position: 85% 10%
+background-size: 25%
+
+# Part II
+
+## *landscapemetrics*: An open-source R tool to calculate landscape metrics
+
+Maximilian H.K. Hesselbarth
+
+Department of Ecosystem Modelling, University of Goettingen, Germany
+
+---
+# Introdution to landscape metrics
+
+
+
+--
+- Tools to quantify composition and configuration of landscapes
+
+  - Composition: number and abundance of land-cover classes
+  - Configuration: spatial arrangement of land-cover classes
+
+
+--
+- Designed for discrete patches of different land-cover classes
+
+&lt;center&gt; 
+
+--
+.pull-left[
+&lt;img src="figs/aerial_lsm.png" width="75%" height="75%" /&gt;
+]
+
+.pull-right[
+&lt;img src="slides_MH_files/figure-html/example_lsm-1.png" width="75%" height="75%" /&gt;
+]
+
+&lt;/center&gt;
+
+---
+# Why a new R package was needed
+
+--
+- *FRAGSTATS*  &lt;font size="3" color="grey"&gt; (McGarigal et al., 2012) &lt;/font&gt; 
+  
+  - &lt;font color = "#63C03C"&gt; Comprehensive collection of metrics &lt;/font&gt; 
+  - &lt;font color = "#64AAC5"&gt; Only on Windows, not open source &lt;/font&gt; 
+  - &lt;font color = "#64AAC5"&gt; Need to import/export data &lt;/font&gt; 
+  - &lt;font color = "#64AAC5"&gt; Hard to integrate into larger workflows &lt;/font&gt; 
+
+
+--
+- *SDMTools* (R package) &lt;font size="3" color="grey"&gt; (VanDerWal et al., 2019) &lt;/font&gt; 
+  
+  - &lt;font color = "#63C03C"&gt; Multiplatform, open source &lt;/font&gt;
+  - &lt;font color = "#64AAC5"&gt; Only set of metrics, no metrics on landscape level &lt;/font&gt; 
+  - &lt;font color = "#64AAC5"&gt; Hard to integrate into larger workflows &lt;/font&gt; 
+  - &lt;font color = "#64AAC5"&gt; Not on CRAN anymore (archived on 12.01.2020) &lt;/font&gt; 
+
+
+--
+- Several GIS add-ons (e.g. *r.li* &lt;font size="3" color="grey"&gt; (Porta et al., 2017) &lt;/font&gt;))
+  
+  - &lt;font color = "#63C03C"&gt; Multiplatform, open source &lt;/font&gt;
+  - &lt;font color = "#64AAC5"&gt; Need to use GIS software &lt;/font&gt;
+
+---
+layout: false
+
+background-image: url("figs/landscapemetrics.png")
+background-position: 90% 5%
+background-size: 15%
+
+# The R package *landscapemetrics*
+
+--
+- Based on *raster* package &lt;font size="3" color="grey"&gt; (Hijmans 2017) &lt;/font&gt;
+
+
+--
+- Allows to calculate landscape metrics in transparent and reproducible workflow
+
+
+--
+- Tidy &lt;font size="3" color="grey"&gt; (sensu Wickham 2014) &lt;/font&gt; and type-stable output of all metric functions
+
+
+--
+- Includes many utility functions for e.g. plotting or sampling
+
+&lt;br&gt;
+&lt;center&gt;
+
+--
+&lt;img src="slides_MH_files/figure-html/levels_lsm-1.png" width="30%" /&gt;&lt;img src="slides_MH_files/figure-html/levels_lsm-2.png" width="30%" /&gt;&lt;img src="slides_MH_files/figure-html/levels_lsm-3.png" width="30%" /&gt;
+
+&lt;/center&gt;
+
+---
+# How to use *landscapemetrics*
+
+Import and check data
+--
+
+```r
+# install.packages("landscapemetrics")
+
+data &lt;- raster("data/example_landscape.tif") 
+check_landscape(data)
+```
+
+```
+##   layer crs units   class n_classes OK
+## 1     1  NA    NA integer         3  ?⃝
+```
+
+List available metrics
+--
+
+```r
+list_lsm()
+```
+
+```
+## # A tibble: 132 x 5
+##   metric name                          type                 level function_name
+##   &lt;chr&gt;  &lt;chr&gt;                         &lt;chr&gt;                &lt;chr&gt; &lt;chr&gt;        
+## 1 area   patch area                    area and edge metric patch lsm_p_area   
+## 2 cai    core area index               core area metric     patch lsm_p_cai    
+## 3 circle related circumscribing circle shape metric         patch lsm_p_circle 
+## 4 contig contiguity index              shape metric         patch lsm_p_contig 
+## 5 core   core area                     core area metric     patch lsm_p_core   
+## # … with 127 more rows
+```
+
+---
+# How to use *landscapemetrics*
+
+--
+.pull-left[
+
+Calculate single metric
+
+
+```r
+lsm_p_area(data)
+```
+
+```
+## # A tibble: 27 x 6
+##   layer level class    id metric  value
+##   &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;
+## 1     1 patch     1     1 area   0.0001
+## 2     1 patch     1     2 area   0.0005
+## 3     1 patch     1     3 area   0.0148
+## 4     1 patch     1     4 area   0.0001
+## 5     1 patch     1     5 area   0.0001
+## # … with 22 more rows
+```
+]
+
+--
+.pull-right[
+
+Combine several metrics to one *tibble*
+
+
+```r
+class_mean &lt;- lsm_c_area_mn(data)
+lsm_total &lt;- lsm_l_ta(data)
+
+bind_rows(class_mean, lsm_total)
+```
+
+```
+## # A tibble: 4 x 6
+##   layer level     class    id metric    value
+##   &lt;int&gt; &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;
+## 1     1 class         1    NA area_mn 0.00199
+## 2     1 class         2    NA area_mn 0.00173
+## 3     1 class         3    NA area_mn 0.0120 
+## 4     1 landscape    NA    NA ta      0.09
+```
+]
+
+---
+# How to use *landscapemetrics*
+
+Integrate easily into larger workflows
+
+
+```r
+set.seed(42)
+
+sample(x = c(1, 2, 3), prob = c(0.5, 0.25, 0.25), size = 2500, replace = TRUE) %&gt;%
+  matrix(nrow = 50, ncol = 50) %&gt;%
+  raster() %&gt;%
+* lsm_p_enn() %&gt;%
+  filter(value &lt;= quantile(value, probs = 0.25) | value &gt;= quantile(value, probs = 0.75)) %&gt;%
+  group_by(class) %&gt;%
+  summarise(n = n()) %&gt;%
+  arrange(-n)
+```
+
+```
+## # A tibble: 3 x 2
+##   class     n
+##   &lt;int&gt; &lt;int&gt;
+## 1     2   150
+## 2     3   130
+## 3     1    21
+```
+
+---
+# How to use *landscapemetrics*
+
+Calculate several metrics at once
+
+
+```r
+calculate_lsm(landscape = data, 
+              level = "landscape", type = "diversity metric", classes_max = 5)
+```
+
+```
+## # A tibble: 9 x 6
+##   layer level     class    id metric    value
+##   &lt;int&gt; &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;
+## 1     1 landscape    NA    NA msidi     0.929
+## 2     1 landscape    NA    NA msiei     0.845
+## 3     1 landscape    NA    NA pr        3    
+## 4     1 landscape    NA    NA prd    3333.   
+## 5     1 landscape    NA    NA rpr      60    
+## 6     1 landscape    NA    NA shdi      1.01 
+## 7     1 landscape    NA    NA shei      0.919
+## 8     1 landscape    NA    NA sidi      0.605
+## 9     1 landscape    NA    NA siei      0.907
+```
+
+---
+class: left, middle, clear, nonum
+
+##  First practical part
+
+Try to work through *Exercise_1.R*. The exercise will teach you how to calculate single and multiple landscape metrics. Furthermore, you will learn how to integrate *landscapemetrics* into larger workflows using e.g. the *tidyverse* &lt;font size="3" color="grey"&gt; (Wickham et al. 2019) &lt;/font&gt;. 
+
+In case you run into problems or have any questions, please contact us at any time via *Zoom* private chat. Also, there will be a public Q&amp;A plenary session at **XX:XX pm**.
+
+For a general overview of *landscapemetrics*, please see &lt;https://r-spatialecology.github.io/landscapemetrics&gt;.
+
+---
+class: left, top, clear
+
+.pull-left[
+## Summary:
+
+- Questions?
+]
+
+.pull-right[
+## Contact:
+
+<i class="ion  ion-social-twitter "></i> [jakub_nowosad](https://twitter.com/jakub_nowosad)
+
+<i class="ion  ion-social-twitter "></i> [MHKHesselbarth](https://twitter.com/mhkhesselbarth)
+
+## Resources:
+
+https://nowosad.github.io
+
+https://mhesselbarth.rbind.io/
+]
+
+---
+# References
+
+Hijmans, R.J., 2019. raster: Geographic data analysis and modeling. R package version 2.9-5. &lt;https://cran.r-project.org/package=raster&gt;.
+
+McGarigal, K., Cushman, S.A., Ene, E., 2012. FRAGSTATS v4: Spatial pattern analysis program for categorical and continuous maps. Computer software program produced by the authors at the University of Massachusetts, Amherst. &lt;http://www.umass.edu/landeco/research/fragstats/fragstats.html&gt;. University of Massachusetts, Amherst.
+
+Porta, C., Spano, L.D., Pontedera, F., 2017. r.li - Toolset for multiscale analysis of landscape structure.
+
+VanDerWal, J., Falconi, L., Januchowski, S., Shoo, L., Storlie, C., 2019. SDMTools: Species distribution modelling tools: Tools for processing data associated with species distribution modelling exercises. R package version 1.1-221.1. &lt;https://CRAN.R-project.org/package=SDMTools&gt;.
+
+Wickham, H., 2014. Tidy Data. J. Stat. Softw. 59, 1–23.
+
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T., Miller, E., Bache, S., Müller, K., Ooms, J., Robinson, D., Seidel, D., Spinu, V., Takahashi, K., Vaughan, D., Wilke, C., Woo, K., Yutani, H., 2019. Welcome to the Tidyverse. J. Open Source Softw. 4, 1686.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "monokai",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:10"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

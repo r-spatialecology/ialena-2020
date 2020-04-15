@@ -286,6 +286,17 @@ calculate_lsm(landscape = data,
 ````
 
 ---
+class: left, middle, clear, nonum
+
+##  First practical part
+
+Try to work through *Exercise_1.R*. The exercise will teach you how to calculate single and multiple landscape metrics. Furthermore, you will learn how to integrate *landscapemetrics* into larger workflows using e.g. the *tidyverse* <font size="3" color="grey"> (Wickham et al. 2019) </font>. 
+
+In case you run into problems or have any questions, please contact us at any time via *Zoom* private chat. Also, there will be a public Q&A plenary session at **XX:XX pm**.
+
+For a general overview of *landscapemetrics*, please see <https://r-spatialecology.github.io/landscapemetrics>.
+
+---
 class: left, top, clear
 
 .pull-left[
@@ -307,3 +318,22 @@ https://nowosad.github.io
 
 https://mhesselbarth.rbind.io/
 ]
+
+---
+# References
+
+Hijmans, R.J., 2019. raster: Geographic data analysis and modeling. R package version 2.9-5. <https://cran.r-project.org/package=raster>.
+
+McGarigal, K., Cushman, S.A., Ene, E., 2012. FRAGSTATS v4: Spatial pattern analysis program for categorical and continuous maps. Computer software program produced by the authors at the University of Massachusetts, Amherst. <http://www.umass.edu/landeco/research/fragstats/fragstats.html>. University of Massachusetts, Amherst.
+
+Porta, C., Spano, L.D., Pontedera, F., 2017. r.li - Toolset for multiscale analysis of landscape structure.
+
+VanDerWal, J., Falconi, L., Januchowski, S., Shoo, L., Storlie, C., 2019. SDMTools: Species distribution modelling tools: Tools for processing data associated with species distribution modelling exercises. R package version 1.1-221.1. <https://CRAN.R-project.org/package=SDMTools>.
+
+Wickham, H., 2014. Tidy Data. J. Stat. Softw. 59, 1–23.
+
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T., Miller, E., Bache, S., Müller, K., Ooms, J., Robinson, D., Seidel, D., Spinu, V., Takahashi, K., Vaughan, D., Wilke, C., Woo, K., Yutani, H., 2019. Welcome to the Tidyverse. J. Open Source Softw. 4, 1686.
+
+
+
+
