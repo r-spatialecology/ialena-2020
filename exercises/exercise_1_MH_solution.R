@@ -113,18 +113,192 @@ list_lsm(level = "landscape", type = "diversity metric", simplify = TRUE)
 
 lsm_p_area(landscape = landscape)
 
-# For the "augusta_nlcd" data set, try to calculate the perimeter-area ratio (para) on patch level for the 
-# Also, calculate the percentage of landscape of class (pland) and lastly the 
-# total edge (te) on landscape level.
+# For the "augusta_nlcd" data set, try to calculate the perimeter-area ratio (para) 
+# on patch level. Also, calculate the percentage of landscape of class (pland) and 
+# lastly the total edge (te) on landscape level. Save all resulting tibbles in 
+# seperated tibbles.
 
 # /Start Code/ #
 
 para_patch <- lsm_p_para(augusta_nlcd)
 percentage_class <- lsm_c_pland(augusta_nlcd)
-edge_landscpae <- lsm_l_te(augusta_nlcd)
+edge_landscape <- lsm_l_te(augusta_nlcd)
 
 # /End Code/ #
 
-#### Ideas/Comments (will be removed for final version) ####
-# Add start-end code to presentation
-# Change raster and put into stack to show stack functionalitoy for stacks
+# Because the output of all functions that calculate landscape metrics is
+# type-stable, it's quite easy to combine several result tibble. Combine the 
+# previously created tibbles into one large result tibble using e.g. dplyr::bind_rows()
+
+# /Start Code/ #
+
+result_tibble <- dplyr::bind_rows(para_patch, percentage_class, edge_landscape)
+
+# /End Code/ #
+
+#### Change parameters of function ####
+
+# Many metrics have additional arguments that can be specified. One example is the
+# core area. The function allows to specify, besides others, to set the edge_depth. 
+# This Distance (in cells) a cell has the be away from the patch edge to be 
+# considered as core cell. 
+
+core_edge_1 <- lsm_l_core_mn(landscape = augusta_nlcd, edge_depth = 1)
+
+# Try to increase the edge_depth and see how the results of the metric change. 
+# Later on, we will also look at this visually.
+
+# /Start Code/ #
+
+core_edge_3 <- lsm_l_core_mn(landscape = augusta_nlcd, edge_depth = 3)
+core_edge_5 <- lsm_l_core_mn(landscape = augusta_nlcd, edge_depth = 5)
+core_edge_10 <- lsm_l_core_mn(landscape = augusta_nlcd, edge_depth = 10)
+
+core_edge_var <- dplyr::bind_rows(edge_1 = core_edge_1, edge_3 = core_edge_3, 
+                                  edge_5 = core_edge_5, edge_10 = core_edge_10, 
+                                  .id = "id")
+
+# /End Code/ #
+
+#### Calculate multipe metrics at once ###
+
+# Of course, it's also possible to calculate several metrics at once. For this, 
+# the function calculate_lsm can be used. There are several ways to select metrics. 
+# The function takes the same arguments as the previously introduced list_lsm()
+# function. So, for example it is quite easy to calculate all patch level 
+# metrics. To see a progress report, you can set progress = TRUE. However, we 
+# strongly recommend not to calculate a large number of metrics ("metric fishing 
+# expeditions"; Gustafson 2019), but rather think about which selected metrics 
+# are the most meanningful for the corresponding research question
+
+patch_level <- calculate_lsm(landscape = augusta_nlcd, 
+                             level = "patch", type = "area and edge metric",
+                             progress = TRUE)
+
+# Addtionally, the function can take a vector with metric function names as "what"
+# argument to calculate selected metrics.
+
+multiple_metrics <- calculate_lsm(landscape = augusta_nlcd, 
+                                  what = c("lsm_p_area", "lsm_p_para"),
+                                  progress = TRUE)
+
+# Calculate all "shape metric"s on class level and addtionally 3 metrics of 
+# choice (one from each level) using calculate_lsm (2 seperate function calls). 
+
+# /Start Code/ #
+
+shape_landscape <- calculate_lsm(landscape = augusta_nlcd, 
+                                 level = "landscape", type = "shape metric",
+                                 progress = TRUE)
+
+multiple_levels <- calculate_lsm(landscape = augusta_nlcd, 
+                                 what = c("lsm_p_area", "lsm_c_area_mn", "lsm_l_ta"),
+                                 progress = TRUE)
+
+# /End Code/ #
+
+#### Integration into larger workflows ####
+
+# One of the biggest advantages of the packages is its easy integration into larger
+# workflows. This can include a pre-processing of the data, calculation of landscape
+# metrics, further analyses of the results and plotting of the results - all in
+# the same R environment.
+
+reclassification_matrix <- matrix(data = c(0, 2, 1,  2, 3, 2), 
+                                  ncol = 3, byrow = TRUE)
+
+landscape_reclass <- raster::reclassify(x = landscape, 
+                                        rcl = reclassification_matrix)
+
+lsm_patch <- calculate_lsm(landscape = landscape_reclass, 
+                           what = c("lsm_p_area", "lsm_p_perim", "lsm_p_para")) %>% 
+  dplyr::group_by(class, metric) %>% 
+  dplyr::summarise(min = min(value),
+                   low = quantile(value, probs = 0.05), 
+                   mean = mean(value), 
+                   hi = quantile(value, probs = 0.95),
+                   max = max(value)) %>% 
+  dplyr::ungroup() %>% 
+  dplyr::mutate(class = factor(class, 
+                               levels = c(1,2), 
+                               labels = c("Class 1", "Class 2")), 
+                metric = factor(metric, 
+                                levels = c("area", "perim", "para"), 
+                                labels = c("Area", "Perimeter", "Perimeter-Area ratio")))
+
+ggplot(data = lsm_patch) + 
+  geom_boxplot(aes(x = class, 
+                   min = min, lower = low, 
+                   middle = mean, 
+                   upper = hi, max = max), stat = "identity", width = 0.1) + 
+  facet_wrap(~metric, scales = "free_y") +
+  labs(x = "Class", y = "Metric value") + 
+  theme_classic()
+
+
+# Reclassify the augusta_nlcd raster into a raster withe three classes and 
+# plot the resut: 
+# - forest (original classes: 41, 42, 43)
+# - developed (original classes: 21, 22, 23, 24) 
+# - various (all other original classes)
+
+# Calculate the patch area and the perimeter on patch level. Use the patch id of 
+# the three largest patch to get the corresponding values of the perimeter for 
+# these patches and vice versa (areas of patches with the three largest perim values).
+
+# Lastly create a plot in which the the patch area is on the x-axis and the 
+# perimeter on the y-axis. Use a simple linear regression model lm(perim ~ area)
+# to predict the perimeter for patches with a value of 100, 1000 and 5000 ha. Add
+# these predictions and the regression model to the plot
+
+# /Start Code/ #
+
+augusta_nlcd_rec <- augusta_nlcd
+
+augusta_nlcd_rec[augusta_nlcd_rec %in% c(41, 42, 43)] <- 1
+augusta_nlcd_rec[augusta_nlcd_rec %in% c(21, 22, 23, 24)] <- 2
+augusta_nlcd_rec[!augusta_nlcd_rec %in% c(1, 2)] <- 3
+
+plot(augusta_nlcd_rec, col = c("#38814E", "#B50000", "#848484"))
+
+patch_area <- lsm_p_area(landscape = augusta_nlcd_rec)
+patch_perim <- lsm_p_perim(landscape = augusta_nlcd_rec)
+
+largest_patch <- dplyr::arrange(patch_area, -value) %>% 
+  dplyr::top_n(n = 3, wt = value)
+
+dplyr::filter(patch_perim, id %in% largest_patch$id)
+
+largest_perim <- dplyr::arrange(patch_perim, -value) %>% 
+  dplyr::top_n(n = 3, wt = value)
+
+dplyr::filter(patch_area, id %in% largest_enn$id)
+
+result_wide <- dplyr::full_join(x = patch_area, patch_perim, 
+                                by = c("layer", "level", "class", "id"), 
+                                suffix = c(".area", ".perim")) %>% 
+  dplyr::select(-metric.area, -metric.perim)
+
+regression_model <- lm(value.perim ~ value.area, data = result_wide)
+
+
+prediction_result <- tibble::tibble(value.area = c(100, 1000, 5000))
+
+prediction_result$prediction <- predict(object = regression_model,
+                                        newdata = prediction_result)
+
+ggplot(data = result_wide) + 
+  geom_abline(intercept = regression_model$coefficients[1], 
+              slope = regression_model$coefficients[2], 
+              linetype = 2) +
+  geom_point(aes(x = value.area, y = value.perim, 
+                 col = "Observed value"), shape = 19) + 
+  geom_point(data = prediction_result, aes(x = value.area, y = prediction, 
+                                           col = "Predicted value"), shape = 19) +
+  scale_color_manual(name = "", values = c("#DD8D29", "#46ACC8")) +
+  labs(x = "Patch area", y = "Patch perimeter") +
+  theme_classic()
+
+# /End Code/ #
+
+# In the next exercise, we are going to look at some advanced features of landscapemetrics.

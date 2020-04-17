@@ -38,6 +38,21 @@ background-size: cover
 
 <!-- https://www.si.edu/object/bright-scene-cattle-near-stream:saam_1983.104.2 -->
 
+```{r setup, echo  = FALSE, results = "hide", message = FALSE, warning = FALSE}
+library(dplyr)
+library(extrafont)
+library(ggplot2)
+library(knitr)
+library(landscapemetrics)
+library(patchwork)
+library(raster)
+
+knitr::opts_chunk$set(fig.retina = 3, warning = FALSE, message = FALSE)
+extrafont::fonts()
+options(tibble.print_min = 5)
+options(tibble.print_max = 5)
+```
+
 ---
 class: inverse, left, bottom, clear, nonum
 
@@ -73,23 +88,305 @@ class: inverse, left, bottom, clear, nonum
 ---
 class: inverse, left, bottom, clear, nonum
 
+layout: false
+
+background-image: url("figs/landscapemetrics.png")
+background-position: 85% 10%
+background-size: 25%
+
 # Part II
-## How to use the landscapemetrics package
+
+## *landscapemetrics*: An open-source R tool to calculate landscape metrics
+
+Maximilian H.K. Hesselbarth
+
+Department of Ecosystem Modelling, University of Goettingen, Germany
 
 ---
-# Intro to landscapemetrics
+# Introdution to landscape metrics
 
-Introduce *landscapemetrics* and show basic and advanced usage with some focus on integration into workflows.
+--
+- Tools to quantify composition and configuration of landscapes
 
-- Intro (lecture)
+  - Composition: number and abundance of land-cover classes
+  - Configuration: spatial arrangement of land-cover classes
 
-- Simple calculation of single and multiple metrics (lecture)
-- Simple calculation of single and multiple metrics (practical)
 
-- Plotting and sampling functions (lecture)
-- Plotting and sampling functions (practical)
+--
+- Designed for discrete patches of different land-cover classes
 
-- Summary (lecture)
+<center> 
+
+--
+.pull-left[
+```{r aerial_lsm, out.width = "75%", out.height = "75%", echo = FALSE}
+knitr::include_graphics("figs/aerial_lsm.png")
+```
+]
+
+.pull-right[
+```{r example_lsm, out.width = "75%", out.height = "75%", echo = FALSE}
+ras_df <- as.data.frame(landscapemetrics::landscape, xy = TRUE)
+
+ggplot(data = ras_df) + 
+  geom_raster(aes(x = x, y = y, fill = as.factor(clumps))) + 
+  scale_fill_manual(values = c("#98D2E1", "#EAB8BD", "#9B9555")) +
+  guides(fill = FALSE) +
+  coord_equal() + 
+  theme_void() + 
+  theme(plot.margin = unit(c(0, 0, 0, 0), "mm"))
+```
+]
+
+</center>
+
+---
+# Why a new R package was needed
+
+--
+- *FRAGSTATS*  <font size="3" color="grey"> (McGarigal et al., 2012) </font> 
+  
+  - <font color = "#63C03C"> Comprehensive collection of metrics </font> 
+  - <font color = "#64AAC5"> Only on Windows, not open source </font> 
+  - <font color = "#64AAC5"> Need to import/export data </font> 
+  - <font color = "#64AAC5"> Hard to integrate into larger workflows </font> 
+
+
+--
+- *SDMTools* (R package) <font size="3" color="grey"> (VanDerWal et al., 2019) </font> 
+  
+  - <font color = "#63C03C"> Multiplatform, open source </font>
+  - <font color = "#64AAC5"> Only set of metrics, no metrics on landscape level </font> 
+  - <font color = "#64AAC5"> Hard to integrate into larger workflows </font> 
+  - <font color = "#64AAC5"> Not on CRAN anymore (archived on 12.01.2020) </font> 
+
+
+--
+- Several GIS add-ons (e.g. *r.li* <font size="3" color="grey"> (Porta et al., 2017) </font>))
+  
+  - <font color = "#63C03C"> Multiplatform, open source </font>
+  - <font color = "#64AAC5"> Need to use GIS software </font>
+
+---
+layout: false
+
+background-image: url("figs/landscapemetrics.png")
+background-position: 90% 5%
+background-size: 15%
+
+# The R package *landscapemetrics*
+
+--
+- Based on *raster* package <font size="3" color="grey"> (Hijmans 2017) </font>
+
+
+--
+- Allows to calculate landscape metrics in transparent and reproducible workflow
+
+
+--
+- Tidy <font size="3" color="grey"> (sensu Wickham 2014) </font> and type-stable output of all metric functions
+
+
+--
+- Includes many utility functions for e.g. plotting or sampling
+
+<br>
+<center>
+
+--
+```{r levels_lsm, fig.hold = "hold", out.width="30%", echo = FALSE}
+
+lsm_patch <- get_patches(landscape, class = 1)[[1]] %>% 
+  as.data.frame(xy = TRUE) %>% 
+  mutate(level = "patch") %>% 
+  rename(clumps = layer) %>% 
+  ggplot() + 
+    geom_raster(aes(x = x, y = y, fill = as.factor(clumps))) + 
+    scale_fill_manual(values = c("#85D4E3", "#F4B5BD", "#9C964A", "#CDC08C", 
+                                 "#FAD77B", "#B77F46", "#282220", "#E0D146", 
+                                 "#D18F41"),
+                      na.value = "grey75") +
+    guides(fill = FALSE) +
+    labs(title = "Patch level") +
+    coord_equal() + 
+    theme_void(base_size = 17.5) + 
+    theme(plot.margin = unit(c(0, 0, 0, 0), "mm"), 
+          text = element_text(family = "Metropolis"))
+
+lsm_class <- as.data.frame(landscape, xy = TRUE) %>% 
+  mutate(clumps = case_when(clumps == 1 ~ 1), 
+         level = "class") %>% 
+  ggplot() + 
+    geom_raster(aes(x = x, y = y, fill = as.factor(clumps))) + 
+    scale_fill_manual(values = "#98D2E1", na.value = "grey75") +
+    guides(fill = FALSE) +
+    labs(title = "Class level") +
+    coord_equal() + 
+    theme_void(base_size = 17.5) + 
+    theme(plot.margin = unit(c(0, 0, 0, 0), "mm"), 
+          text = element_text(family = "Metropolis"))
+
+lsm_landscape <- as.data.frame(landscape, xy = TRUE) %>% 
+  mutate(level = "landscape") %>% 
+  ggplot() + 
+    geom_raster(aes(x = x, y = y, fill = as.factor(clumps))) + 
+    scale_fill_manual(values = c("#98D2E1", "#EAB8BD", "#9B9555")) +
+    guides(fill = FALSE) +
+    labs(title = "Landscape level") +
+    coord_equal() + 
+    theme_void(base_size = 17.5) + 
+    theme(plot.margin = unit(c(0, 0, 0, 0), "mm"), 
+          text = element_text(family = "Metropolis"))
+
+lsm_patch 
+lsm_class
+lsm_landscape
+```
+
+</center>
+
+---
+# Getting ready to use *landscapemetrics*
+
+--
+Import and check data
+
+```{r check_lsm}
+# install.packages("landscapemetrics")
+
+data <- raster("data/example_landscape.tif") 
+check_landscape(data)
+```
+
+--
+List available metrics
+
+```{r list_metrics}
+list_lsm()
+```
+
+---
+# How to calculate landscape metrics
+
+--
+.pull-left[
+
+Calculate single metric
+
+```{r simple_calc_a}
+lsm_p_area(data)
+```
+]
+
+--
+.pull-right[
+
+Combine several metrics to one *tibble*
+
+```{r simple_calc_b}
+class_mean <- lsm_c_area_mn(data)
+lsm_total <- lsm_l_ta(data)
+
+bind_rows(class_mean, lsm_total)
+```
+]
+
+---
+# Easy integration into larger workflows
+
+Integrate easily into larger workflows
+
+```{r larger_workflow}
+set.seed(42)
+
+sample(x = c(1, 2, 3), prob = c(0.5, 0.25, 0.25), size = 2500, replace = TRUE) %>%
+  matrix(nrow = 50, ncol = 50) %>%
+  raster() %>%
+  lsm_p_enn() %>% #<<
+  filter(value <= quantile(value, probs = 0.25) | value >= quantile(value, probs = 0.75)) %>%
+  group_by(class) %>%
+  summarise(n = n()) %>%
+  arrange(-n)
+```
+
+---
+
+Calculate several metrics at once
+
+```{r multiple_metrics}
+calculate_lsm(landscape = data, 
+              level = "landscape", type = "diversity metric", 
+              classes_max = 5)
+```
+
+---
+class: left, middle, clear, nonum
+
+##  First practical part
+
+Try to work through *Exercise_1.R*. The exercise will teach you how to calculate single and multiple landscape metrics. Furthermore, you will learn how to integrate *landscapemetrics* into larger workflows using e.g. the *tidyverse* <font size="3" color="grey"> (Wickham et al. 2019) </font>. 
+
+During the exercise there are part where you are supposed to code your own solution indicated by the following structure:
+
+```{r exercise_code, eval = FALSE}
+# /Start Code/ #
+
+print("Hello World") # This would be your code contribution
+
+# /End Code/ # 
+```
+
+In case you run into problems or have any questions, please contact us at any time via *Zoom* private chat. Also, there will be a public Q&A plenary session at **XX:XX pm**.
+
+For a general overview of *landscapemetrics*, please see <https://r-spatialecology.github.io/landscapemetrics>.
+
+---
+# Visualize patches
+
+```{r, show_patches, fig.align = "center"}
+show_patches(data, labels = FALSE, class = 42)
+```
+
+---
+# Further visualization
+
+--
+.pull-left[
+```{r, show_cores, fig.align = "center"}
+show_cores(data, labels = FALSE, 
+           class = 42)
+```
+]
+
+--
+.pull-right[
+```{r, show_lsm_dummy, eval = FALSE}
+show_lsm(data, labels = FALSE, 
+         class = 42, what = "lsm_p_area")
+```
+
+```{r, show_lsm, echo = FALSE, fig.align = "center"}
+show_lsm(data, labels = FALSE, 
+         class = 42, what = "lsm_p_area") + theme(legend.position = "none")
+```
+]
+
+---
+# Sampling 
+
+---
+# Moving window
+
+---
+# Building blocks
+
+---
+# Citation 
+
+```{r citation}
+citation("landscapemetrics")
+```
 
 ---
 class: left, top, clear
@@ -99,7 +396,6 @@ class: left, top, clear
 
 - Questions?
 ]
-
 
 .pull-right[
 ## Contact:
@@ -114,3 +410,18 @@ https://nowosad.github.io
 
 https://mhesselbarth.rbind.io/
 ]
+
+---
+# References
+
+Hijmans, R.J., 2019. raster: Geographic data analysis and modeling. R package version 2.9-5. <https://cran.r-project.org/package=raster>.
+
+McGarigal, K., Cushman, S.A., Ene, E., 2012. FRAGSTATS v4: Spatial pattern analysis program for categorical and continuous maps. Computer software program produced by the authors at the University of Massachusetts, Amherst. <http://www.umass.edu/landeco/research/fragstats/fragstats.html>. University of Massachusetts, Amherst.
+
+Porta, C., Spano, L.D., Pontedera, F., 2017. r.li - Toolset for multiscale analysis of landscape structure.
+
+VanDerWal, J., Falconi, L., Januchowski, S., Shoo, L., Storlie, C., 2019. SDMTools: Species distribution modelling tools: Tools for processing data associated with species distribution modelling exercises. R package version 1.1-221.1. <https://CRAN.R-project.org/package=SDMTools>.
+
+Wickham, H., 2014. Tidy Data. J. Stat. Softw. 59, 1–23.
+
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T., Miller, E., Bache, S., Müller, K., Ooms, J., Robinson, D., Seidel, D., Spinu, V., Takahashi, K., Vaughan, D., Wilke, C., Woo, K., Yutani, H., 2019. Welcome to the Tidyverse. J. Open Source Softw. 4, 1686.
