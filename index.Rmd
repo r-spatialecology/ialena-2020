@@ -346,6 +346,10 @@ Department of Ecosystem Modelling, University of Goettingen, Germany
 ---
 # Introdution to landscape metrics
 
+```{r load_data_part_2, echo = FALSE}
+lc_data <- raster("data/example_lndscp.tif") 
+```
+
 --
 - Tools to quantify composition and configuration of landscapes
 
@@ -367,10 +371,10 @@ knitr::include_graphics("figs/aerial_lsm.png")
 
 .pull-right[
 ```{r example_lsm, out.width = "75%", out.height = "75%", echo = FALSE}
-ras_df <- as.data.frame(landscapemetrics::landscape, xy = TRUE)
+ras_df <- as.data.frame(lc_data, xy = TRUE)
 
 ggplot(data = ras_df) + 
-  geom_raster(aes(x = x, y = y, fill = as.factor(clumps))) + 
+  geom_raster(aes(x = x, y = y, fill = as.factor(example_lndscp))) + 
   scale_fill_manual(values = c("#98D2E1", "#EAB8BD", "#9B9555")) +
   guides(fill = FALSE) +
   coord_equal() + 
@@ -437,13 +441,11 @@ background-size: 15%
 
 --
 ```{r levels_lsm, fig.hold = "hold", out.width="30%", echo = FALSE}
-
-lsm_patch <- get_patches(landscape, class = 1)[[1]] %>% 
+lsm_patch <- get_patches(lc_data, class = 1)[[1]] %>% 
   as.data.frame(xy = TRUE) %>% 
   mutate(level = "patch") %>% 
-  rename(clumps = layer) %>% 
   ggplot() + 
-    geom_raster(aes(x = x, y = y, fill = as.factor(clumps))) + 
+    geom_raster(aes(x = x, y = y, fill = as.factor(layer))) + 
     scale_fill_manual(values = c("#85D4E3", "#F4B5BD", "#9C964A", "#CDC08C", 
                                  "#FAD77B", "#B77F46", "#282220", "#E0D146", 
                                  "#D18F41"),
@@ -455,11 +457,11 @@ lsm_patch <- get_patches(landscape, class = 1)[[1]] %>%
     theme(plot.margin = unit(c(0, 0, 0, 0), "mm"), 
           text = element_text(family = "Metropolis"))
 
-lsm_class <- as.data.frame(landscape, xy = TRUE) %>% 
-  mutate(clumps = case_when(clumps == 1 ~ 1), 
+lsm_class <- ras_df %>% 
+  mutate(example_lndscp = case_when(example_lndscp == 1 ~ 1), 
          level = "class") %>% 
   ggplot() + 
-    geom_raster(aes(x = x, y = y, fill = as.factor(clumps))) + 
+    geom_raster(aes(x = x, y = y, fill = as.factor(example_lndscp))) + 
     scale_fill_manual(values = "#98D2E1", na.value = "grey75") +
     guides(fill = FALSE) +
     labs(title = "Class level") +
@@ -468,10 +470,10 @@ lsm_class <- as.data.frame(landscape, xy = TRUE) %>%
     theme(plot.margin = unit(c(0, 0, 0, 0), "mm"), 
           text = element_text(family = "Metropolis"))
 
-lsm_landscape <- as.data.frame(landscape, xy = TRUE) %>% 
+lsm_landscape <- ras_df %>% 
   mutate(level = "landscape") %>% 
   ggplot() + 
-    geom_raster(aes(x = x, y = y, fill = as.factor(clumps))) + 
+    geom_raster(aes(x = x, y = y, fill = as.factor(example_lndscp))) + 
     scale_fill_manual(values = c("#98D2E1", "#EAB8BD", "#9B9555")) +
     guides(fill = FALSE) +
     labs(title = "Landscape level") +
@@ -496,15 +498,15 @@ Import and check data
 ```{r check_lsm}
 # install.packages("landscapemetrics")
 
-data <- raster("data/example_landscape.tif") 
-landscapemetrics::check_landscape(data)
+lc_data <- raster("data/example_lndscp.tif") 
+check_landscape(lc_data)
 ```
 
 --
 List available metrics
 
 ```{r list_metrics}
-landscapemetrics::list_lsm()
+list_lsm()
 ```
 
 ---
@@ -516,7 +518,7 @@ landscapemetrics::list_lsm()
 Calculate single metric
 
 ```{r simple_calc_a}
-landscapemetrics::lsm_p_area(data)
+lsm_p_area(lc_data)
 ```
 ]
 
@@ -526,8 +528,8 @@ landscapemetrics::lsm_p_area(data)
 Combine several metrics to one *tibble*
 
 ```{r simple_calc_b}
-class_mean <- landscapemetrics::lsm_c_area_mn(data)
-lsm_total <- landscapemetrics::lsm_l_ta(data)
+class_mean <- lsm_c_area_mn(lc_data)
+lsm_total <- lsm_l_ta(lc_data)
 
 bind_rows(class_mean, lsm_total)
 ```
@@ -544,12 +546,12 @@ set.seed(42)
 
 sample(x = c(1, 2, 3), prob = c(0.5, 0.25, 0.25), size = 2500, replace = TRUE) %>%
   matrix(nrow = 50, ncol = 50) %>%
-  raster::raster() %>%
-  landscapemetrics::lsm_p_enn() %>% #<<
-  dplyr::filter(value <= quantile(value, probs = 0.25) | value >= quantile(value, probs = 0.75)) %>%
-  dplyr::group_by(class) %>%
-  dplyr::summarise(n = n()) %>%
-  dplyr::arrange(-n)
+  raster() %>%
+  lsm_p_enn() %>% #<<
+  filter(value <= quantile(value, probs = 0.25) | value >= quantile(value, probs = 0.75)) %>%
+  group_by(class) %>%
+  summarise(n = n()) %>%
+  arrange(-n)
 ```
 
 ---
@@ -591,8 +593,8 @@ For a general overview of *landscapemetrics*, please see <https://r-spatialecolo
 --
 Easily visualize patches of several classes or the whole landscape
 
-```{r, show_patches, fig.align = "center"}
-landscapemetrics::show_patches(data, labels = FALSE, class = 42)
+```{r, show_patches}
+show_patches(augusta_nlcd, labels = FALSE, class = 42)
 ```
 
 ---
@@ -603,9 +605,9 @@ landscapemetrics::show_patches(data, labels = FALSE, class = 42)
 
 Visualize core areas of patches
 
-```{r, show_cores, fig.align = "center"}
-landscapemetrics::show_cores(data, labels = FALSE, 
-                             class = 42)
+```{r, show_cores}
+show_cores(augusta_nlcd, 
+           labels = FALSE, class = 42)
 ```
 ]
 
@@ -615,13 +617,13 @@ landscapemetrics::show_cores(data, labels = FALSE,
 Visualize landscape metrics on patch level
 
 ```{r, show_lsm_dummy, eval = FALSE}
-landscapemetrics::show_lsm(data, labels = FALSE, 
-                           class = 42, what = "lsm_p_area")
+show_lsm(augusta_nlcd, labels = FALSE, 
+         class = 42, what = "lsm_p_area")
 ```
 
-```{r, show_lsm, echo = FALSE, fig.align = "center"}
-landscapemetrics::show_lsm(data, labels = FALSE, 
-                           class = 42, what = "lsm_p_area") + 
+```{r, show_lsm, echo = FALSE}
+show_lsm(augusta_nlcd, labels = FALSE, 
+         class = 42, what = "lsm_p_area") + 
   theme(legend.position = "none")
 ```
 ]
@@ -639,14 +641,14 @@ landscapemetrics::show_lsm(data, labels = FALSE,
 - Metrics can be specified identical to `list_lsm()` and `calculate_lsm()`
 
 --
-```{r, plot_sample_points, echo = FALSE, fig.align = "center"}
+```{r, plot_sample_points, echo = FALSE}
 sample_points <- matrix(c(1253709, 1249455, 
                           1261857, 1256055,
                           1252009, 1257055), ncol = 2, byrow = TRUE)
 
-buffer <- landscapemetrics::construct_buffer(coords = sample_points, 
-                                             size = 1000, shape = "square", 
-                                             return_sp = FALSE)
+buffer <- construct_buffer(coords = sample_points,
+                           size = 1000, shape = "square", 
+                           return_sp = FALSE)
 
 ggplot(data = raster::as.data.frame(augusta_nlcd, xy = TRUE)) + 
   geom_raster(aes(x = x, y = y, fill = nlcd_2011_landcover_2011_edition_2014_10_10_NLCD.2011.Land.Cover.Class)) +
@@ -698,7 +700,7 @@ sample_lsm(landscape = augusta_nlcd, y = sample_points,
 - Use matrix to specify moving window and focal cell
 
 --
-```{r moving_window_plot, echo = FALSE, fig.align = "center"}
+```{r moving_window_plot, echo = FALSE}
 focal_i <- cbind(ras_df[ ,c(1,2)], id = 1:nrow(ras_df))
 
 focal_poly <- purrr::map_dfr(1:nrow(focal_i), function(i) {
@@ -720,7 +722,7 @@ focal_poly$id <- as.integer(focal_poly$id)
 # focal_poly <- focal_poly[which(focal_poly$x > 0 & focal_poly$y > 0), ]
 
 gg_window <- ggplot(data = ras_df) + 
-  geom_raster(aes(x = x, y = y, fill = as.factor(clumps))) + 
+  geom_raster(aes(x = x, y = y, fill = as.factor(example_lndscp))) + 
   geom_point(data = focal_i, aes(x = x, y = y), pch = 1) +
   geom_polygon(data = focal_poly, aes(x = x, y = y),
                fill = NA, col = "black") +
@@ -739,15 +741,14 @@ gganimate::animate(gg_window, nframes = 900, fps = 10, duration = 90)
 # Moving window
 
 --
-Results in list with `raster` objects
+Results in list with *raster* objects
 
 ```{r moving_window}
 window <- matrix(1, nrow = 5, ncol = 5)
-window_result <- window_lsm(landscape, window = window, what = "lsm_l_np")
+window_result <- window_lsm(lc_data, window = window, what = "lsm_l_np")
 ```
 
-```{r moving_window_result, echo = FALSE, fig.align = "center", out.width = "40%"}
-
+```{r moving_window_result, echo = FALSE, out.width = "40%"}
 ggplot(data = raster::as.data.frame(window_result[[1]]$lsm_l_np, xy = TRUE)) + 
   geom_raster(aes(x = x, y = y, fill = factor(layer))) + 
   scale_fill_viridis_d(option = "A") +
@@ -756,7 +757,6 @@ ggplot(data = raster::as.data.frame(window_result[[1]]$lsm_l_np, xy = TRUE)) +
   theme(legend.position = "none")
 
 ```
-
 
 ---
 # Building blocks
@@ -771,21 +771,20 @@ Fast building blocks to create your own metrics
 
 ```{r adj_raster}
 adj_raster <- function(x) {
-  adjacencies <- 
-    raster::adjacent(x, cells = 1:ncell(x))
-  table(x[adjacencies[, 1]], x[adjacencies[, 2]])
+  adjacencies <- adjacent(x,cells = 1:ncell(x))
+  table(x[adjacencies[, 1]],x[adjacencies[, 2]])
 }
-adj_raster(landscape)
+adj_raster(lc_data)
 ```
 ]
 
 --
 .pull-right[
 
-`landscapemetrics` package
+*landscapemetrics* package
 
 ```{r adj_lsm}
-get_adjacencies(landscape)
+get_adjacencies(lc_data)
 ```
 ]
 
