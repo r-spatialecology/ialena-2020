@@ -42,23 +42,54 @@ background-size: cover
 ---
 class: inverse, left, bottom, clear, nonum
 
+layout: false
+
+background-image: url("figs/geocompr-logo.png")
+background-position: 85% 10%
+background-size: 30%
+
 # Part I
+
 ## Introduction to the spatial data analysis in R
 
+Jakub Nowosad
+
+Institute of Geoecology and Geoinformation, Adam Mickiewicz University, Poznan, Poland
+
 ---
-# Intro to rspatial
+# Intro to R spatial
 
-- I would show how to read raster data, understand its structure, visualize it using *tmap*, and provide some links to more resources. In details:
+&lt;!-- - I would show how to read raster data, understand its structure, visualize it using *tmap*, and provide some links to more resources. In details: --&gt;
 
-- Intro (lecture)
+&lt;!-- - Intro (lecture) --&gt;
 
-- Making maps in R (lecture)
-- Making maps in R (practical)
+---
+# Making maps in R
 
-- Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (lecture)
-- Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (practical)
+&lt;!-- Making maps in R (lecture) --&gt;
 
-- Summary of the first part (lecture)
+---
+class: left, middle, clear, nonum
+
+##  First practical part
+
+&lt;!-- - Making maps in R (practical) --&gt;
+
+---
+# Middle lecture
+
+&lt;!-- - Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (lecture) --&gt;
+
+
+---
+class: left, middle, clear, nonum
+
+##  Second practical part
+
+&lt;!-- - Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (practical) --&gt;
+
+---
+# Summary of the first part (lecture)
 
 ---
 class: inverse, left, bottom, clear, nonum
@@ -254,7 +285,7 @@ bind_rows(class_mean, lsm_total)
 ```
 ## # A tibble: 16 x 6
 ##   layer level class    id metric  value
-##   &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;
+## * &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;
 ## 1     1 class    11    NA area_mn 1.66 
 ## 2     1 class    21    NA area_mn 1.92 
 ## 3     1 class    22    NA area_mn 0.715

@@ -56,23 +56,63 @@ options(tibble.print_max = 5)
 ---
 class: inverse, left, bottom, clear, nonum
 
+layout: false
+
+background-image: url("figs/geocompr-logo.png")
+background-position: 85% 10%
+background-size: 30%
+
 # Part I
+
 ## Introduction to the spatial data analysis in R
 
+Jakub Nowosad
+
+Institute of Geoecology and Geoinformation, Adam Mickiewicz University, Poznan, Poland
+
 ---
-# Intro to rspatial
+# Intro to R spatial
 
-- I would show how to read raster data, understand its structure, visualize it using *tmap*, and provide some links to more resources. In details:
+<!-- - I would show how to read raster data, understand its structure, visualize it using *tmap*, and provide some links to more resources. In details: -->
 
-- Intro (lecture)
+<!-- - Intro (lecture) -->
 
-- Making maps in R (lecture)
-- Making maps in R (practical)
+---
+# Making maps in R
 
-- Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (lecture)
-- Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (practical)
+<!-- Making maps in R (lecture) -->
 
-- Summary of the first part (lecture)
+---
+class: left, middle, clear, nonum
+
+##  First practical part
+
+<!-- - Making maps in R (practical) -->
+
+---
+# Spatial data representations
+
+<!-- - Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (lecture) -->
+
+
+---
+class: left, middle, clear, nonum
+
+##  Second practical part
+
+<!-- - Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (practical) -->
+
+---
+# Summary
+
+<!-- Summary of the first part (lecture) -->
+- https://www.youtube.com/watch?v=Va0STgco7-4
+- https://nowosad.github.io/whyr_webinar004/#1
+
+- https://geocompr.github.io/
+- https://www.rspatial.org/
+- https://www.r-spatial.org/
+- `#rspatial` and `#geocompr` on Twitter
 
 ---
 class: inverse, left, bottom, clear, nonum
