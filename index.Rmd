@@ -134,6 +134,49 @@ knitr::include_graphics("figs/tmap-examples.png")
 # ...
 
 .pull-left[
+<!-- https://www.mrlc.gov/data/legends/national-land-cover-database-2011-nlcd2011-legend -->
+
+```{r, echo=FALSE, eval=FALSE}
+library(dplyr)
+library(tidyr)
+lc_df = tibble::tribble(
+                                 ~V1,
+                    "11. Open Water",
+            "12. Perennial Ice Snow",
+         "21. Developed, Open Space",
+      "22. Developed, Low Intensity",
+   "23. Developed, Medium Intensity",
+      "24. Developed High Intensity",
+           "31. Bare Rock/Sand/Clay",
+              "41. Deciduous Forest",
+              "42. Evergreen Forest",
+                  "43. Mixed Forest",
+                   "51. Dwarf Shrub",
+                   "52. Shrub/Scrub",
+         "71. Grasslands/Herbaceous",
+              "72. Sedge/Herbaceous",
+                          "74. Moss",
+                   "81. Pasture/Hay",
+              "82. Cultivated Crops",
+                "90. Woody Wetlands",
+  "95. Emergent Herbaceous Wetlands"
+  ) %>% separate(V1, c("ID", "lc_category"), sep = "\\.") %>% 
+  mutate(ID = as.integer(ID), 
+         lc_category = stringr::str_trim(lc_category))
+```
+
+
+```{r, echo=FALSE, eval=FALSE}
+library(raster)
+lc_data <- raster("data/example_landscape.tif") 
+levels(lc_data)[[1]] <- levels(lc_data)[[1]] %>% 
+  left_join(lc_df, by = "ID") %>% 
+  dplyr::select(-category)
+levels(lc_data)[[1]] <- na.omit(levels(lc_data)[[1]])
+
+writeRaster(lc_data, "data/example_landscape33.tif", options = "COMPRESS=DEFLATE")
+```
+
 ```{r}
 library(sf)
 library(raster)
@@ -157,6 +200,9 @@ bb$id = 1
 st_crs(bb) = st_crs(bb)
 write_sf(bb, "data/study_area.gpkg")
 ```
+
+
+
 
 ]
 
