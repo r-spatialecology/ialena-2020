@@ -60,7 +60,7 @@ options(tibble.print_max = 5)
 You can install the packages used in the workshop as follows:
 
 ```{r, eval=FALSE}
-pkgs = c(
+pkgs <- c(
   "sf",                
   "raster",            
   "tmap",              
@@ -130,6 +130,37 @@ library(tmap)
 knitr::include_graphics("figs/tmap-examples.png")
 ```
 
+---
+# ...
+
+.pull-left[
+```{r}
+library(sf)
+library(raster)
+study_area <- read_sf("data/study_area.gpkg")
+lc_data <- raster("data/example_landscape.tif") 
+```
+]
+
+.pull-right[
+```{r}
+plot(lc_data, axes = TRUE)
+plot(st_geometry(study_area), add = TRUE)
+```
+
+```{r, echo=FALSE, eval=FALSE}
+aa = mapedit::drawFeatures(mapview::mapview(sf::st_bbox(lc_data)))
+bb = sf::st_transform(aa, sf::st_crs(lc_data))
+bb$X_leaflet_id = NULL
+bb$feature_type = NULL
+bb$id = 1
+st_crs(bb) = st_crs(bb)
+write_sf(bb, "data/study_area.gpkg")
+```
+
+]
+
+
 
 ---
 class: left, middle, clear, nonum
@@ -149,6 +180,34 @@ class: left, middle, clear, nonum
 <!-- 7. Change the borders' color of the New Zealand's regions to black.  -->
 <!-- Decrease the line width. -->
 <!-- 8. Change the background color to any color of your choice. -->
+
+---
+# Making maps in R
+
+.left-code[
+```{r tm1, fig.show="hide", error=TRUE}
+tm_shape(lc_data) #<<
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("tm1", "png")`)
+]
+
+---
+# Making maps in R
+
+.left-code[
+```{r tm2, fig.show="hide"}
+tm_shape(lc_data) +
+  tm_raster() #<<
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("tm2", "png")`)
+]
+
 
 ---
 # Spatial data representations
@@ -387,8 +446,6 @@ lsm_landscape
 Import and check data
 
 ```{r check_lsm}
-# install.packages("landscapemetrics")
-
 lc_data <- raster("data/example_landscape.tif") 
 check_landscape(lc_data)
 ```

@@ -47,7 +47,7 @@ You can install the packages used in the workshop as follows:
 
 
 ```r
-pkgs = c(
+pkgs &lt;- c(
   "sf",                
   "raster",            
   "tmap",              
@@ -117,6 +117,33 @@ library(tmap)
 
 &lt;img src="figs/tmap-examples.png" width="75%" style="display: block; margin: auto;" /&gt;
 
+---
+# ...
+
+.pull-left[
+
+```r
+library(sf)
+library(raster)
+study_area &lt;- read_sf("data/study_area.gpkg")
+lc_data &lt;- raster("data/example_landscape.tif") 
+```
+]
+
+.pull-right[
+
+```r
+plot(lc_data, axes = TRUE)
+plot(st_geometry(study_area), add = TRUE)
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-6-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+
 
 ---
 class: left, middle, clear, nonum
@@ -136,6 +163,40 @@ class: left, middle, clear, nonum
 &lt;!-- 7. Change the borders' color of the New Zealand's regions to black.  --&gt;
 &lt;!-- Decrease the line width. --&gt;
 &lt;!-- 8. Change the background color to any color of your choice. --&gt;
+
+---
+# Making maps in R
+
+.left-code[
+
+```r
+*tm_shape(lc_data)
+```
+
+```
+## Error: no layer elements defined after tm_shape
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm1-1.png)
+]
+
+---
+# Making maps in R
+
+.left-code[
+
+```r
+tm_shape(lc_data) +
+* tm_raster()
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm2-1.png)
+]
+
 
 ---
 # Spatial data representations
@@ -314,10 +375,8 @@ Import and check data
 
 
 ```r
-# install.packages("landscapemetrics")
-
-data &lt;- raster("data/example_landscape.tif") 
-check_landscape(data)
+lc_data &lt;- raster("data/example_landscape.tif") 
+check_landscape(lc_data)
 ```
 
 ```
@@ -355,7 +414,7 @@ Calculate single metric
 
 
 ```r
-lsm_p_area(data)
+lsm_p_area(lc_data)
 ```
 
 ```
@@ -378,8 +437,8 @@ Combine several metrics to one *tibble*
 
 
 ```r
-class_mean &lt;- lsm_c_area_mn(data)
-lsm_total &lt;- lsm_l_ta(data)
+class_mean &lt;- lsm_c_area_mn(lc_data)
+lsm_total &lt;- lsm_l_ta(lc_data)
 
 bind_rows(class_mean, lsm_total)
 ```
@@ -431,7 +490,7 @@ Calculate several metrics at once
 
 
 ```r
-calculate_lsm(landscape = data, 
+calculate_lsm(landscape = lc_data, 
               level = "landscape", type = "diversity metric", 
               classes_max = 5)
 ```
@@ -475,7 +534,7 @@ For a general overview of *landscapemetrics*, please see &lt;https://r-spatialec
 
 
 ```r
-show_patches(data, labels = FALSE, class = 42)
+show_patches(lc_data, labels = FALSE, class = 42)
 ```
 
 &lt;img src="index_files/figure-html/show_patches-1.png" width="504" style="display: block; margin: auto;" /&gt;
@@ -487,7 +546,7 @@ show_patches(data, labels = FALSE, class = 42)
 .pull-left[
 
 ```r
-show_cores(data, labels = FALSE, 
+show_cores(lc_data, labels = FALSE, 
            class = 42)
 ```
 
@@ -498,7 +557,7 @@ show_cores(data, labels = FALSE,
 .pull-right[
 
 ```r
-show_lsm(data, labels = FALSE, 
+show_lsm(lc_data, labels = FALSE, 
          class = 42, what = "lsm_p_area")
 ```
 
