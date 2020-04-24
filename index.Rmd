@@ -10,7 +10,7 @@ output:
     lib_dir: libs
     self_contained: false
     nature:
-      highlightStyle: monokai
+      highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
       ratio: 16:10
@@ -49,32 +49,271 @@ library(purrr)
 library(raster)
 library(sp)
 
-knitr::opts_chunk$set(fig.retina = 3, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(fig.retina = 3, warning = FALSE, message = FALSE, fig.align = "center")
 extrafont::fonts()
 options(tibble.print_min = 5)
 options(tibble.print_max = 5)
 ```
 
 ---
-class: inverse, left, bottom, clear, nonum
+# Prerequisites
 
-# Part I
-## Introduction to the spatial data analysis in R
+.pull-left[
+You can install the packages used in the workshop as follows:
+
+```{r, eval=FALSE}
+pkgs <- c(
+  "sf",                
+  "raster",            
+  "tmap",              
+  "landscapemetrics",
+  "usethis"
+)
+install.packages(pkgs)
+```
+]
+
+.pull-right[
+The code below can be used to download all the scripts and data for the workshop:
+
+```{r, eval=FALSE}
+usethis::use_course(ADD LINK)
+```
+]
 
 ---
-# Intro to rspatial
+# ...
 
-- I would show how to read raster data, understand its structure, visualize it using *tmap*, and provide some links to more resources. In details:
+- rules 
+- workshop agenda
 
-- Intro (lecture)
+---
+class: inverse, left, bottom, clear, nonum
 
-- Making maps in R (lecture)
-- Making maps in R (practical)
+layout: false
 
-- Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (lecture)
-- Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (practical)
+background-image: url("figs/geocompr-logo.png")
+background-position: 85% 10%
+background-size: 30%
 
-- Summary of the first part (lecture)
+# Part I
+
+## Introduction to the spatial data analysis in R
+
+Jakub Nowosad
+
+Institute of Geoecology and Geoinformation, Adam Mickiewicz University, Poznan, Poland
+
+---
+# Intro to R spatial
+
+<!-- - I would show how to read raster data, understand its structure, visualize it using *tmap*, and provide some links to more resources. In details: -->
+
+<!-- - Intro (lecture) -->
+
+---
+# Making maps in R
+
+<!-- Making maps in R (lecture) -->
+
+---
+# tmap
+
+```{r}
+library(tmap)
+```
+
+- Thematic mapping package
+- It allows you to create static maps, animated maps and interactive maps.
+- It works by adding subsequent layers to visualize and then modifying them.
+- https://github.com/mtennekes/tmap - list of additional materials about the **tmap** package 
+
+```{r, echo=FALSE, out.width="75%"}
+knitr::include_graphics("figs/tmap-examples.png")
+```
+
+---
+# ...
+
+.pull-left[
+<!-- https://www.mrlc.gov/data/legends/national-land-cover-database-2011-nlcd2011-legend -->
+
+```{r, echo=FALSE, eval=FALSE}
+library(dplyr)
+library(tidyr)
+lc_df = tibble::tribble(
+                                 ~V1,
+                    "11. Open Water",
+            "12. Perennial Ice Snow",
+         "21. Developed, Open Space",
+      "22. Developed, Low Intensity",
+   "23. Developed, Medium Intensity",
+      "24. Developed High Intensity",
+           "31. Bare Rock/Sand/Clay",
+              "41. Deciduous Forest",
+              "42. Evergreen Forest",
+                  "43. Mixed Forest",
+                   "51. Dwarf Shrub",
+                   "52. Shrub/Scrub",
+         "71. Grasslands/Herbaceous",
+              "72. Sedge/Herbaceous",
+                          "74. Moss",
+                   "81. Pasture/Hay",
+              "82. Cultivated Crops",
+                "90. Woody Wetlands",
+  "95. Emergent Herbaceous Wetlands"
+  ) %>% separate(V1, c("ID", "lc_category"), sep = "\\.") %>% 
+  mutate(ID = as.integer(ID), 
+         lc_category = stringr::str_trim(lc_category))
+```
+
+
+```{r, echo=FALSE, eval=FALSE}
+library(raster)
+lc_data <- raster("data/example_landscape.tif") 
+levels(lc_data)[[1]] <- levels(lc_data)[[1]] %>% 
+  left_join(lc_df, by = "ID") %>% 
+  dplyr::select(-category)
+levels(lc_data)[[1]] <- na.omit(levels(lc_data)[[1]])
+
+writeRaster(lc_data, "data/example_landscape33.tif", options = "COMPRESS=DEFLATE")
+```
+
+```{r}
+library(sf)
+library(raster)
+study_area <- read_sf("data/study_area.gpkg")
+lc_data <- raster("data/example_landscape.tif") 
+```
+]
+
+.pull-right[
+```{r}
+plot(lc_data, axes = TRUE)
+plot(st_geometry(study_area), add = TRUE)
+```
+
+```{r, echo=FALSE, eval=FALSE}
+aa = mapedit::drawFeatures(mapview::mapview(sf::st_bbox(lc_data)))
+bb = sf::st_transform(aa, sf::st_crs(lc_data))
+bb$X_leaflet_id = NULL
+bb$feature_type = NULL
+bb$id = 1
+st_crs(bb) = st_crs(bb)
+write_sf(bb, "data/study_area.gpkg")
+```
+
+
+
+
+]
+
+
+
+---
+class: left, middle, clear, nonum
+
+##  First practical part
+
+<!-- - Making maps in R (practical) -->
+<!-- Run the code and: -->
+
+<!-- 1. Change the map title from `"My map"` to `"New Zealand"`. -->
+<!-- 2. Update the map credits with your own name and today's date. -->
+<!-- 3. Change the color palette to `"BuGn"`.  -->
+<!-- (You can also try other palettes from http://colorbrewer2.org/) -->
+<!-- 4. Put the north arrow in the top right corner of the map. -->
+<!-- 5. Improve the legend title by adding the legend units. -->
+<!-- 6. Increase the number of breaks in the scale bar. -->
+<!-- 7. Change the borders' color of the New Zealand's regions to black.  -->
+<!-- Decrease the line width. -->
+<!-- 8. Change the background color to any color of your choice. -->
+
+---
+# Making maps in R
+
+.left-code[
+```{r tm1, fig.show="hide", error=TRUE}
+tm_shape(lc_data) #<<
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("tm1", "png")`)
+]
+
+---
+# Making maps in R
+
+.left-code[
+```{r tm2, fig.show="hide"}
+tm_shape(lc_data) +
+  tm_raster() #<<
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("tm2", "png")`)
+]
+
+
+---
+# Spatial data representations
+
+<!-- - Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (lecture) -->
+<!-- short the text here -- add images!-->
+
+**sf**:
+- The **sf** package is the successor of the **sp** package based on the OGC standard Simple Features.
+- Combines the functionality of three previous packages: **sp**, **rgeos** and **rgdal**.
+- Most of the functions in this package start with a prefix `st_`.
+- This package handles additional vector data types (e.g. polygon and multipolygon are two separate classes), allows for easier data processing, and support sfor spatial databases such as PostGIS.
+- https://r-spatial.github.io/sf/ and https://github.com/rstudio/cheatsheets/blob/master/sf.pdf
+
+**raster**:
+- The **raster** package contains classes and methods representing raster objects and operations.
+- It allows raster data to be loaded and saved.
+- It allows raster algebra and raster processing.
+- It includes a number of additional functions, e.g. for analysis of terrain characteristics.
+- It allows you to work on large sets of data.
+- ?`raster-package` and http://www.rpubs.com/etiennebr/visualraster
+
+
+---
+class: left, middle, clear, nonum
+
+##  Second practical part
+
+<!-- - Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (practical) -->
+
+---
+# Summary
+
+<!-- add something about r spatial ecosystem?? -->
+
+.lc[
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("figs/book_cover.jpg")
+```
+]
+
+.rc[
+Recent talks:
+- https://www.youtube.com/watch?v=Va0STgco7-4
+- https://nowosad.github.io/whyr_webinar004/#1
+- https://www.youtube.com/watch?v=bLgoqnqJ4DY
+- https://nowosad.github.io/whyr_19
+
+Resources:
+
+- https://geocompr.github.io/
+- https://www.rspatial.org/
+- https://www.r-spatial.org/
+- https://gis.stackexchange.com/questions/tagged/r
+- `#rspatial` and `#geocompr` on Twitter
+]
+
+
 
 ---
 class: inverse, left, bottom, clear, nonum
@@ -320,7 +559,7 @@ sample(x = c(1, 2, 3), prob = c(0.5, 0.25, 0.25), size = 2500, replace = TRUE) %
 Easily calculate multiple metrics based on e.g. level and type
 
 ```{r multiple_metrics}
-calculate_lsm(landscape = data, 
+calculate_lsm(landscape = lc_data, 
               level = "landscape", type = "diversity metric", 
               classes_max = 5)
 ```

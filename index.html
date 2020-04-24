@@ -40,25 +40,229 @@ background-size: cover
 
 
 ---
-class: inverse, left, bottom, clear, nonum
+# Prerequisites
 
-# Part I
-## Introduction to the spatial data analysis in R
+.pull-left[
+You can install the packages used in the workshop as follows:
+
+
+```r
+pkgs &lt;- c(
+  "sf",                
+  "raster",            
+  "tmap",              
+  "landscapemetrics",
+  "usethis"
+)
+install.packages(pkgs)
+```
+]
+
+.pull-right[
+The code below can be used to download all the scripts and data for the workshop:
+
+
+```r
+usethis::use_course(ADD LINK)
+```
+]
 
 ---
-# Intro to rspatial
+# ...
 
-- I would show how to read raster data, understand its structure, visualize it using *tmap*, and provide some links to more resources. In details:
+- rules 
+- workshop agenda
 
-- Intro (lecture)
+---
+class: inverse, left, bottom, clear, nonum
 
-- Making maps in R (lecture)
-- Making maps in R (practical)
+layout: false
 
-- Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (lecture)
-- Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (practical)
+background-image: url("figs/geocompr-logo.png")
+background-position: 85% 10%
+background-size: 30%
 
-- Summary of the first part (lecture)
+# Part I
+
+## Introduction to the spatial data analysis in R
+
+Jakub Nowosad
+
+Institute of Geoecology and Geoinformation, Adam Mickiewicz University, Poznan, Poland
+
+---
+# Intro to R spatial
+
+&lt;!-- - I would show how to read raster data, understand its structure, visualize it using *tmap*, and provide some links to more resources. In details: --&gt;
+
+&lt;!-- - Intro (lecture) --&gt;
+
+---
+# Making maps in R
+
+&lt;!-- Making maps in R (lecture) --&gt;
+
+---
+# tmap
+
+
+```r
+library(tmap)
+```
+
+- Thematic mapping package
+- It allows you to create static maps, animated maps and interactive maps.
+- It works by adding subsequent layers to visualize and then modifying them.
+- https://github.com/mtennekes/tmap - list of additional materials about the **tmap** package 
+
+&lt;img src="figs/tmap-examples.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+# ...
+
+.pull-left[
+&lt;!-- https://www.mrlc.gov/data/legends/national-land-cover-database-2011-nlcd2011-legend --&gt;
+
+
+
+
+
+
+
+```r
+library(sf)
+library(raster)
+study_area &lt;- read_sf("data/study_area.gpkg")
+lc_data &lt;- raster("data/example_landscape.tif") 
+```
+]
+
+.pull-right[
+
+```r
+plot(lc_data, axes = TRUE)
+plot(st_geometry(study_area), add = TRUE)
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-8-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+
+
+
+
+
+]
+
+
+
+---
+class: left, middle, clear, nonum
+
+##  First practical part
+
+&lt;!-- - Making maps in R (practical) --&gt;
+&lt;!-- Run the code and: --&gt;
+
+&lt;!-- 1. Change the map title from `"My map"` to `"New Zealand"`. --&gt;
+&lt;!-- 2. Update the map credits with your own name and today's date. --&gt;
+&lt;!-- 3. Change the color palette to `"BuGn"`.  --&gt;
+&lt;!-- (You can also try other palettes from http://colorbrewer2.org/) --&gt;
+&lt;!-- 4. Put the north arrow in the top right corner of the map. --&gt;
+&lt;!-- 5. Improve the legend title by adding the legend units. --&gt;
+&lt;!-- 6. Increase the number of breaks in the scale bar. --&gt;
+&lt;!-- 7. Change the borders' color of the New Zealand's regions to black.  --&gt;
+&lt;!-- Decrease the line width. --&gt;
+&lt;!-- 8. Change the background color to any color of your choice. --&gt;
+
+---
+# Making maps in R
+
+.left-code[
+
+```r
+*tm_shape(lc_data)
+```
+
+```
+## Error: no layer elements defined after tm_shape
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm1-1.png)
+]
+
+---
+# Making maps in R
+
+.left-code[
+
+```r
+tm_shape(lc_data) +
+* tm_raster()
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm2-1.png)
+]
+
+
+---
+# Spatial data representations
+
+&lt;!-- - Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (lecture) --&gt;
+&lt;!-- short the text here -- add images!--&gt;
+
+**sf**:
+- The **sf** package is the successor of the **sp** package based on the OGC standard Simple Features.
+- Combines the functionality of three previous packages: **sp**, **rgeos** and **rgdal**.
+- Most of the functions in this package start with a prefix `st_`.
+- This package handles additional vector data types (e.g. polygon and multipolygon are two separate classes), allows for easier data processing, and support sfor spatial databases such as PostGIS.
+- https://r-spatial.github.io/sf/ and https://github.com/rstudio/cheatsheets/blob/master/sf.pdf
+
+**raster**:
+- The **raster** package contains classes and methods representing raster objects and operations.
+- It allows raster data to be loaded and saved.
+- It allows raster algebra and raster processing.
+- It includes a number of additional functions, e.g. for analysis of terrain characteristics.
+- It allows you to work on large sets of data.
+- ?`raster-package` and http://www.rpubs.com/etiennebr/visualraster
+
+
+---
+class: left, middle, clear, nonum
+
+##  Second practical part
+
+&lt;!-- - Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (practical) --&gt;
+
+---
+# Summary
+
+&lt;!-- add something about r spatial ecosystem?? --&gt;
+
+.lc[
+&lt;img src="figs/book_cover.jpg" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.rc[
+Recent talks:
+- https://www.youtube.com/watch?v=Va0STgco7-4
+- https://nowosad.github.io/whyr_webinar004/#1
+- https://www.youtube.com/watch?v=bLgoqnqJ4DY
+- https://nowosad.github.io/whyr_19
+
+Resources:
+
+- https://geocompr.github.io/
+- https://www.rspatial.org/
+- https://www.r-spatial.org/
+- https://gis.stackexchange.com/questions/tagged/r
+- `#rspatial` and `#geocompr` on Twitter
+]
+
+
 
 ---
 class: inverse, left, bottom, clear, nonum
@@ -105,11 +309,11 @@ Department of Ecosystem Modelling, University of Goettingen, Germany
 
 --
 .pull-left[
-&lt;img src="figs/aerial_lsm.png" width="75%" height="75%" /&gt;
+&lt;img src="figs/aerial_lsm.png" width="75%" height="75%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="index_files/figure-html/example_lsm-1.png" width="75%" height="75%" /&gt;
+&lt;img src="index_files/figure-html/example_lsm-1.png" width="75%" height="75%" style="display: block; margin: auto;" /&gt;
 ]
 
 &lt;/center&gt;
@@ -169,7 +373,7 @@ background-size: 15%
 &lt;center&gt;
 
 --
-&lt;img src="index_files/figure-html/levels_lsm-1.png" width="30%" /&gt;&lt;img src="index_files/figure-html/levels_lsm-2.png" width="30%" /&gt;&lt;img src="index_files/figure-html/levels_lsm-3.png" width="30%" /&gt;
+&lt;img src="index_files/figure-html/levels_lsm-1.png" width="30%" style="display: block; margin: auto;" /&gt;&lt;img src="index_files/figure-html/levels_lsm-2.png" width="30%" style="display: block; margin: auto;" /&gt;&lt;img src="index_files/figure-html/levels_lsm-3.png" width="30%" style="display: block; margin: auto;" /&gt;
 
 &lt;/center&gt;
 
@@ -254,7 +458,7 @@ bind_rows(class_mean, lsm_total)
 ```
 ## # A tibble: 16 x 6
 ##   layer level class    id metric  value
-##   &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;
+## * &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;
 ## 1     1 class    11    NA area_mn 1.66 
 ## 2     1 class    21    NA area_mn 1.92 
 ## 3     1 class    22    NA area_mn 0.715
@@ -301,7 +505,7 @@ Easily calculate multiple metrics based on e.g. level and type
 
 
 ```r
-calculate_lsm(landscape = data, 
+calculate_lsm(landscape = lc_data, 
               level = "landscape", type = "diversity metric", 
               classes_max = 5)
 ```
@@ -601,7 +805,7 @@ Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L., François, R., Grol
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "monokai",
+"highlightStyle": "github",
 "highlightLines": true,
 "countIncrementalSlides": false,
 "ratio": "16:10"

@@ -85,7 +85,7 @@ a {
 }
 
 .rc {
-  width: 70%;
+  width: 68%;
   float: right;
   height: 92%;
 }
@@ -122,4 +122,17 @@ a {
   float: right;
   text-align: right;
   margin: 0 auto;
+}
+
+/* custom.css */
+.left-code {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
 }
