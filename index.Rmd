@@ -42,10 +42,12 @@ background-size: cover
 library(dplyr)
 library(extrafont)
 library(ggplot2)
+library(gganimate)
 library(knitr)
 library(landscapemetrics)
-library(patchwork)
+library(purrr)
 library(raster)
+library(sp)
 
 knitr::opts_chunk$set(fig.retina = 3, warning = FALSE, message = FALSE)
 extrafont::fonts()
@@ -256,14 +258,14 @@ Import and check data
 # install.packages("landscapemetrics")
 
 data <- raster("data/example_landscape.tif") 
-check_landscape(data)
+landscapemetrics::check_landscape(data)
 ```
 
 --
 List available metrics
 
 ```{r list_metrics}
-list_lsm()
+landscapemetrics::list_lsm()
 ```
 
 ---
@@ -275,7 +277,7 @@ list_lsm()
 Calculate single metric
 
 ```{r simple_calc_a}
-lsm_p_area(data)
+landscapemetrics::lsm_p_area(data)
 ```
 ]
 
@@ -285,8 +287,8 @@ lsm_p_area(data)
 Combine several metrics to one *tibble*
 
 ```{r simple_calc_b}
-class_mean <- lsm_c_area_mn(data)
-lsm_total <- lsm_l_ta(data)
+class_mean <- landscapemetrics::lsm_c_area_mn(data)
+lsm_total <- landscapemetrics::lsm_l_ta(data)
 
 bind_rows(class_mean, lsm_total)
 ```
@@ -295,6 +297,7 @@ bind_rows(class_mean, lsm_total)
 ---
 # Easy integration into larger workflows
 
+--
 Integrate easily into larger workflows
 
 ```{r larger_workflow}
@@ -302,17 +305,19 @@ set.seed(42)
 
 sample(x = c(1, 2, 3), prob = c(0.5, 0.25, 0.25), size = 2500, replace = TRUE) %>%
   matrix(nrow = 50, ncol = 50) %>%
-  raster() %>%
-  lsm_p_enn() %>% #<<
-  filter(value <= quantile(value, probs = 0.25) | value >= quantile(value, probs = 0.75)) %>%
-  group_by(class) %>%
-  summarise(n = n()) %>%
-  arrange(-n)
+  raster::raster() %>%
+  landscapemetrics::lsm_p_enn() %>% #<<
+  dplyr::filter(value <= quantile(value, probs = 0.25) | value >= quantile(value, probs = 0.75)) %>%
+  dplyr::group_by(class) %>%
+  dplyr::summarise(n = n()) %>%
+  dplyr::arrange(-n)
 ```
 
 ---
+# Calculation of multiple metrics
 
-Calculate several metrics at once
+--
+Easily calculate multiple metrics based on e.g. level and type
 
 ```{r multiple_metrics}
 calculate_lsm(landscape = data, 
@@ -329,7 +334,7 @@ Try to work through *Exercise_1.R*. The exercise will teach you how to calculate
 
 During the exercise there are part where you are supposed to code your own solution indicated by the following structure:
 
-```{r exercise_code, eval = FALSE}
+```{r exercise_code_1, eval = FALSE}
 # /Start Code/ #
 
 print("Hello World") # This would be your code contribution
@@ -344,8 +349,11 @@ For a general overview of *landscapemetrics*, please see <https://r-spatialecolo
 ---
 # Visualize patches
 
+--
+Easily visualize patches of several classes or the whole landscape
+
 ```{r, show_patches, fig.align = "center"}
-show_patches(data, labels = FALSE, class = 42)
+landscapemetrics::show_patches(data, labels = FALSE, class = 42)
 ```
 
 ---
@@ -353,33 +361,222 @@ show_patches(data, labels = FALSE, class = 42)
 
 --
 .pull-left[
+
+Visualize core areas of patches
+
 ```{r, show_cores, fig.align = "center"}
-show_cores(data, labels = FALSE, 
-           class = 42)
+landscapemetrics::show_cores(data, labels = FALSE, 
+                             class = 42)
 ```
 ]
 
 --
 .pull-right[
+
+Visualize landscape metrics on patch level
+
 ```{r, show_lsm_dummy, eval = FALSE}
-show_lsm(data, labels = FALSE, 
-         class = 42, what = "lsm_p_area")
+landscapemetrics::show_lsm(data, labels = FALSE, 
+                           class = 42, what = "lsm_p_area")
 ```
 
 ```{r, show_lsm, echo = FALSE, fig.align = "center"}
-show_lsm(data, labels = FALSE, 
-         class = 42, what = "lsm_p_area") + theme(legend.position = "none")
+landscapemetrics::show_lsm(data, labels = FALSE, 
+                           class = 42, what = "lsm_p_area") + 
+  theme(legend.position = "none")
 ```
 ]
 
 ---
-# Sampling 
+# Sample metrics in buffer areas
+
+--
+- Samples metrics in a buffer area (sample plot) around sample points 
+
+--
+- Also able to use sample lines or  *sp*-SpatialPolygons. 
+
+--
+- Metrics can be specified identical to `list_lsm()` and `calculate_lsm()`
+
+--
+```{r, plot_sample_points, echo = FALSE, fig.align = "center"}
+sample_points <- matrix(c(1253709, 1249455, 
+                          1261857, 1256055,
+                          1252009, 1257055), ncol = 2, byrow = TRUE)
+
+buffer <- landscapemetrics::construct_buffer(coords = sample_points, 
+                                             size = 1000, shape = "square", 
+                                             return_sp = FALSE)
+
+ggplot(data = raster::as.data.frame(augusta_nlcd, xy = TRUE)) + 
+  geom_raster(aes(x = x, y = y, fill = nlcd_2011_landcover_2011_edition_2014_10_10_NLCD.2011.Land.Cover.Class)) +
+  geom_point(data = data.frame(sample_points), aes(x = X1, y = X2), pch = 1) +
+  geom_polygon(data = data.frame(buffer), aes(x = X1, y = X2, group = X3), 
+               fill = NA, col = "black") +
+  coord_equal() + 
+  scale_fill_manual(name = "", values = c("Herbaceuous" = "#FDE9AA", 
+                                          "Evergreen Forest" = "#38814E", 
+                                          "Deciduous Forest" = "#85C77E", 
+                                          "Hay/Pasture" = "#FBF65D", 
+                                          "Developed, Open Space" = "#E8D1D1", 
+                                          "Mixed Fores" = "#D4E7B0", 
+                                          "Shrub/Scrub" = "#DCCA8F", 
+                                          "Open Water" = "#5475A8", 
+                                          "Woody Wetlands" = "#C8E6F8", 
+                                          "Developed, Low Intensity" = "#E29E8C", 
+                                          "Developed, Medium Intensity" = "#FF0000", 
+                                          "Developed, High Intensity" = "#B50000", 
+                                          "Barren Land" = "#D2CDC0", 
+                                          "Emergent Herbaceuous Wetlands" = "#FDE9AA", 
+                                          "Cultivated Crops" = "#CA9146")) +
+  guides(fill = FALSE) + 
+  theme_void()
+```
+
+---
+# Sample metrics in buffer areas
+
+--
+Slightly different output *tibble*
+
+```{r sample_lsm}
+sample_points <- matrix(c(1253709, 1249455, 
+                          1261857, 1256055,
+                          1252009, 1257055), ncol = 2, byrow = TRUE)
+
+sample_lsm(landscape = augusta_nlcd, y = sample_points, 
+           size = 1000, what = "lsm_l_np")
+```
 
 ---
 # Moving window
 
+--
+- Show gradients and variability in the landscape
+
+--
+- Use matrix to specify moving window and focal cell
+
+--
+```{r moving_window_plot, echo = FALSE, fig.align = "center"}
+focal_i <- cbind(ras_df[ ,c(1,2)], id = 1:nrow(ras_df))
+
+focal_poly <- purrr::map_dfr(1:nrow(focal_i), function(i) {
+  
+  focal_i[i, c(1,2)]
+  
+  x_min <- focal_i[i, 1] - 4.5
+  x_max <- focal_i[i, 1] + 4.5
+  
+  y_min <- focal_i[i, 2] - 4.5
+  y_max <- focal_i[i, 2] + 4.5
+  
+  data.frame(x = c(x_min, x_max, x_max, x_min), 
+             y = c(y_min, y_min, y_max, y_max))
+}, .id = "id")
+
+focal_poly$id <- as.integer(focal_poly$id)
+
+# focal_poly <- focal_poly[which(focal_poly$x > 0 & focal_poly$y > 0), ]
+
+gg_window <- ggplot(data = ras_df) + 
+  geom_raster(aes(x = x, y = y, fill = as.factor(clumps))) + 
+  geom_point(data = focal_i, aes(x = x, y = y), pch = 1) +
+  geom_polygon(data = focal_poly, aes(x = x, y = y),
+               fill = NA, col = "black") +
+  scale_fill_manual(values = c("#98D2E1", "#EAB8BD", "#9B9555")) +
+  guides(fill = FALSE) +
+  coord_equal() + 
+  theme_void() + 
+  transition_states(id,
+                    transition_length = 2,
+                    state_length = 1)
+
+gganimate::animate(gg_window, nframes = 900, fps = 10, duration = 90)
+```
+
+---
+# Moving window
+
+--
+Results in list with `raster` objects
+
+```{r moving_window}
+window <- matrix(1, nrow = 5, ncol = 5)
+window_result <- window_lsm(landscape, window = window, what = "lsm_l_np")
+```
+
+```{r moving_window_result, echo = FALSE, fig.align = "center", out.width = "40%"}
+
+ggplot(data = raster::as.data.frame(window_result[[1]]$lsm_l_np, xy = TRUE)) + 
+  geom_raster(aes(x = x, y = y, fill = factor(layer))) + 
+  scale_fill_viridis_d(option = "A") +
+  coord_equal() + 
+  theme_void() + 
+  theme(legend.position = "none")
+
+```
+
+
 ---
 # Building blocks
+
+--
+Fast building blocks to create your own metrics
+
+--
+.pull-left[
+
+*raster* package
+
+```{r adj_raster}
+adj_raster <- function(x) {
+  adjacencies <- 
+    raster::adjacent(x, cells = 1:ncell(x))
+  table(x[adjacencies[, 1]], x[adjacencies[, 2]])
+}
+adj_raster(landscape)
+```
+]
+
+--
+.pull-right[
+
+`landscapemetrics` package
+
+```{r adj_lsm}
+get_adjacencies(landscape)
+```
+]
+
+--
+```{r bench, eval = FALSE}
+# A tibble: 2 x 3 
+expression                      mean        mem_alloc
+<chr>                           <bch:tm>    <bch:byt>
+1 adj_raster(landscape)         8900 μs     1470 KB
+2 get_adjacencies(landscape)    562 μs      6 KB
+```
+
+---
+##  Second practical part
+
+Try to work through *Exercise_2.R*. The exercise will teach you how to use all utility functions of the *landscapemetrics* package.
+
+During the exercise there are part where you are supposed to code your own solution indicated by the following structure:
+
+```{r exercise_code_2, eval = FALSE}
+# /Start Code/ #
+
+print("Hello World") # This would be your code contribution
+
+# /End Code/ # 
+```
+
+In case you run into problems or have any questions, please contact us at any time via *Zoom* private chat. Also, there will be a public Q&A plenary session at **XX:XX pm**.
+
+For a general overview of *landscapemetrics*, please see <https://r-spatialecology.github.io/landscapemetrics>.
 
 ---
 # Citation 

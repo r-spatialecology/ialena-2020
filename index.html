@@ -184,7 +184,7 @@ Import and check data
 # install.packages("landscapemetrics")
 
 data &lt;- raster("data/example_landscape.tif") 
-check_landscape(data)
+landscapemetrics::check_landscape(data)
 ```
 
 ```
@@ -197,7 +197,7 @@ List available metrics
 
 
 ```r
-list_lsm()
+landscapemetrics::list_lsm()
 ```
 
 ```
@@ -222,7 +222,7 @@ Calculate single metric
 
 
 ```r
-lsm_p_area(data)
+landscapemetrics::lsm_p_area(data)
 ```
 
 ```
@@ -245,8 +245,8 @@ Combine several metrics to one *tibble*
 
 
 ```r
-class_mean &lt;- lsm_c_area_mn(data)
-lsm_total &lt;- lsm_l_ta(data)
+class_mean &lt;- landscapemetrics::lsm_c_area_mn(data)
+lsm_total &lt;- landscapemetrics::lsm_l_ta(data)
 
 bind_rows(class_mean, lsm_total)
 ```
@@ -267,6 +267,7 @@ bind_rows(class_mean, lsm_total)
 ---
 # Easy integration into larger workflows
 
+--
 Integrate easily into larger workflows
 
 
@@ -275,12 +276,12 @@ set.seed(42)
 
 sample(x = c(1, 2, 3), prob = c(0.5, 0.25, 0.25), size = 2500, replace = TRUE) %&gt;%
   matrix(nrow = 50, ncol = 50) %&gt;%
-  raster() %&gt;%
-* lsm_p_enn() %&gt;%
-  filter(value &lt;= quantile(value, probs = 0.25) | value &gt;= quantile(value, probs = 0.75)) %&gt;%
-  group_by(class) %&gt;%
-  summarise(n = n()) %&gt;%
-  arrange(-n)
+  raster::raster() %&gt;%
+* landscapemetrics::lsm_p_enn() %&gt;%
+  dplyr::filter(value &lt;= quantile(value, probs = 0.25) | value &gt;= quantile(value, probs = 0.75)) %&gt;%
+  dplyr::group_by(class) %&gt;%
+  dplyr::summarise(n = n()) %&gt;%
+  dplyr::arrange(-n)
 ```
 
 ```
@@ -293,8 +294,10 @@ sample(x = c(1, 2, 3), prob = c(0.5, 0.25, 0.25), size = 2500, replace = TRUE) %
 ```
 
 ---
+# Calculation of multiple metrics
 
-Calculate several metrics at once
+--
+Easily calculate multiple metrics based on e.g. level and type
 
 
 ```r
@@ -340,9 +343,12 @@ For a general overview of *landscapemetrics*, please see &lt;https://r-spatialec
 ---
 # Visualize patches
 
+--
+Easily visualize patches of several classes or the whole landscape
+
 
 ```r
-show_patches(data, labels = FALSE, class = 42)
+landscapemetrics::show_patches(data, labels = FALSE, class = 42)
 ```
 
 &lt;img src="index_files/figure-html/show_patches-1.png" width="504" style="display: block; margin: auto;" /&gt;
@@ -353,9 +359,12 @@ show_patches(data, labels = FALSE, class = 42)
 --
 .pull-left[
 
+Visualize core areas of patches
+
+
 ```r
-show_cores(data, labels = FALSE, 
-           class = 42)
+landscapemetrics::show_cores(data, labels = FALSE, 
+                             class = 42)
 ```
 
 &lt;img src="index_files/figure-html/show_cores-1.png" width="504" style="display: block; margin: auto;" /&gt;
@@ -364,22 +373,162 @@ show_cores(data, labels = FALSE,
 --
 .pull-right[
 
+Visualize landscape metrics on patch level
+
+
 ```r
-show_lsm(data, labels = FALSE, 
-         class = 42, what = "lsm_p_area")
+landscapemetrics::show_lsm(data, labels = FALSE, 
+                           class = 42, what = "lsm_p_area")
 ```
 
 &lt;img src="index_files/figure-html/show_lsm-1.png" width="504" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
-# Sampling 
+# Sample metrics in buffer areas
+
+--
+- Samples metrics in a buffer area (sample plot) around sample points 
+
+--
+- Also able to use sample lines or  *sp*-SpatialPolygons. 
+
+--
+- Metrics can be specified identical to `list_lsm()` and `calculate_lsm()`
+
+--
+&lt;img src="index_files/figure-html/plot_sample_points-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+# Sample metrics in buffer areas
+
+--
+Slightly different output *tibble*
+
+
+```r
+sample_points &lt;- matrix(c(1253709, 1249455, 
+                          1261857, 1256055,
+                          1252009, 1257055), ncol = 2, byrow = TRUE)
+
+sample_lsm(landscape = augusta_nlcd, y = sample_points, 
+           size = 1000, what = "lsm_l_np")
+```
+
+```
+## # A tibble: 3 x 8
+##   layer level     class    id metric value plot_id percentage_inside
+##   &lt;int&gt; &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;int&gt;             &lt;dbl&gt;
+## 1     1 landscape    NA    NA np       103       1              99.5
+## 2     1 landscape    NA    NA np       116       2              99.5
+## 3     1 landscape    NA    NA np        80       3              99.5
+```
 
 ---
 # Moving window
 
+--
+- Show gradients and variability in the landscape
+
+--
+- Use matrix to specify moving window and focal cell
+
+--
+&lt;img src="index_files/figure-html/moving_window_plot-1.gif" style="display: block; margin: auto;" /&gt;
+
+---
+# Moving window
+
+--
+Results in list with `raster` objects
+
+
+```r
+window &lt;- matrix(1, nrow = 5, ncol = 5)
+window_result &lt;- window_lsm(landscape, window = window, what = "lsm_l_np")
+```
+
+&lt;img src="index_files/figure-html/moving_window_result-1.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+
 ---
 # Building blocks
+
+--
+Fast building blocks to create your own metrics
+
+--
+.pull-left[
+
+*raster* package
+
+
+```r
+adj_raster &lt;- function(x) {
+  adjacencies &lt;- 
+    raster::adjacent(x, cells = 1:ncell(x))
+  table(x[adjacencies[, 1]], x[adjacencies[, 2]])
+}
+adj_raster(landscape)
+```
+
+```
+##    
+##        1    2    3
+##   1  520   43  137
+##   2   43  704  184
+##   3  137  184 1528
+```
+]
+
+--
+.pull-right[
+
+`landscapemetrics` package
+
+
+```r
+get_adjacencies(landscape)
+```
+
+```
+## [[1]]
+##     1   2    3
+## 1 520  43  137
+## 2  43 704  184
+## 3 137 184 1528
+```
+]
+
+--
+
+```r
+# A tibble: 2 x 3 
+expression                      mean        mem_alloc
+&lt;chr&gt;                           &lt;bch:tm&gt;    &lt;bch:byt&gt;
+1 adj_raster(landscape)         8900 μs     1470 KB
+2 get_adjacencies(landscape)    562 μs      6 KB
+```
+
+---
+##  Second practical part
+
+Try to work through *Exercise_2.R*. The exercise will teach you how to use all utility functions of the *landscapemetrics* package.
+
+During the exercise there are part where you are supposed to code your own solution indicated by the following structure:
+
+
+```r
+# /Start Code/ #
+
+print("Hello World") # This would be your code contribution
+
+# /End Code/ # 
+```
+
+In case you run into problems or have any questions, please contact us at any time via *Zoom* private chat. Also, there will be a public Q&amp;A plenary session at **XX:XX pm**.
+
+For a general overview of *landscapemetrics*, please see &lt;https://r-spatialecology.github.io/landscapemetrics&gt;.
 
 ---
 # Citation 
