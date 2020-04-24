@@ -389,8 +389,8 @@ Import and check data
 ```{r check_lsm}
 # install.packages("landscapemetrics")
 
-data <- raster("data/example_landscape.tif") 
-check_landscape(data)
+lc_data <- raster("data/example_landscape.tif") 
+check_landscape(lc_data)
 ```
 
 --
@@ -409,7 +409,7 @@ list_lsm()
 Calculate single metric
 
 ```{r simple_calc_a}
-lsm_p_area(data)
+lsm_p_area(lc_data)
 ```
 ]
 
@@ -419,8 +419,8 @@ lsm_p_area(data)
 Combine several metrics to one *tibble*
 
 ```{r simple_calc_b}
-class_mean <- lsm_c_area_mn(data)
-lsm_total <- lsm_l_ta(data)
+class_mean <- lsm_c_area_mn(lc_data)
+lsm_total <- lsm_l_ta(lc_data)
 
 bind_rows(class_mean, lsm_total)
 ```
@@ -449,7 +449,7 @@ sample(x = c(1, 2, 3), prob = c(0.5, 0.25, 0.25), size = 2500, replace = TRUE) %
 Calculate several metrics at once
 
 ```{r multiple_metrics}
-calculate_lsm(landscape = data, 
+calculate_lsm(landscape = lc_data, 
               level = "landscape", type = "diversity metric", 
               classes_max = 5)
 ```
@@ -479,7 +479,7 @@ For a general overview of *landscapemetrics*, please see <https://r-spatialecolo
 # Visualize patches
 
 ```{r, show_patches, fig.align = "center"}
-show_patches(data, labels = FALSE, class = 42)
+show_patches(lc_data, labels = FALSE, class = 42)
 ```
 
 ---
@@ -488,7 +488,7 @@ show_patches(data, labels = FALSE, class = 42)
 --
 .pull-left[
 ```{r, show_cores, fig.align = "center"}
-show_cores(data, labels = FALSE, 
+show_cores(lc_data, labels = FALSE, 
            class = 42)
 ```
 ]
@@ -496,12 +496,12 @@ show_cores(data, labels = FALSE,
 --
 .pull-right[
 ```{r, show_lsm_dummy, eval = FALSE}
-show_lsm(data, labels = FALSE, 
+show_lsm(lc_data, labels = FALSE, 
          class = 42, what = "lsm_p_area")
 ```
 
 ```{r, show_lsm, echo = FALSE, fig.align = "center"}
-show_lsm(data, labels = FALSE, 
+show_lsm(lc_data, labels = FALSE, 
          class = 42, what = "lsm_p_area") + theme(legend.position = "none")
 ```
 ]
