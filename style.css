@@ -49,6 +49,10 @@
 }
 */
 
+.remark-code, .remark-inline-code { font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace;
+                                    font-size: 80%;
+                                  }
+
 .captionstyle {
   color:white;
   background-color:black;
@@ -127,12 +131,12 @@ a {
 /* custom.css */
 .left-code {
   color: #777;
-  width: 38%;
+  width: 43%;
   height: 92%;
   float: left;
 }
 .right-plot {
-  width: 60%;
+  width: 55%;
   float: right;
   padding-left: 1%;
 }
