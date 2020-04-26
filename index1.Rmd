@@ -522,6 +522,21 @@ tmap_save(map1, "my_first_map.png")  #<<
 ```
 
 ---
+# Vector-raster interactions
+
+---
+# Vector-raster interactions: crop
+
+---
+# Vector-raster interactions: mask
+
+---
+# Reprojections
+
+---
+# Reprojections
+
+---
 class: left, middle, clear, nonum
 
 ##  Second practical part
