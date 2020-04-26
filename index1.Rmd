@@ -106,32 +106,62 @@ Jakub Nowosad
 Institute of Geoecology and Geoinformation, Adam Mickiewicz University, Poznan, Poland
 
 ---
-# Intro to R spatial
+# Spatial data representations: raster data
 
-<!-- - I would show how to read raster data, understand its structure, visualize it using *tmap*, and provide some links to more resources. In details: -->
+.lc[
+- The **raster** package
+- Classes for spatial raster data: `RasterLayer`, and multilayer `RasterStack` and `RasterBrick`
+- Raster data input/output
+- Raster algebra and raster processing
+- ?`raster-package`, [link1](https://geocompr.robinlovelace.net/spatial-class.html#raster-data), [link2](https://rspatial.org/raster/index.html), and [link3](http://www.rpubs.com/etiennebr/visualraster)
+]
 
-<!-- - Intro (lecture) -->
+.rc[
+```{r, echo=FALSE, out.height=200}
+knitr::include_graphics("figs/raster-intro-plot-1.png", dpi = NA)
+```
+
+```{r, message=FALSE}
+library(raster)
+elev_data <- raster("data/example_elevation.tif")
+elev_data
+```
+]
+
 
 ---
-# Making maps in R
+# Spatial data representations: vector data
 
-<!-- Making maps in R (lecture) -->
+.pull-left[
+```{r,echo=FALSE, message=FALSE}
+library(spData)
+library(sf)
+library(tmap)
+study_area <- read_sf("data/study_area.gpkg")
+tmap_mode("view")
+tm_shape(study_area) + 
+    tm_borders()
+tmap_mode("plot")
+```
 
----
-# tmap
+]
+
+.pull-right[
 
 ```{r}
-library(tmap)
+library(sf)
+study_area <- read_sf("data/study_area.gpkg")
+head(study_area)
 ```
 
-- Thematic mapping package
-- It allows you to create static maps, animated maps and interactive maps.
-- It works by adding subsequent layers to visualize and then modifying them.
-- https://github.com/mtennekes/tmap - list of additional materials about the **tmap** package 
+- The **sf** package
+- A class system for spatial vector data 
+- Vector data input/output
+- Transformations between different coordinate reference systems (CRS)
+- Geometric operations
+- [link1](https://geocompr.robinlovelace.net/spatial-class.html#vector-data), [link2](https://r-spatial.github.io/sf/), [link3](https://github.com/rstudio/cheatsheets/blob/master/sf.pdf)
+]
 
-```{r, echo=FALSE, out.width="75%"}
-knitr::include_graphics("figs/tmap-examples.png")
-```
 
 ---
 # ...
@@ -217,6 +247,24 @@ write_sf(bb, "data/study_area.gpkg")
 ]
 
 
+
+<!-- Making maps in R (lecture) -->
+
+---
+# Making maps in R: tmap
+
+```{r}
+library(tmap)
+```
+
+- Thematic mapping package
+- It allows you to create static maps, animated maps and interactive maps.
+- It works by adding subsequent layers to visualize and then modifying them.
+- https://github.com/mtennekes/tmap - list of additional materials about the **tmap** package 
+
+```{r, echo=FALSE, out.width="75%"}
+knitr::include_graphics("figs/tmap-examples.png")
+```
 
 ---
 class: left, middle, clear, nonum
@@ -307,7 +355,13 @@ tmap_mode("view") #<<
 tm_shape(study_area) +
   tm_borders() +
   tm_layout(main.title = "Study area")
+```
+
+```{r,eval=FALSE}
 tmap_mode("plot") #<<
+tm_shape(study_area) +
+  tm_borders() +
+  tm_layout(main.title = "Study area")
 ```
 
 
@@ -364,12 +418,12 @@ tm_shape(lc_data) +
 tm_shape(lc_data) + 
   tm_raster(drop.levels = TRUE,       
             title = "Land cover:") +  
-  tm_shape(study_area) +
-  tm_borders() +
-  tm_scale_bar(position = c("right",      
-                            "bottom")) +  
-  tm_compass(position = c("left", "top")) +
-  tm_layout(main.title = "Study area",
+  tm_shape(study_area) + #<<
+  tm_borders() + #<<
+  tm_scale_bar(position = c("right",      #<<
+                            "bottom")) +  #<<
+  tm_compass(position = c("left", "top")) + #<<
+  tm_layout(main.title = "Study area", #<<
             legend.outside = TRUE)  
 ```
 ]
@@ -387,7 +441,7 @@ tm_shape(lc_data) +
   tm_raster(drop.levels = TRUE,       
             title = "Land cover:") +  
   tm_shape(study_area) +
-  tm_borders(lwd = 3, col = "black") +
+  tm_borders(lwd = 3, col = "black") +  #<<
   tm_scale_bar(position = c("right",      
                             "bottom")) +  
   tm_compass(position = c("left", "top")) +
@@ -410,8 +464,8 @@ elev_data <- raster("data/example_elevation.tif")
 
 .left-code[
 ```{r tm10, fig.show="hide"}
-tm_shape(elev_data) + 
-  tm_raster()
+tm_shape(elev_data) +  #<<
+  tm_raster()  #<<
 ```
 ]
 
@@ -425,9 +479,9 @@ tm_shape(elev_data) +
 .left-code[
 ```{r tm11, fig.show="hide"}
 tm_shape(elev_data) + 
-  tm_raster(style = "cont",
-            title = "Elevation (m asl)") +
-  tm_layout(legend.outside = TRUE)
+  tm_raster(style = "cont",  #<<
+            title = "Elevation (m asl)") +  #<<
+  tm_layout(legend.outside = TRUE)  #<<
 ```
 ]
 
@@ -443,7 +497,7 @@ tm_shape(elev_data) +
 tm_shape(elev_data) + 
   tm_raster(style = "cont",
             title = "Elevation (m asl)",
-            palette = "-RdYlGn") +
+            palette = "-RdYlGn") +  #<<
   tm_layout(legend.outside = TRUE)
 
 # tmaptools::palette_explorer()
@@ -464,30 +518,8 @@ map1 <- tm_shape(elev_data) +
             palette = "-RdYlGn") +
   tm_layout(legend.outside = TRUE)
 
-tmap_save(map1, "my_first_map.png")
+tmap_save(map1, "my_first_map.png")  #<<
 ```
-
----
-# Spatial data representations
-
-<!-- - Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (lecture) -->
-<!-- short the text here -- add images!-->
-
-**sf**:
-- The **sf** package is the successor of the **sp** package based on the OGC standard Simple Features.
-- Combines the functionality of three previous packages: **sp**, **rgeos** and **rgdal**.
-- Most of the functions in this package start with a prefix `st_`.
-- This package handles additional vector data types (e.g. polygon and multipolygon are two separate classes), allows for easier data processing, and support sfor spatial databases such as PostGIS.
-- https://r-spatial.github.io/sf/ and https://github.com/rstudio/cheatsheets/blob/master/sf.pdf
-
-**raster**:
-- The **raster** package contains classes and methods representing raster objects and operations.
-- It allows raster data to be loaded and saved.
-- It allows raster algebra and raster processing.
-- It includes a number of additional functions, e.g. for analysis of terrain characteristics.
-- It allows you to work on large sets of data.
-- ?`raster-package` and http://www.rpubs.com/etiennebr/visualraster
-
 
 ---
 class: left, middle, clear, nonum
