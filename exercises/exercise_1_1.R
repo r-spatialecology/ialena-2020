@@ -43,7 +43,7 @@ library(spDataLarge)
 tm_shape(nz_elev)  +
   tm_raster(title = "elev", 
             style = "cont",
-            palette = "-RdYlGn") +
+            palette = "BuGn") +
   tm_shape(nz) +
   tm_borders(col = "red", 
              lwd = 3) +
@@ -61,7 +61,7 @@ tm_shape(nz_elev)  +
 
 # 1. Change the map title from "My map" to "New Zealand".
 # 2. Update the map credits with your own name and today's date.
-# 3. Change the color palette to "BuGn". 
+# 3. Change the color palette to "-RdYlGn". 
 #    (You can also try other palettes from http://colorbrewer2.org/)
 # 4. Put the north arrow in the top right corner of the map.
 # 5. Improve the legend title by adding the used units (m asl).
