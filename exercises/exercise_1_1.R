@@ -19,11 +19,6 @@ print("Hello World") # This would be your code contribution
 
 # /End Code/ #
 
-#### Data sets #### 
-
-# We will use two data sets: `nz_elev` and `nz`.
-# The first one is an elevation raster object for the New Zealand area, and the second one is an sf object with polygons representing the 16 regions of New Zealand.
-
 #### Required R libraries ####
 
 # We will use the sf, raster, and tmap packages.
@@ -34,6 +29,11 @@ library(raster)
 library(tmap)
 library(spData)
 library(spDataLarge)
+
+#### Data sets #### 
+
+# We will use two data sets: `nz_elev` and `nz`.
+# The first one is an elevation raster object for the New Zealand area, and the second one is an sf object with polygons representing the 16 regions of New Zealand.
 
 #### Existing code ####
 
@@ -57,8 +57,8 @@ tm_shape(nz_elev)  +
             bg.color = "orange",
             inner.margins = c(0, 0, 0, 0))
 
+#### Exercise I ####
 
-# Exercises I:
 # 1. Change the map title from "My map" to "New Zealand".
 # 2. Update the map credits with your own name and today's date.
 # 3. Change the color palette to "BuGn". 
@@ -78,7 +78,8 @@ tm_shape(nz_elev)  +
 
 # /End Code/ #
 
-# Exercises II:
+#### Exercise II ####
+
 # 9. Read two new datasets, `srtm` and `zion`, using the code below.
 #    To create a new map representing these datasets.
 
