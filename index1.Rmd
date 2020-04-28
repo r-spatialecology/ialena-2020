@@ -580,7 +580,7 @@ tm_shape(lc_data) +
 
 .rc[
 ```{r}
-lc_data_cropped = crop(lc_data, study_area)
+lc_data_cropped <- crop(lc_data, study_area)
 ```
 ```{r, echo=FALSE, fig.width=8}
 tm_shape(lc_data_cropped) +
@@ -610,8 +610,8 @@ tm_shape(lc_data) +
 
 .rc[
 ```{r}
-# lc_data_masked = mask(crop(lc_data, study_area), study_area)
-lc_data_masked = mask(lc_data_cropped, study_area)
+# lc_data_masked <- mask(crop(lc_data, study_area), study_area)
+lc_data_masked <- mask(lc_data_cropped, study_area)
 ```
 ```{r, echo=FALSE, fig.width=8}
 tm_shape(lc_data_masked) +
@@ -696,10 +696,10 @@ crs(lc_data)
 - You can find different CRSs and their representations at https://epsg.io/
 
 **Vector data:**
-1. `study_area2 = st_transform(study_area, st_crs(another_sf_obj))`
-1. `study_area2 = st_transform(study_area, crs(lc_data))`
-1. `study_area2 = st_transform(study_area, 4326)`
-1. `study_area2 = st_transform(study_area, "ESRI:54030")`
+1. `study_area2 <- st_transform(study_area, st_crs(another_sf_obj))`
+1. `study_area2 <- st_transform(study_area, crs(lc_data))`
+1. `study_area2 <- st_transform(study_area, 4326)`
+1. `study_area2 <- st_transform(study_area, "ESRI:54030")`
 ]
 
 
@@ -708,13 +708,13 @@ crs(lc_data)
 
 .pull-right[
 **Raster data:**
-1. `elev_data2 = projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs")`
-1. `elev_data2 = projectRaster(elev_data, crs = lc_data)`
-1. `elev_data2 = projectRaster(elev_data, crs = st_crs(study_area)$proj4string)`
+1. `elev_data2 <- projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs")`
+1. `elev_data2 <- projectRaster(elev_data, crs = lc_data)`
+1. `elev_data2 <- projectRaster(elev_data, crs = st_crs(study_area)$proj4string)`
 
 Method is important here:
-1. `elev_data2 = projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs", method = "bilinear")`
-1. `lc_data2 = projectRaster(lc_data, crs = "+proj=longlat +datum=WGS84 +no_defs", method = "ngb")`
+1. `elev_data2 <- projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs", method = "bilinear")`
+1. `lc_data2 <- projectRaster(lc_data, crs = "+proj=longlat +datum=WGS84 +no_defs", method = "ngb")`
 ]
 
 ---
