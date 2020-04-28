@@ -164,7 +164,7 @@ head(study_area)
 
 
 ---
-# ...
+# Spatial data reading
 
 .pull-left[
 <!-- https://www.mrlc.gov/data/legends/national-land-cover-database-2011-nlcd2011-legend -->
@@ -221,7 +221,9 @@ lc_data <- raster("data/example_landscape.tif")
 library(elevatr)
 elev_data <- elevatr::get_elev_raster(extend(lc_data, y = c(100, 100)), z = 11)
 elev_data <- resample(elev_data, lc_data, method = "bilinear")
-writeRaster(elev_data, "data/example_elevation.tif", options = "COMPRESS=DEFLATE")
+elev_data2 <- projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs")
+elev_data3 <- projectRaster(elev_data2, crs = lc_data)
+writeRaster(elev_data2, "data/example_elevation.tif", options = "COMPRESS=DEFLATE", overwrite = TRUE)
 ```
 ]
 
@@ -302,7 +304,7 @@ tm_shape(study_area) #<<
 # Making maps in R
 
 .left-code[
-```{r tm2, fig.show="hide"}
+```{r tm2, fig.show="hide", fig.width=8}
 tm_shape(study_area) +
   tm_borders() #<<
 ```
@@ -316,7 +318,7 @@ tm_shape(study_area) +
 # Making maps in R
 
 .left-code[
-```{r tm3, fig.show="hide"}
+```{r tm3, fig.show="hide", fig.width=8}
 tm_shape(study_area) +
   tm_borders() +
   tm_scale_bar(position = c("right",      #<<
@@ -333,7 +335,7 @@ tm_shape(study_area) +
 # Making maps in R
 
 .left-code[
-```{r tm4, fig.show="hide"}
+```{r tm4, fig.show="hide", fig.width=8}
 tm_shape(study_area) +
   tm_borders() +
   tm_scale_bar(position = c("right",      
@@ -369,7 +371,7 @@ tm_shape(study_area) +
 # Making maps in R
 
 .left-code[
-```{r tm5, fig.show="hide"}
+```{r tm5, fig.show="hide", fig.width=8}
 tm_shape(lc_data) + #<<
   tm_raster()       #<<
 ```
@@ -383,7 +385,7 @@ tm_shape(lc_data) + #<<
 # Making maps in R
 
 .left-code[
-```{r tm6, fig.show="hide"}
+```{r tm6, fig.show="hide", fig.width=8}
 tm_shape(lc_data) + 
   tm_raster() +
   tm_layout(legend.outside = TRUE) #<<
@@ -398,7 +400,7 @@ tm_shape(lc_data) +
 # Making maps in R
 
 .left-code[
-```{r tm7, fig.show="hide"}
+```{r tm7, fig.show="hide", fig.width=8}
 tm_shape(lc_data) + 
   tm_raster(drop.levels = TRUE,       #<<
             title = "Land cover:") +  #<<
@@ -414,7 +416,7 @@ tm_shape(lc_data) +
 # Making maps in R
 
 .left-code[
-```{r tm8, fig.show="hide"}
+```{r tm8, fig.show="hide", fig.width=8}
 tm_shape(lc_data) + 
   tm_raster(drop.levels = TRUE,       
             title = "Land cover:") +  
@@ -436,7 +438,7 @@ tm_shape(lc_data) +
 # Making maps in R
 
 .left-code[
-```{r tm9, fig.show="hide"}
+```{r tm9, fig.show="hide", fig.width=8}
 tm_shape(lc_data) + 
   tm_raster(drop.levels = TRUE,       
             title = "Land cover:") +  
@@ -463,7 +465,7 @@ elev_data <- raster("data/example_elevation.tif")
 ```
 
 .left-code[
-```{r tm10, fig.show="hide"}
+```{r tm10, fig.show="hide", fig.width=8}
 tm_shape(elev_data) +  #<<
   tm_raster()  #<<
 ```
@@ -477,7 +479,7 @@ tm_shape(elev_data) +  #<<
 # Making maps in R
 
 .left-code[
-```{r tm11, fig.show="hide"}
+```{r tm11, fig.show="hide", fig.width=8}
 tm_shape(elev_data) + 
   tm_raster(style = "cont",  #<<
             title = "Elevation (m asl)") +  #<<
@@ -493,7 +495,7 @@ tm_shape(elev_data) +
 # Making maps in R
 
 .left-code[
-```{r tm12, fig.show="hide"}
+```{r tm12, fig.show="hide", fig.width=8}
 tm_shape(elev_data) + 
   tm_raster(style = "cont",
             title = "Elevation (m asl)",
@@ -511,7 +513,7 @@ tm_shape(elev_data) +
 ---
 # Making maps in R
 
-```{r tm13, fig.show="hide"}
+```{r tm13, fig.show="hide", fig.width=8}
 map1 <- tm_shape(elev_data) + 
   tm_raster(style = "cont",
             title = "Elevation (m asl)",
@@ -522,19 +524,224 @@ tmap_save(map1, "my_first_map.png")  #<<
 ```
 
 ---
-# Vector-raster interactions
+# R spatial processing power
+
+.pull-left[
+Attribute data operations:
+- Vector attribute subsetting, aggregation and joins
+- Creating new vector attributes
+- Raster subsetting
+- Summarizing raster objects
+
+Spatial data operations:
+- Spatial subsetting
+- Topological relations
+- Spatial joining
+- Aggregation
+- Map algebra
+- Local, focal, and zonal raster operations
+]
+
+.pull-right[
+Geometry operations:
+- Geometric operations on vector data
+- Geometric operations on raster data
+- **Vector-raster interactions**
+
+Coordinate reference systems:
+- Understanding map projections
+- **Reprojecting spatial data**
+- Modifying map projections
+]
+
 
 ---
 # Vector-raster interactions: crop
 
+.lc[
+```{r, eval=FALSE}
+lc_data
+```
+```{r, echo=FALSE}
+tm_shape(lc_data) +
+  tm_raster() +
+  tm_shape(study_area) + 
+  tm_borders(lwd = 3, col = "black") +
+  tm_layout(legend.show = FALSE)
+```
+
+]
+
+.rc[
+```{r}
+lc_data_cropped = crop(lc_data, study_area)
+```
+```{r, echo=FALSE, fig.width=8}
+tm_shape(lc_data_cropped) +
+  tm_raster() +
+  tm_shape(study_area) + 
+  tm_borders(lwd = 3, col = "black") +
+  tm_layout(legend.show = FALSE)
+```
+]
+
 ---
 # Vector-raster interactions: mask
 
----
-# Reprojections
+.lc[
+```{r, eval=FALSE}
+lc_data
+```
+```{r, echo=FALSE}
+tm_shape(lc_data) +
+  tm_raster() +
+  tm_shape(study_area) + 
+  tm_borders(lwd = 3, col = "black") +
+  tm_layout(legend.show = FALSE)
+```
+
+]
+
+.rc[
+```{r}
+# lc_data_masked = mask(crop(lc_data, study_area), study_area)
+lc_data_masked = mask(lc_data_cropped, study_area)
+```
+```{r, echo=FALSE, fig.width=8}
+tm_shape(lc_data_masked) +
+  tm_raster() +
+  tm_shape(study_area) + 
+  tm_borders(lwd = 3, col = "black") +
+  tm_layout(legend.show = FALSE)
+```
+]
+
 
 ---
-# Reprojections
+# Spatial data coordinates
+
+```{r, echo=FALSE}
+polygon_sfc = st_sfc(st_polygon(list(rbind(
+  c(1.2, 0.6), c(1.4, 0.6), c(1.4, 0.8), c(1.2, 0.8), c(1.2, 0.6)
+))), crs = 4326)
+polygon_sf = st_sf(geometry = polygon_sfc)
+```
+
+- **Geographic coordinates**: angles (degrees; longitude and latitude), pointing out locations on a spherical or ellipsoidal surface
+- **Projected coordinates**: measured on a two-dimensional flat space (e.g. in metres; x and y), related to an ellipsoid by projection
+
+.pull-left[
+```{r, warning=FALSE, purl=FALSE, echo=FALSE, fig.height=6}
+library(tmap)
+library(sf)
+polygon_sf$id = as.factor(c(1))
+polygon_sf_af = polygon_sf
+polygon_sf_af$geometry = polygon_sf_af$geometry + c(20, 40)
+polygon_sf_afp = st_cast(polygon_sf_af, "MULTIPOINT")
+tm_shape(polygon_sf_af) +
+  tm_graticules() + 
+  tm_polygons(col = "id", lwd = 7) +
+  tm_shape(polygon_sf_afp) +
+  tm_dots(size = 1) +
+  tm_layout(main.title = "POLYGON", legend.show = FALSE, inner.margins = 0.15) +
+  tm_xlab("Longitude", space = 0.5) + 
+  tm_ylab("Latitude", space = 0.5)
+```
+]
+
+.pull-right[
+```{r, purl=FALSE, echo=FALSE, warning=FALSE, fig.height=6}
+library(tmap)
+polygon_sf_p = st_cast(polygon_sf, "MULTIPOINT")
+tm_shape(polygon_sf) +
+  tm_grid() + 
+  tm_polygons(col = "id", lwd = 7) +
+  tm_shape(polygon_sf_p) +
+  tm_dots(size = 1) +
+  tm_layout(main.title = "POLYGON", legend.show = FALSE, inner.margins = 0.15) +
+  tm_xlab("X", space = 0.5) + 
+  tm_ylab("Y", space = 0.5)
+```
+]
+
+
+---
+# Coordinate reference systems
+
+.pull-left[
+```{r}
+st_crs(study_area)
+```
+]
+
+.pull-right[
+```{r}
+crs(lc_data)
+```
+]
+
+---
+# Reprojecting spatial data
+
+https://epsg.io/
+
+.pull-left[
+- `study_area2 = st_transform(study_area, st_crs(another_sf_obj))`
+- `study_area2 = st_transform(study_area, crs(lc_data))`
+- `study_area2 = st_transform(study_area, 4326)`
+- `study_area2 = st_transform(study_area, "ESRI:54030")`
+]
+
+.pull-right[
+- `elev_data2 = projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs")`
+- `elev_data2 = projectRaster(elev_data, crs = lc_data)`
+- `elev_data2 = projectRaster(elev_data, crs = st_crs(study_area)$proj4string)`
+
+- `elev_data2 = projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs", method = "bilinear")`
+- `lc_data2 = projectRaster(lc_data, crs = "+proj=longlat +datum=WGS84 +no_defs", method = "ngb")`
+]
+
+---
+# Reprojecting spatial data
+
+<!-- ?resample -->
+
+.pull-left[
+```{r, eval=FALSE}
+elev_data
+```
+<br>
+<br>
+```{r, echo=FALSE, fig.width=8}
+tm_shape(elev_data) + 
+  tm_raster(style = "cont",
+            title = "Elevation (m asl)",
+            palette = "-RdYlGn") +
+  tm_layout(legend.show = FALSE) + 
+  tm_graticules()
+```
+
+
+]
+
+.pull-right[
+```{r}
+elev_data2 <- projectRaster(elev_data, 
+                            crs = lc_data, 
+                            method = "bilinear")
+```
+```{r, echo=FALSE, fig.width=8}
+tm_shape(elev_data2) + 
+  tm_raster(style = "cont",
+            title = "Elevation (m asl)",
+            palette = "-RdYlGn") +
+  tm_layout(legend.show = FALSE) + 
+  tm_grid()
+```
+
+
+
+]
 
 ---
 class: left, middle, clear, nonum
