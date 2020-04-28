@@ -513,7 +513,8 @@ tm_shape(elev_data) +
 ---
 # Making maps in R
 
-```{r tm13, fig.show="hide", fig.width=8}
+.left-code[
+```{r tm13, fig.show="hide", fig.width=8, eval=FALSE}
 map1 <- tm_shape(elev_data) + 
   tm_raster(style = "cont",
             title = "Elevation (m asl)",
@@ -521,7 +522,14 @@ map1 <- tm_shape(elev_data) +
   tm_layout(legend.outside = TRUE)
 
 tmap_save(map1, "my_first_map.png")  #<<
+
+tmap_save(map1, "my_first_map.html")  #<<
 ```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("tm12", "png")`)
+]
 
 ---
 # R spatial processing power
@@ -756,24 +764,24 @@ class: left, middle, clear, nonum
 <!-- add something about r spatial ecosystem?? -->
 
 .lc[
+<a href="https://geocompr.robinlovelace.net/">
 ```{r, echo=FALSE, out.width="100%"}
 knitr::include_graphics("figs/book_cover.jpg")
 ```
+</a>
 ]
 
 .rc[
 Recent talks:
-- https://www.youtube.com/watch?v=Va0STgco7-4
-- https://nowosad.github.io/whyr_webinar004/#1
-- https://www.youtube.com/watch?v=bLgoqnqJ4DY
-- https://nowosad.github.io/whyr_19
+- "The landscape of spatial data analysis in R": [video](https://www.youtube.com/watch?v=bLgoqnqJ4DY) and [slides](https://nowosad.github.io/whyr_19)
+- "Recent changes in R spatial and how to be ready for them": [video](https://www.youtube.com/watch?v=Va0STgco7-4) and [slides](https://nowosad.github.io/whyr_webinar004)
 
 Resources:
 
-- https://geocompr.github.io/
-- https://www.rspatial.org/
-- https://www.r-spatial.org/
-- https://gis.stackexchange.com/questions/tagged/r
+- [The Geocomputation with R website](https://geocompr.github.io/): open source book, blog posts, workshop materials, and more
+- [The Spatial Data Science with R website (focus on raster)](https://www.rspatial.org/): materials focused on the **raster** package
+- [The r-spatial website](https://www.r-spatial.org/): blog posts and a book-in-progress
+- [The GIS Stackexchange website](https://gis.stackexchange.com/questions/tagged/r): place to ask questions related to spatial data analysis in R
 - `#rspatial` and `#geocompr` on Twitter
 ]
 
