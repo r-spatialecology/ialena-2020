@@ -580,7 +580,7 @@ tm_shape(lc_data) +
 
 .rc[
 ```{r}
-lc_data_cropped <- crop(lc_data, study_area)
+lc_data_cropped <- crop(lc_data, study_area) #<<
 ```
 ```{r, echo=FALSE, fig.width=8}
 tm_shape(lc_data_cropped) +
@@ -611,7 +611,7 @@ tm_shape(lc_data) +
 .rc[
 ```{r}
 # lc_data_masked <- mask(crop(lc_data, study_area), study_area)
-lc_data_masked <- mask(lc_data_cropped, study_area)
+lc_data_masked <- mask(lc_data_cropped, study_area) #<<
 ```
 ```{r, echo=FALSE, fig.width=8}
 tm_shape(lc_data_masked) +
@@ -676,13 +676,17 @@ tm_shape(polygon_sf) +
 
 .pull-left[
 ```{r}
-st_crs(study_area)
+st_crs(study_area) #<<
 ```
 ]
 
+
+--
+
+
 .pull-right[
 ```{r}
-crs(lc_data)
+crs(lc_data) #<<
 ```
 ]
 
@@ -695,10 +699,10 @@ crs(lc_data)
 - **Projected Coordinate Reference Systems:** data analysis, local maps. Often some CRS is already used in the project/by the institution
 - You can find different CRSs and their representations at https://epsg.io/
 
-**Vector data:**
+Vector data:
 1. `study_area2 <- st_transform(study_area, st_crs(another_sf_obj))`
 1. `study_area2 <- st_transform(study_area, crs(lc_data))`
-1. `study_area2 <- st_transform(study_area, 4326)`
+1. `study_area2 <- st_transform(study_area,4326)`
 1. `study_area2 <- st_transform(study_area, "ESRI:54030")`
 ]
 
@@ -707,7 +711,7 @@ crs(lc_data)
 
 
 .pull-right[
-**Raster data:**
+Raster data:
 1. `elev_data2 <- projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs")`
 1. `elev_data2 <- projectRaster(elev_data, crs = lc_data)`
 1. `elev_data2 <- projectRaster(elev_data, crs = st_crs(study_area)$proj4string)`
@@ -742,9 +746,9 @@ tm_shape(elev_data) +
 
 .pull-right[
 ```{r}
-elev_data2 <- projectRaster(elev_data, 
-                            crs = lc_data, 
-                            method = "bilinear")
+elev_data2 <- projectRaster(elev_data, #<<
+                            crs = lc_data, #<< 
+                            method = "bilinear") #<<
 ```
 ```{r, echo=FALSE, fig.width=8}
 tm_shape(elev_data2) + 
