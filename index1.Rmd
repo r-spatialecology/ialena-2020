@@ -249,9 +249,6 @@ write_sf(bb, "data/study_area.gpkg")
 ]
 
 
-
-<!-- Making maps in R (lecture) -->
-
 ---
 # Making maps in R: tmap
 
@@ -272,6 +269,21 @@ knitr::include_graphics("figs/tmap-examples.png")
 class: left, middle, clear, nonum
 
 ##  First practical part
+
+Try to work through *Exercise_1_1.R*. 
+The exercise will throw you in at the deep end - **you need to modify the provided code to improve the resulting map**.
+
+During the exercise there are part where you are supposed to type your own solution indicated by the following structure:
+
+```{r exercise_code_1_1, eval = FALSE}
+# /Start Code/ #
+
+print("Hello World") # This would be your code contribution
+
+# /End Code/ # 
+```
+
+In case you run into problems or have any questions, please contact us at any time via *Zoom* private chat. 
 
 <!-- - Making maps in R (practical) -->
 <!-- Run the code and: -->
