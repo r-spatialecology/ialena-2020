@@ -332,6 +332,8 @@ class: left, top, clear
 .pull-left[
 ## Summary:
 
+- "console-based ability to seamlessly switch between geographic and non-geographic data processing, modeling and visualization tasks"
+- A tip of an iceberg (but you do not need to know it all)
 - Questions?
 ]
 
