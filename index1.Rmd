@@ -691,22 +691,32 @@ crs(lc_data)
 ---
 # Reprojecting spatial data
 
-https://epsg.io/
-
 .pull-left[
-- `study_area2 = st_transform(study_area, st_crs(another_sf_obj))`
-- `study_area2 = st_transform(study_area, crs(lc_data))`
-- `study_area2 = st_transform(study_area, 4326)`
-- `study_area2 = st_transform(study_area, "ESRI:54030")`
+- [A vast topic](https://geocompr.robinlovelace.net/reproj-geo-data.html#when-to-reproject)
+- **Geographic Coordinate Reference Systems:** data integration, web mapping. Usually WGS84 (EPSG: 4326)
+- **Projected Coordinate Reference Systems:** data analysis, local maps. Often some CRS is already used in the project/by the institution
+- You can find different CRSs and their representations at https://epsg.io/
+
+**Vector data:**
+1. `study_area2 = st_transform(study_area, st_crs(another_sf_obj))`
+1. `study_area2 = st_transform(study_area, crs(lc_data))`
+1. `study_area2 = st_transform(study_area, 4326)`
+1. `study_area2 = st_transform(study_area, "ESRI:54030")`
 ]
 
-.pull-right[
-- `elev_data2 = projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs")`
-- `elev_data2 = projectRaster(elev_data, crs = lc_data)`
-- `elev_data2 = projectRaster(elev_data, crs = st_crs(study_area)$proj4string)`
 
-- `elev_data2 = projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs", method = "bilinear")`
-- `lc_data2 = projectRaster(lc_data, crs = "+proj=longlat +datum=WGS84 +no_defs", method = "ngb")`
+--
+
+
+.pull-right[
+**Raster data:**
+1. `elev_data2 = projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs")`
+1. `elev_data2 = projectRaster(elev_data, crs = lc_data)`
+1. `elev_data2 = projectRaster(elev_data, crs = st_crs(study_area)$proj4string)`
+
+Method is important here:
+1. `elev_data2 = projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs", method = "bilinear")`
+1. `lc_data2 = projectRaster(lc_data, crs = "+proj=longlat +datum=WGS84 +no_defs", method = "ngb")`
 ]
 
 ---
