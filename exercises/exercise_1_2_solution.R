@@ -67,7 +67,20 @@ lc_data_masked <- mask(crop(lc_data, study_area), study_area)
 
 # /Start Code/ #
 
+#1
+zion
+class(zion)
+st_crs(zion)
+dim(zion)
+st_geometry_type(zion)
 
+#2
+srtm
+class(srtm)
+crs(srtm)
+nlayers(srtm)
+dim(srtm)
+res(srtm)
 
 # /End Code/ #
 
@@ -85,7 +98,15 @@ lc_data_masked <- mask(crop(lc_data, study_area), study_area)
 
 # /Start Code/ #
 
+#1
+srtm2 <- projectRaster(srtm, crs = zion)
+plot(srtm)
+plot(srtm2)
 
+#2
+zion2 <- st_transform(zion, crs = st_crs(srtm)$proj4string)
+plot(zion)
+plot(zion2)
 
 # /End Code/ #
 
@@ -94,12 +115,20 @@ lc_data_masked <- mask(crop(lc_data, study_area), study_area)
 
 # 1. Use the `zion` and `srtm2` objects.
 # Crop and mask the `srtm2` object to the borders of the `zion` object.
+# 2. Try using the `inverse = TRUE` argument in the mask function. 
+# What does it do?
 
 # Your solution
 
 # /Start Code/ #
 
+#1
+srtm3 <- mask(crop(srtm2, zion), zion)
+plot(srtm3)
 
+#2
+srtm4 <- mask(crop(srtm2, zion), zion, inverse = TRUE)
+plot(srtm4)
 
 # /End Code/ #
 
@@ -113,7 +142,25 @@ lc_data_masked <- mask(crop(lc_data, study_area), study_area)
 
 # /Start Code/ #
 
+my_map = tm_shape(lc_data_masked) + 
+  tm_raster(drop.levels = TRUE,       
+            title = "Land cover:") +  
+  tm_shape(study_area) +
+  tm_borders(lwd = 3, col = "black") +
+  tm_scale_bar(position = c("RIGHT", "BOTTOM"),
+               breaks = c(0, 1, 2),
+               text.size = 0.6) +
+  tm_compass(position = c("LEFT", "TOP"),
+             type = "rose", 
+             size = 1) +
+  tm_credits(position = c("LEFT", "BOTTOM"),
+             text = "Nowosad, 2020",
+             size = 0.5) +
+  tm_layout(main.title = "Study area",
+            legend.outside = TRUE,
+            frame = FALSE)
 
+tmap_save(my_map, "LC_NOWOSAD.png")
 
 # /End Code/ #
 
