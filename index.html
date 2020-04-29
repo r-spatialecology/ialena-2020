@@ -8,6 +8,17 @@
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+    <script src="libs/jquery-1.12.4/jquery.min.js"></script>
+    <link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+    <script src="libs/leaflet-1.3.1/leaflet.js"></script>
+    <link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+    <script src="libs/Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+    <script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+    <link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+    <script src="libs/leaflet-binding-2.0.3/leaflet.js"></script>
+    <script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+    <script src="libs/leaflet-providers-plugin-2.0.3/leaflet-providers-plugin.js"></script>
     <link href="libs/ionicons-2.0.1/css/ionicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" type="text/css" />
   </head>
@@ -30,6 +41,7 @@ background-size: cover
 
 
 &lt;link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lora" /&gt;
+
 .captionstyle[Jakub Nowosad and Maximilian H.K. Hesselbarth]
 
 .captionstyle[2020-05-14, the IALE-North America 2020 Annual Meeting]
@@ -91,34 +103,80 @@ Jakub Nowosad
 Institute of Geoecology and Geoinformation, Adam Mickiewicz University, Poznan, Poland
 
 ---
-# Intro to R spatial
+# Spatial data representations: raster data
 
-&lt;!-- - I would show how to read raster data, understand its structure, visualize it using *tmap*, and provide some links to more resources. In details: --&gt;
+.lc[
+- The **raster** package
+- Classes for spatial raster data: `RasterLayer`, and multilayer `RasterStack` and `RasterBrick`
+- Raster data input/output
+- Raster algebra and raster processing
+- ?`raster-package`, [link1](https://geocompr.robinlovelace.net/spatial-class.html#raster-data), [link2](https://rspatial.org/raster/index.html), and [link3](http://www.rpubs.com/etiennebr/visualraster)
+]
 
-&lt;!-- - Intro (lecture) --&gt;
-
----
-# Making maps in R
-
-&lt;!-- Making maps in R (lecture) --&gt;
-
----
-# tmap
+.rc[
+&lt;img src="figs/raster-intro-plot-1.png" height="200" style="display: block; margin: auto;" /&gt;
 
 
 ```r
-library(tmap)
+library(raster)
+elev_data &lt;- raster("data/example_elevation.tif")
+elev_data
 ```
 
-- Thematic mapping package
-- It allows you to create static maps, animated maps and interactive maps.
-- It works by adding subsequent layers to visualize and then modifying them.
-- https://github.com/mtennekes/tmap - list of additional materials about the **tmap** package 
+```
+## class      : RasterLayer 
+## dimensions : 550, 753, 414150  (nrow, ncol, ncell)
+## resolution : 0.000322, 0.000266  (x, y)
+## extent     : -82.41659, -82.17413, 33.45642, 33.60272  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs  
+## source     : /home/jn/Science/conferences/2020/ialena-2020/data/example_elevation.tif 
+## names      : example_elevation 
+## values     : 57, 178.9385  (min, max)
+```
+]
 
-&lt;img src="figs/tmap-examples.png" width="75%" style="display: block; margin: auto;" /&gt;
 
 ---
-# ...
+# Spatial data representations: vector data
+
+.pull-left[
+<div id="htmlwidget-8d23e35eba91de204018" style="width:504px;height:504px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8d23e35eba91de204018">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"createMapPane","args":["tmap401",401]},{"method":"addProviderTiles","args":["Esri.WorldGrayCanvas",null,"Esri.WorldGrayCanvas",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["OpenStreetMap",null,"OpenStreetMap",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["Esri.WorldTopoMap",null,"Esri.WorldTopoMap",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addPolygons","args":[[[[{"lng":[-82.247983,-82.225345,-82.212312,-82.239751,-82.274736,-82.311779,-82.339904,-82.352937,-82.356367,-82.347449,-82.31658,-82.28091,-82.247983],"lat":[33.486435,33.514492,33.543112,33.559707,33.569433,33.572294,33.561995,33.539678,33.520217,33.496743,33.481854,33.47899,33.486435]}]]],"X1","study_area",{"interactive":false,"className":"","pane":"tmap401","stroke":true,"color":"#666666","weight":1,"opacity":1,"fill":true,"fillOpacity":0,"dashArray":"none","smoothFactor":1,"noClip":false},null,null,"1",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["Esri.WorldGrayCanvas","OpenStreetMap","Esri.WorldTopoMap"],"study_area",{"collapsed":true,"autoZIndex":true,"position":"topleft"}]}],"limits":{"lat":[33.47899,33.572294],"lng":[-82.356367,-82.212312]},"fitBounds":[33.47899,-82.356367,33.572294,-82.212312,[]]},"evals":[],"jsHooks":[]}</script>
+
+]
+
+.pull-right[
+
+
+```r
+library(sf)
+study_area &lt;- read_sf("data/study_area.gpkg")
+head(study_area)
+```
+
+```
+## Simple feature collection with 1 feature and 1 field
+## geometry type:  POLYGON
+## dimension:      XY
+## bbox:           xmin: 1254413 ymin: 1247861 xmax: 1267196 ymax: 1258095
+## proj4string:    +proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
+## # A tibble: 1 x 2
+##      id                                                                     geom
+##   &lt;dbl&gt;                                                            &lt;POLYGON [m]&gt;
+## 1     1 ((1264853 1249278, 1266468 1252680, 1267196 1256017, 1264424 1257485, 1…
+```
+
+- The **sf** package
+- A class system for spatial vector data 
+- Vector data input/output
+- Transformations between different coordinate reference systems (CRS)
+- Geometric operations
+- [link1](https://geocompr.robinlovelace.net/spatial-class.html#vector-data), [link2](https://r-spatial.github.io/sf/), [link3](https://github.com/rstudio/cheatsheets/blob/master/sf.pdf)
+]
+
+
+---
+# Spatial data reading
 
 .pull-left[
 &lt;!-- https://www.mrlc.gov/data/legends/national-land-cover-database-2011-nlcd2011-legend --&gt;
@@ -135,6 +193,8 @@ library(raster)
 study_area &lt;- read_sf("data/study_area.gpkg")
 lc_data &lt;- raster("data/example_landscape.tif") 
 ```
+
+
 ]
 
 .pull-right[
@@ -144,7 +204,7 @@ plot(lc_data, axes = TRUE)
 plot(st_geometry(study_area), add = TRUE)
 ```
 
-&lt;img src="index_files/figure-html/unnamed-chunk-8-1.png" width="504" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -154,25 +214,41 @@ plot(st_geometry(study_area), add = TRUE)
 ]
 
 
+---
+# Making maps in R: tmap
+
+
+```r
+library(tmap)
+```
+
+- Thematic mapping package
+- It allows you to create static maps, animated maps and interactive maps.
+- It works by adding subsequent layers to visualize and then modifying them.
+- https://github.com/mtennekes/tmap - list of additional materials about the **tmap** package 
+
+&lt;img src="figs/tmap-examples.png" width="75%" style="display: block; margin: auto;" /&gt;
 
 ---
 class: left, middle, clear, nonum
 
 ##  First practical part
 
-&lt;!-- - Making maps in R (practical) --&gt;
-&lt;!-- Run the code and: --&gt;
+Try to work through *Exercise_1_1.R*. 
+The exercises will throw you in at the deep end - **you need to modify the provided code to improve the resulting map**.
 
-&lt;!-- 1. Change the map title from `"My map"` to `"New Zealand"`. --&gt;
-&lt;!-- 2. Update the map credits with your own name and today's date. --&gt;
-&lt;!-- 3. Change the color palette to `"BuGn"`.  --&gt;
-&lt;!-- (You can also try other palettes from http://colorbrewer2.org/) --&gt;
-&lt;!-- 4. Put the north arrow in the top right corner of the map. --&gt;
-&lt;!-- 5. Improve the legend title by adding the legend units. --&gt;
-&lt;!-- 6. Increase the number of breaks in the scale bar. --&gt;
-&lt;!-- 7. Change the borders' color of the New Zealand's regions to black.  --&gt;
-&lt;!-- Decrease the line width. --&gt;
-&lt;!-- 8. Change the background color to any color of your choice. --&gt;
+During the exercise there are part where you are supposed to type your own solution indicated by the following structure:
+
+
+```r
+# /Start Code/ #
+
+print("Hello World") # This would be your code contribution
+
+# /End Code/ # 
+```
+
+In case you run into problems or have any questions, please contact us at any time via *Zoom* private chat. 
 
 ---
 # Making maps in R
@@ -180,7 +256,7 @@ class: left, middle, clear, nonum
 .left-code[
 
 ```r
-*tm_shape(lc_data)
+*tm_shape(study_area)
 ```
 
 ```
@@ -198,8 +274,8 @@ class: left, middle, clear, nonum
 .left-code[
 
 ```r
-tm_shape(lc_data) +
-* tm_raster()
+tm_shape(study_area) +
+* tm_borders()
 ```
 ]
 
@@ -207,35 +283,459 @@ tm_shape(lc_data) +
 ![](index_files/figure-html/tm2-1.png)
 ]
 
+---
+# Making maps in R
+
+.left-code[
+
+```r
+tm_shape(study_area) +
+  tm_borders() +
+* tm_scale_bar(position = c("right",
+*                           "bottom")) +
+* tm_compass(position = c("left", "top"))
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm3-1.png)
+]
 
 ---
-# Spatial data representations
+# Making maps in R
 
-&lt;!-- - Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (lecture) --&gt;
-&lt;!-- short the text here -- add images!--&gt;
+.left-code[
 
-**sf**:
-- The **sf** package is the successor of the **sp** package based on the OGC standard Simple Features.
-- Combines the functionality of three previous packages: **sp**, **rgeos** and **rgdal**.
-- Most of the functions in this package start with a prefix `st_`.
-- This package handles additional vector data types (e.g. polygon and multipolygon are two separate classes), allows for easier data processing, and support sfor spatial databases such as PostGIS.
-- https://r-spatial.github.io/sf/ and https://github.com/rstudio/cheatsheets/blob/master/sf.pdf
+```r
+tm_shape(study_area) +
+  tm_borders() +
+  tm_scale_bar(position = c("right",      
+                            "bottom")) +  
+  tm_compass(position = c("left", "top")) +
+* tm_layout(main.title = "Study area")
+```
+]
 
-**raster**:
-- The **raster** package contains classes and methods representing raster objects and operations.
-- It allows raster data to be loaded and saved.
-- It allows raster algebra and raster processing.
-- It includes a number of additional functions, e.g. for analysis of terrain characteristics.
-- It allows you to work on large sets of data.
-- ?`raster-package` and http://www.rpubs.com/etiennebr/visualraster
+.right-plot[
+![](index_files/figure-html/tm4-1.png)
+]
 
+---
+# Making maps in R
+
+
+```r
+*tmap_mode("view")
+tm_shape(study_area) +
+  tm_borders() +
+  tm_layout(main.title = "Study area")
+```
+
+
+```r
+*tmap_mode("plot")
+tm_shape(study_area) +
+  tm_borders() +
+  tm_layout(main.title = "Study area")
+```
+
+
+---
+# Making maps in R
+
+.left-code[
+
+```r
+*tm_shape(lc_data) +
+* tm_raster()
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm5-1.png)
+]
+
+---
+# Making maps in R
+
+.left-code[
+
+```r
+tm_shape(lc_data) + 
+  tm_raster() +
+* tm_layout(legend.outside = TRUE)
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm6-1.png)
+]
+
+---
+# Making maps in R
+
+.left-code[
+
+```r
+tm_shape(lc_data) + 
+* tm_raster(drop.levels = TRUE,
+*           title = "Land cover:") +
+  tm_layout(legend.outside = TRUE)   
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm7-1.png)
+]
+
+---
+# Making maps in R
+
+.left-code[
+
+```r
+tm_shape(lc_data) + 
+  tm_raster(drop.levels = TRUE,       
+            title = "Land cover:") +  
+* tm_shape(study_area) +
+* tm_borders() +
+* tm_scale_bar(position = c("right",
+*                           "bottom")) +
+* tm_compass(position = c("left", "top")) +
+* tm_layout(main.title = "Study area",
+            legend.outside = TRUE)  
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm8-1.png)
+]
+
+---
+# Making maps in R
+
+.left-code[
+
+```r
+tm_shape(lc_data) + 
+  tm_raster(drop.levels = TRUE,       
+            title = "Land cover:") +  
+  tm_shape(study_area) +
+* tm_borders(lwd = 3, col = "black") +
+  tm_scale_bar(position = c("right",      
+                            "bottom")) +  
+  tm_compass(position = c("left", "top")) +
+  tm_layout(main.title = "Study area",
+            legend.outside = TRUE)  
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm9-1.png)
+]
+
+
+---
+# Making maps in R
+
+
+```r
+elev_data &lt;- raster("data/example_elevation.tif")
+```
+
+.left-code[
+
+```r
+*tm_shape(elev_data) +
+* tm_raster()
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm10-1.png)
+]
+
+---
+# Making maps in R
+
+.left-code[
+
+```r
+tm_shape(elev_data) + 
+* tm_raster(style = "cont",
+*           title = "Elevation (m asl)") +
+* tm_layout(legend.outside = TRUE)
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm11-1.png)
+]
+
+---
+# Making maps in R
+
+.left-code[
+
+```r
+tm_shape(elev_data) + 
+  tm_raster(style = "cont",
+            title = "Elevation (m asl)",
+*           palette = "-RdYlGn") +
+  tm_layout(legend.outside = TRUE)
+```
+
+```r
+# tmaptools::palette_explorer()
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm12-1.png)
+]
+
+---
+# Making maps in R
+
+.left-code[
+
+```r
+map1 &lt;- tm_shape(elev_data) + 
+  tm_raster(style = "cont",
+            title = "Elevation (m asl)",
+            palette = "-RdYlGn") +
+  tm_layout(legend.outside = TRUE)
+
+*tmap_save(map1, "my_first_map.png")
+
+*tmap_save(map1, "my_first_map.html")
+```
+]
+
+.right-plot[
+![](index_files/figure-html/tm12-1.png)
+]
+
+---
+# R spatial processing power
+
+.pull-left[
+Attribute data operations:
+- Vector attribute subsetting, aggregation and joins
+- Creating new vector attributes
+- Raster subsetting
+- Summarizing raster objects
+
+Spatial data operations:
+- Spatial subsetting
+- Topological relations
+- Spatial joining
+- Aggregation
+- Map algebra
+- Local, focal, and zonal raster operations
+]
+
+.pull-right[
+Geometry operations:
+- Geometric operations on vector data
+- Geometric operations on raster data
+- **Vector-raster interactions**
+
+Coordinate reference systems:
+- Understanding map projections
+- **Reprojecting spatial data**
+- Modifying map projections
+]
+
+
+---
+# Vector-raster interactions: crop
+
+.lc[
+
+```r
+lc_data
+```
+&lt;img src="index_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+.rc[
+
+```r
+*lc_data_cropped &lt;- crop(lc_data, study_area)
+```
+&lt;img src="index_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Vector-raster interactions: mask
+
+.lc[
+
+```r
+lc_data
+```
+&lt;img src="index_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+.rc[
+
+```r
+# lc_data_masked &lt;- mask(crop(lc_data, study_area), study_area)
+*lc_data_masked &lt;- mask(lc_data_cropped, study_area)
+```
+&lt;img src="index_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+# Spatial data coordinates
+
+
+
+- **Geographic coordinates**: angles (degrees; longitude and latitude), pointing out locations on a spherical or ellipsoidal surface
+- **Projected coordinates**: measured on a two-dimensional flat space (e.g. in metres; x and y), related to an ellipsoid by projection
+
+.pull-left[
+&lt;img src="index_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="index_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+# Coordinate reference systems
+
+.pull-left[
+
+```r
+*st_crs(study_area)
+```
+
+```
+## Coordinate Reference System:
+##   No user input
+##   wkt:
+## PROJCS["unnamed",
+##     GEOGCS["GRS 1980(IUGG, 1980)",
+##         DATUM["unknown",
+##             SPHEROID["GRS80",6378137,298.257222101],
+##             TOWGS84[0,0,0,0,0,0,0]],
+##         PRIMEM["Greenwich",0],
+##         UNIT["degree",0.0174532925199433]],
+##     PROJECTION["Albers_Conic_Equal_Area"],
+##     PARAMETER["standard_parallel_1",29.5],
+##     PARAMETER["standard_parallel_2",45.5],
+##     PARAMETER["latitude_of_center",23],
+##     PARAMETER["longitude_of_center",-96],
+##     PARAMETER["false_easting",0],
+##     PARAMETER["false_northing",0],
+##     UNIT["Meter",1]]
+```
+]
+
+
+--
+
+
+.pull-right[
+
+```r
+*crs(lc_data)
+```
+
+```
+## CRS arguments:
+##  +proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0
+## +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+```
+]
+
+---
+# Reprojecting spatial data
+
+.pull-left[
+- [A vast topic](https://geocompr.robinlovelace.net/reproj-geo-data.html#when-to-reproject)
+- **Geographic Coordinate Reference Systems:** data integration, web mapping. Usually WGS84 (EPSG: 4326)
+- **Projected Coordinate Reference Systems:** data analysis, local maps. Often some CRS is already used in the project/by the institution
+- You can find different CRSs and their representations at https://epsg.io/
+
+Vector data:
+1. `study_area2 &lt;- st_transform(study_area, st_crs(another_sf_obj))`
+1. `study_area2 &lt;- st_transform(study_area, crs(lc_data))`
+1. `study_area2 &lt;- st_transform(study_area,4326)`
+1. `study_area2 &lt;- st_transform(study_area, "ESRI:54030")`
+]
+
+
+--
+
+
+.pull-right[
+Raster data:
+1. `elev_data2 &lt;- projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs")`
+1. `elev_data2 &lt;- projectRaster(elev_data, crs = lc_data)`
+1. `elev_data2 &lt;- projectRaster(elev_data, crs = st_crs(study_area)$proj4string)`
+
+Method is important here:
+1. `elev_data2 &lt;- projectRaster(elev_data, crs = "+proj=longlat +datum=WGS84 +no_defs", method = "bilinear")`
+1. `lc_data2 &lt;- projectRaster(lc_data, crs = "+proj=longlat +datum=WGS84 +no_defs", method = "ngb")`
+]
+
+---
+# Reprojecting spatial data
+
+&lt;!-- ?resample --&gt;
+
+.pull-left[
+
+```r
+elev_data
+```
+&lt;br&gt;
+&lt;br&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-32-1.png" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+.pull-right[
+
+```r
+*elev_data2 &lt;- projectRaster(elev_data,
+*                           crs = lc_data,
+*                           method = "bilinear")
+```
+&lt;img src="index_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+]
 
 ---
 class: left, middle, clear, nonum
 
 ##  Second practical part
 
-&lt;!-- - Reading raster data, understanding its structure, and doing simple preprocessing (crop and mask?) (practical) --&gt;
+Try to work through *Exercise_1_2.R*. 
+The exercises will focus on understanding spatial data, interactions between raster and vector representation, and reprojecting spatial objects. 
+
+During the exercise there are part where you are supposed to type your own solution indicated by the following structure:
+
+
+```r
+# /Start Code/ #
+
+print("Hello World") # This would be your code contribution
+
+# /End Code/ # 
+```
+
+In case you run into problems or have any questions, please contact us at any time via *Zoom* private chat. 
 
 ---
 # Summary
@@ -243,22 +743,22 @@ class: left, middle, clear, nonum
 &lt;!-- add something about r spatial ecosystem?? --&gt;
 
 .lc[
+&lt;a href="https://geocompr.robinlovelace.net/"&gt;
 &lt;img src="figs/book_cover.jpg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;/a&gt;
 ]
 
 .rc[
 Recent talks:
-- https://www.youtube.com/watch?v=Va0STgco7-4
-- https://nowosad.github.io/whyr_webinar004/#1
-- https://www.youtube.com/watch?v=bLgoqnqJ4DY
-- https://nowosad.github.io/whyr_19
+- "The landscape of spatial data analysis in R": [video](https://www.youtube.com/watch?v=bLgoqnqJ4DY) and [slides](https://nowosad.github.io/whyr_19)
+- "Recent changes in R spatial and how to be ready for them": [video](https://www.youtube.com/watch?v=Va0STgco7-4) and [slides](https://nowosad.github.io/whyr_webinar004)
 
 Resources:
 
-- https://geocompr.github.io/
-- https://www.rspatial.org/
-- https://www.r-spatial.org/
-- https://gis.stackexchange.com/questions/tagged/r
+- [The Geocomputation with R website](https://geocompr.github.io/): open source book, blog posts, workshop materials, and more
+- [The Spatial Data Science with R website (focus on raster)](https://www.rspatial.org/): materials focused on the **raster** package
+- [The r-spatial website](https://www.r-spatial.org/): blog posts and a book-in-progress
+- [The GIS Stackexchange website](https://gis.stackexchange.com/questions/tagged/r): place to ask questions related to spatial data analysis in R
 - `#rspatial` and `#geocompr` on Twitter
 ]
 
@@ -275,12 +775,505 @@ class: inverse, left, bottom, clear, nonum
 &lt;!--We could ask for questions during the intro, and then during the break, we could look at them and prepare our answers.--&gt;
 &lt;!--we should use some online timer (or rmarkdown timer), visible to the participants--&gt;
 
+
+---
+class: inverse, left, bottom, clear, nonum
+
+layout: false
+
+background-image: url("figs/landscapemetrics.png")
+background-position: 85% 10%
+background-size: 25%
+
+# Part II
+
+## *landscapemetrics*: An open-source R tool to calculate landscape metrics
+
+Maximilian H.K. Hesselbarth
+
+Department of Ecosystem Modelling, University of Goettingen, Germany
+
+---
+# Introdution to landscape metrics
+
+
+
+--
+- Tools to quantify composition and configuration of landscapes
+
+  - Composition: number and abundance of land-cover classes
+  - Configuration: spatial arrangement of land-cover classes
+
+
+--
+- Designed for discrete patches of different land-cover classes
+
+&lt;center&gt; 
+
+--
+.pull-left[
+&lt;img src="figs/aerial_lsm.png" width="75%" height="75%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="index_files/figure-html/example_lsm-1.png" width="75%" height="75%" style="display: block; margin: auto;" /&gt;
+]
+
+&lt;/center&gt;
+
+---
+# Why a new R package was needed
+
+--
+- *FRAGSTATS*  &lt;font size="3" color="grey"&gt; (McGarigal et al., 2012) &lt;/font&gt; 
+  
+  - &lt;font color = "#63C03C"&gt; Comprehensive collection of metrics &lt;/font&gt; 
+  - &lt;font color = "#64AAC5"&gt; Only on Windows, not open source &lt;/font&gt; 
+  - &lt;font color = "#64AAC5"&gt; Need to import/export data &lt;/font&gt; 
+  - &lt;font color = "#64AAC5"&gt; Hard to integrate into larger workflows &lt;/font&gt; 
+
+
+--
+- *SDMTools* (R package) &lt;font size="3" color="grey"&gt; (VanDerWal et al., 2019) &lt;/font&gt; 
+  
+  - &lt;font color = "#63C03C"&gt; Multiplatform, open source &lt;/font&gt;
+  - &lt;font color = "#64AAC5"&gt; Only set of metrics, no metrics on landscape level &lt;/font&gt; 
+  - &lt;font color = "#64AAC5"&gt; Hard to integrate into larger workflows &lt;/font&gt; 
+  - &lt;font color = "#64AAC5"&gt; Not on CRAN anymore (archived on 12.01.2020) &lt;/font&gt; 
+
+
+--
+- Several GIS add-ons (e.g. *r.li* &lt;font size="3" color="grey"&gt; (Porta et al., 2017) &lt;/font&gt;))
+  
+  - &lt;font color = "#63C03C"&gt; Multiplatform, open source &lt;/font&gt;
+  - &lt;font color = "#64AAC5"&gt; Need to use GIS software &lt;/font&gt;
+
+---
+layout: false
+
+background-image: url("figs/landscapemetrics.png")
+background-position: 90% 5%
+background-size: 15%
+
+# The R package *landscapemetrics*
+
+--
+- Based on *raster* package &lt;font size="3" color="grey"&gt; (Hijmans 2017) &lt;/font&gt;
+
+
+--
+- Allows to calculate landscape metrics in transparent and reproducible workflow
+
+
+--
+- Tidy &lt;font size="3" color="grey"&gt; (sensu Wickham 2014) &lt;/font&gt; and type-stable output of all metric functions
+
+
+--
+- Includes many utility functions for e.g. plotting or sampling
+
+&lt;br&gt;
+&lt;center&gt;
+
+--
+&lt;img src="index_files/figure-html/levels_lsm-1.png" width="30%" /&gt;&lt;img src="index_files/figure-html/levels_lsm-2.png" width="30%" /&gt;&lt;img src="index_files/figure-html/levels_lsm-3.png" width="30%" /&gt;
+
+&lt;/center&gt;
+
+---
+# Getting ready to use *landscapemetrics*
+
+--
+Import and check data
+
+
+```r
+# install.packages("landscapemetrics")
+
+lc_data &lt;- raster("data/example_lndscp.tif") 
+check_landscape(lc_data)
+```
+
+```
+##   layer crs units   class n_classes OK
+## 1     1  NA    NA integer         3  ?⃝
+```
+
+--
+List available metrics
+
+
+```r
+list_lsm()
+```
+
+```
+## # A tibble: 132 x 5
+##   metric name                          type                 level function_name
+##   &lt;chr&gt;  &lt;chr&gt;                         &lt;chr&gt;                &lt;chr&gt; &lt;chr&gt;        
+## 1 area   patch area                    area and edge metric patch lsm_p_area   
+## 2 cai    core area index               core area metric     patch lsm_p_cai    
+## 3 circle related circumscribing circle shape metric         patch lsm_p_circle 
+## 4 contig contiguity index              shape metric         patch lsm_p_contig 
+## 5 core   core area                     core area metric     patch lsm_p_core   
+## # … with 127 more rows
+```
+
+---
+# How to calculate landscape metrics
+
+--
+.pull-left[
+
+Calculate single metric
+
+
+```r
+lsm_p_area(lc_data)
+```
+
+```
+## # A tibble: 27 x 6
+##   layer level class    id metric  value
+##   &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;
+## 1     1 patch     1     1 area   0.0001
+## 2     1 patch     1     2 area   0.0005
+## 3     1 patch     1     3 area   0.0148
+## 4     1 patch     1     4 area   0.0001
+## 5     1 patch     1     5 area   0.0001
+## # … with 22 more rows
+```
+]
+
+--
+.pull-right[
+
+Combine several metrics to one *tibble*
+
+
+```r
+class_mean &lt;- lsm_c_area_mn(lc_data)
+lsm_total &lt;- lsm_l_ta(lc_data)
+
+bind_rows(class_mean, lsm_total)
+```
+
+```
+## # A tibble: 4 x 6
+##   layer level     class    id metric    value
+## * &lt;int&gt; &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;
+## 1     1 class         1    NA area_mn 0.00199
+## 2     1 class         2    NA area_mn 0.00173
+## 3     1 class         3    NA area_mn 0.0120 
+## 4     1 landscape    NA    NA ta      0.09
+```
+]
+
+---
+# Easy integration into larger workflows
+
+--
+Integrate easily into larger workflows
+
+
+```r
+set.seed(42)
+
+sample(x = c(1, 2, 3), prob = c(0.5, 0.25, 0.25), size = 2500, replace = TRUE) %&gt;%
+  matrix(nrow = 50, ncol = 50) %&gt;%
+  raster() %&gt;%
+* lsm_p_enn() %&gt;%
+  filter(value &lt;= quantile(value, probs = 0.25) | value &gt;= quantile(value, probs = 0.75)) %&gt;%
+  group_by(class) %&gt;%
+  summarise(n = n()) %&gt;%
+  arrange(-n)
+```
+
+```
+## # A tibble: 3 x 2
+##   class     n
+##   &lt;int&gt; &lt;int&gt;
+## 1     2   150
+## 2     3   130
+## 3     1    21
+```
+
+---
+# Calculation of multiple metrics
+
+--
+Easily calculate multiple metrics based on e.g. level and type
+
+
+```r
+calculate_lsm(landscape = lc_data, 
+              level = "landscape", type = "diversity metric", 
+              classes_max = 5)
+```
+
+```
+## # A tibble: 9 x 6
+##   layer level     class    id metric    value
+##   &lt;int&gt; &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;
+## 1     1 landscape    NA    NA msidi     0.929
+## 2     1 landscape    NA    NA msiei     0.845
+## 3     1 landscape    NA    NA pr        3    
+## 4     1 landscape    NA    NA prd    3333.   
+## 5     1 landscape    NA    NA rpr      60    
+## # … with 4 more rows
+```
+
+---
+class: left, middle, clear, nonum
+
+##  First practical part
+
+Try to work through *Exercise_1_1.R*. The exercise will teach you how to calculate single and multiple landscape metrics.
+Furthermore, you will learn how to integrate *landscapemetrics* into larger workflows using e.g. the *tidyverse* &lt;font size="3" color="grey"&gt; (Wickham et al. 2019) &lt;/font&gt;. 
+
+During the exercise there are part where you are supposed to code your own solution indicated by the following structure:
+
+
+```r
+# /Start Code/ #
+
+print("Hello World") # This would be your code contribution
+
+# /End Code/ # 
+```
+
+In case you run into problems or have any questions, please contact us at any time via *Zoom* private chat.
+Also, there will be a public Q&amp;A plenary session at **XX:XX pm**.
+
+For a general overview of *landscapemetrics*, please see &lt;https://r-spatialecology.github.io/landscapemetrics&gt;.
+
+---
+# Visualize patches
+
+--
+Easily visualize patches of several classes or the whole landscape
+
+
+```r
+show_patches(augusta_nlcd, labels = FALSE, class = 42)
+```
+
+&lt;img src="index_files/figure-html/show_patches-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Further visualization
+
+--
+.pull-left[
+
+Visualize core areas of patches
+
+
+```r
+show_cores(augusta_nlcd, 
+           labels = FALSE, class = 42)
+```
+
+&lt;img src="index_files/figure-html/show_cores-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+--
+.pull-right[
+
+Visualize landscape metrics on patch level
+
+
+```r
+show_lsm(augusta_nlcd, labels = FALSE, 
+         class = 42, what = "lsm_p_area")
+```
+
+&lt;img src="index_files/figure-html/show_lsm-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Sample metrics in buffer areas
+
+--
+- Samples metrics in a buffer area (sample plot) around sample points 
+
+--
+- Also able to use sample lines or  *sp*-SpatialPolygons &lt;font size="3" color="grey"&gt; (Pebesma &amp; Bivand, 2005) &lt;/font&gt;. 
+
+--
+- Metrics can be specified identical to `list_lsm()` and `calculate_lsm()`
+
+--
+&lt;img src="index_files/figure-html/plot_sample_points-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Sample metrics in buffer areas
+
+--
+Slightly different output *tibble*
+
+
+```r
+sample_points &lt;- matrix(c(1253709, 1249455, 
+                          1261857, 1256055,
+                          1252009, 1257055), ncol = 2, byrow = TRUE)
+
+sample_lsm(landscape = augusta_nlcd, y = sample_points, 
+           size = 1000, what = "lsm_l_np")
+```
+
+```
+## # A tibble: 3 x 8
+##   layer level     class    id metric value plot_id percentage_inside
+##   &lt;int&gt; &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;int&gt;             &lt;dbl&gt;
+## 1     1 landscape    NA    NA np       103       1              99.5
+## 2     1 landscape    NA    NA np       116       2              99.5
+## 3     1 landscape    NA    NA np        80       3              99.5
+```
+
+---
+# Moving window
+
+--
+- Show gradients and variability in the landscape
+
+--
+- Use matrix to specify moving window and focal cell
+
+--
+&lt;img src="index_files/figure-html/moving_window_plot-1.gif" style="display: block; margin: auto;" /&gt;
+
+---
+# Moving window
+
+Results in list with *raster* objects
+
+
+```r
+window &lt;- matrix(1, nrow = 5, ncol = 5)
+window_result &lt;- window_lsm(lc_data, window = window, what = "lsm_l_np")
+```
+
+&lt;img src="index_files/figure-html/moving_window_result-1.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+# Building blocks
+
+--
+Fast building blocks to create your own metrics
+
+--
+.pull-left[
+
+*raster* package &lt;font size="3" color="grey"&gt; (Hijmans 2017) &lt;/font&gt;
+
+
+```r
+adj_raster &lt;- function(x) {
+  adjacencies &lt;- adjacent(x,cells = 1:ncell(x))
+  table(x[adjacencies[, 1]],x[adjacencies[, 2]])
+}
+adj_raster(lc_data)
+```
+
+```
+##    
+##        1    2    3
+##   1  520   43  137
+##   2   43  704  184
+##   3  137  184 1528
+```
+]
+
+--
+.pull-right[
+
+*landscapemetrics* package
+
+
+```r
+get_adjacencies(lc_data)
+```
+
+```
+## [[1]]
+##     1   2    3
+## 1 520  43  137
+## 2  43 704  184
+## 3 137 184 1528
+```
+]
+
+--
+
+```r
+# A tibble: 2 x 3 
+expression                      mean        mem_alloc
+&lt;chr&gt;                           &lt;bch:tm&gt;    &lt;bch:byt&gt;
+1 adj_raster(landscape)         8900 μs     1470 KB
+2 get_adjacencies(landscape)    562 μs      6 KB
+```
+
+---
+##  Second practical part
+
+Try to work through *Exercise_2_2.R*.
+The exercise will teach you how to use all utility functions of the *landscapemetrics* package.
+
+During the exercise there are part where you are supposed to code your own solution indicated by the following structure:
+
+
+```r
+# /Start Code/ #
+
+print("Hello World") # This would be your code contribution
+
+# /End Code/ # 
+```
+
+In case you run into problems or have any questions, please contact us at any time via *Zoom* private chat.
+Also, there will be a public Q&amp;A plenary session at **XX:XX pm**.
+
+For a general overview of *landscapemetrics*, please see &lt;https://r-spatialecology.github.io/landscapemetrics&gt;.
+
+---
+# Citation 
+
+
+```r
+citation("landscapemetrics")
+```
+
+```
+## 
+## To cite landscapemetrics or acknowledge its use, please cite this
+## Software note, substituting the version of the application that you
+## used for ‘version 0’.
+## 
+##   Hesselbarth, M.H.K., Sciaini, M., With, K.A., Wiegand, K., Nowosad,
+##   J. 2019. landscapemetrics: an open-source R tool to calculate
+##   landscape metrics. - Ecography 42:1648-1657(ver. 0).
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Article{,
+##     title = {landscapemetrics: an open-source R tool to calculate landscape metrics},
+##     author = {Maximilian H.K. Hesselbarth and Marco Sciaini and Kimberly A. With and Kerstin Wiegand and Jakub Nowosad},
+##     journal = {Ecography},
+##     volume = {42},
+##     year = {2019},
+##     pages = {1648-1657},
+##   }
+```
+
 ---
 class: left, top, clear
 
 .pull-left[
 ## Summary:
 
+- "console-based ability to seamlessly switch between geographic and non-geographic data processing, modeling and visualization tasks"
+- A tip of an iceberg (but you do not need to know it all)
 - Questions?
 ]
 
@@ -297,6 +1290,23 @@ https://nowosad.github.io
 
 https://mhesselbarth.rbind.io/
 ]
+
+---
+# References
+
+Hijmans, R.J., 2019. raster: Geographic data analysis and modeling. R package version 2.9-5. &lt;https://cran.r-project.org/package=raster&gt;.
+
+McGarigal, K., Cushman, S.A., Ene, E., 2012. FRAGSTATS v4: Spatial pattern analysis program for categorical and continuous maps. Computer software program produced by the authors at the University of Massachusetts, Amherst. &lt;http://www.umass.edu/landeco/research/fragstats/fragstats.html&gt;. University of Massachusetts, Amherst.
+
+Pebesma, E.J., Bivand, R.S., 2005. Classes and methods for spatial data in R. R News 5(2).
+
+Porta, C., Spano, L.D., Pontedera, F., 2017. r.li - Toolset for multiscale analysis of landscape structure.
+
+VanDerWal, J., Falconi, L., Januchowski, S., Shoo, L., Storlie, C., 2019. SDMTools: Species distribution modelling tools: Tools for processing data associated with species distribution modelling exercises. R package version 1.1-221.1. &lt;https://CRAN.R-project.org/package=SDMTools&gt;.
+
+Wickham, H., 2014. Tidy Data. J. Stat. Softw. 59, 1–23.
+
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T., Miller, E., Bache, S., Müller, K., Ooms, J., Robinson, D., Seidel, D., Spinu, V., Takahashi, K., Vaughan, D., Wilke, C., Woo, K., Yutani, H., 2019. Welcome to the Tidyverse. J. Open Source Softw. 4, 1686.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

@@ -1,0 +1,13 @@
+base
+dplyr
+extrafont
+ggplot2
+gganimate
+knitr
+landscapemetrics
+purrr
+sp
+raster
+spData
+sf
+tmap
