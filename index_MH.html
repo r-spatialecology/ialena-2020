@@ -139,7 +139,7 @@ background-size: 15%
 &lt;center&gt;
 
 --
-&lt;img src="index_MH_files/figure-html/levels_lsm-1.png" width="30%" style="display: block; margin: auto;" /&gt;&lt;img src="index_MH_files/figure-html/levels_lsm-2.png" width="30%" style="display: block; margin: auto;" /&gt;&lt;img src="index_MH_files/figure-html/levels_lsm-3.png" width="30%" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_MH_files/figure-html/levels_lsm-1.png" width="30%" /&gt;&lt;img src="index_MH_files/figure-html/levels_lsm-2.png" width="30%" /&gt;&lt;img src="index_MH_files/figure-html/levels_lsm-3.png" width="30%" /&gt;
 
 &lt;/center&gt;
 
@@ -158,8 +158,8 @@ check_landscape(lc_data)
 ```
 
 ```
-##   layer crs units   class n_classes OK
-## 1     1  NA    NA integer         3  ?⃝
+##   layer crs units   class n_classes  OK
+## 1     1  NA    NA integer         3 (?)
 ```
 
 --
@@ -179,7 +179,7 @@ list_lsm()
 ## 3 circle related circumscribing circle shape metric         patch lsm_p_circle 
 ## 4 contig contiguity index              shape metric         patch lsm_p_contig 
 ## 5 core   core area                     core area metric     patch lsm_p_core   
-## # … with 127 more rows
+## # ... with 127 more rows
 ```
 
 ---
@@ -204,7 +204,7 @@ lsm_p_area(lc_data)
 ## 3     1 patch     1     3 area   0.0148
 ## 4     1 patch     1     4 area   0.0001
 ## 5     1 patch     1     5 area   0.0001
-## # … with 22 more rows
+## # ... with 22 more rows
 ```
 ]
 
@@ -283,7 +283,7 @@ calculate_lsm(landscape = lc_data,
 ## 3     1 landscape    NA    NA pr        3    
 ## 4     1 landscape    NA    NA prd    3333.   
 ## 5     1 landscape    NA    NA rpr      60    
-## # … with 4 more rows
+## # ... with 4 more rows
 ```
 
 ---
@@ -359,7 +359,7 @@ show_lsm(augusta_nlcd, labels = FALSE,
 - Samples metrics in a buffer area (sample plot) around sample points 
 
 --
-- Also able to use sample lines or  *sp*-SpatialPolygons. 
+- Also able to use sample lines or  *sp*-SpatialPolygons &lt;font size="3" color="grey"&gt; (Pebesma &amp; Bivand, 2005) &lt;/font&gt;. 
 
 --
 - Metrics can be specified identical to `list_lsm()` and `calculate_lsm()`
@@ -407,7 +407,6 @@ sample_lsm(landscape = augusta_nlcd, y = sample_points,
 ---
 # Moving window
 
---
 Results in list with *raster* objects
 
 
@@ -427,7 +426,7 @@ Fast building blocks to create your own metrics
 --
 .pull-left[
 
-*raster* package
+*raster* package &lt;font size="3" color="grey"&gt; (Hijmans 2017) &lt;/font&gt;
 
 
 ```r
@@ -555,6 +554,8 @@ https://mhesselbarth.rbind.io/
 Hijmans, R.J., 2019. raster: Geographic data analysis and modeling. R package version 2.9-5. &lt;https://cran.r-project.org/package=raster&gt;.
 
 McGarigal, K., Cushman, S.A., Ene, E., 2012. FRAGSTATS v4: Spatial pattern analysis program for categorical and continuous maps. Computer software program produced by the authors at the University of Massachusetts, Amherst. &lt;http://www.umass.edu/landeco/research/fragstats/fragstats.html&gt;. University of Massachusetts, Amherst.
+
+Pebesma, E.J., Bivand, R.S., 2005. Classes and methods for spatial data in R. R News 5(2).
 
 Porta, C., Spano, L.D., Pontedera, F., 2017. r.li - Toolset for multiscale analysis of landscape structure.
 

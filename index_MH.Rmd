@@ -14,6 +14,8 @@ output:
       highlightLines: true
       countIncrementalSlides: false
       ratio: 16:10
+editor_options: 
+  chunk_output_type: console
 ---
 class: inverse, left, nonum, clear
 background-image: url("figs/cover.jpg")
@@ -50,7 +52,6 @@ library(raster)
 library(sp)
 
 knitr::opts_chunk$set(fig.retina = 3, warning = FALSE, message = FALSE, fig.align = "center")
-extrafont::fonts()
 options(tibble.print_min = 5)
 options(tibble.print_max = 5)
 ```
@@ -169,7 +170,7 @@ background-size: 15%
 <center>
 
 --
-```{r levels_lsm, fig.hold = "hold", out.width="30%", echo = FALSE}
+```{r levels_lsm, fig.hold = "hold", fig.align = "default", out.width="30%", echo = FALSE}
 lsm_patch <- get_patches(lc_data, class = 1)[[1]] %>% 
   as.data.frame(xy = TRUE) %>% 
   mutate(level = "patch") %>% 
@@ -334,9 +335,14 @@ show_patches(augusta_nlcd, labels = FALSE, class = 42)
 
 Visualize core areas of patches
 
-```{r, show_cores}
+```{r, show_cores_dummy, eval = FALSE}
 show_cores(augusta_nlcd, 
            labels = FALSE, class = 42)
+```
+
+```{r, show_cores, echo = FALSE}
+show_cores(augusta_nlcd, 
+           labels = FALSE, class = 42, edge_depth = 5)
 ```
 ]
 
@@ -364,7 +370,7 @@ show_lsm(augusta_nlcd, labels = FALSE,
 - Samples metrics in a buffer area (sample plot) around sample points 
 
 --
-- Also able to use sample lines or  *sp*-SpatialPolygons. 
+- Also able to use sample lines or  *sp*-SpatialPolygons <font size="3" color="grey"> (Pebesma & Bivand, 2005) </font>. 
 
 --
 - Metrics can be specified identical to `list_lsm()` and `calculate_lsm()`
@@ -381,9 +387,10 @@ buffer <- construct_buffer(coords = sample_points,
 
 ggplot(data = raster::as.data.frame(augusta_nlcd, xy = TRUE)) + 
   geom_raster(aes(x = x, y = y, fill = nlcd_2011_landcover_2011_edition_2014_10_10_NLCD.2011.Land.Cover.Class)) +
-  geom_point(data = data.frame(sample_points), aes(x = X1, y = X2), pch = 1) +
+  geom_point(data = data.frame(sample_points), aes(x = X1, y = X2), 
+             shape = 19, size = 2.5) +
   geom_polygon(data = data.frame(buffer), aes(x = X1, y = X2, group = X3), 
-               fill = NA, col = "black") +
+               fill = NA, col = "black", size = 1.5) +
   coord_equal() + 
   scale_fill_manual(name = "", values = c("Herbaceuous" = "#FDE9AA", 
                                           "Evergreen Forest" = "#38814E", 
@@ -430,11 +437,9 @@ sample_lsm(landscape = augusta_nlcd, y = sample_points,
 
 --
 ```{r moving_window_plot, echo = FALSE}
-focal_i <- cbind(ras_df[ ,c(1,2)], id = 1:nrow(ras_df))
+focal_i <- cbind(ras_df[ ,c(1, 2)], id = 1:nrow(ras_df))
 
 focal_poly <- purrr::map_dfr(1:nrow(focal_i), function(i) {
-  
-  focal_i[i, c(1,2)]
   
   x_min <- focal_i[i, 1] - 4.5
   x_max <- focal_i[i, 1] + 4.5
@@ -448,7 +453,8 @@ focal_poly <- purrr::map_dfr(1:nrow(focal_i), function(i) {
 
 focal_poly$id <- as.integer(focal_poly$id)
 
-# focal_poly <- focal_poly[which(focal_poly$x > 0 & focal_poly$y > 0), ]
+focal_i <- focal_i[1:250, ]
+focal_poly <- focal_poly[focal_poly$id %in% 1:250, ]
 
 gg_window <- ggplot(data = ras_df) + 
   geom_raster(aes(x = x, y = y, fill = as.factor(example_lndscp))) + 
@@ -463,13 +469,12 @@ gg_window <- ggplot(data = ras_df) +
                     transition_length = 2,
                     state_length = 1)
 
-gganimate::animate(gg_window, nframes = 900, fps = 10, duration = 90)
+gganimate::animate(gg_window, nframes = 250, fps = 5, duration = 50)
 ```
 
 ---
 # Moving window
 
---
 Results in list with *raster* objects
 
 ```{r moving_window}
@@ -496,7 +501,7 @@ Fast building blocks to create your own metrics
 --
 .pull-left[
 
-*raster* package
+*raster* package <font size="3" color="grey"> (Hijmans 2017) </font>
 
 ```{r adj_raster}
 adj_raster <- function(x) {
@@ -581,6 +586,8 @@ https://mhesselbarth.rbind.io/
 Hijmans, R.J., 2019. raster: Geographic data analysis and modeling. R package version 2.9-5. <https://cran.r-project.org/package=raster>.
 
 McGarigal, K., Cushman, S.A., Ene, E., 2012. FRAGSTATS v4: Spatial pattern analysis program for categorical and continuous maps. Computer software program produced by the authors at the University of Massachusetts, Amherst. <http://www.umass.edu/landeco/research/fragstats/fragstats.html>. University of Massachusetts, Amherst.
+
+Pebesma, E.J., Bivand, R.S., 2005. Classes and methods for spatial data in R. R News 5(2).
 
 Porta, C., Spano, L.D., Pontedera, F., 2017. r.li - Toolset for multiscale analysis of landscape structure.
 
