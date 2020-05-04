@@ -883,32 +883,32 @@ ggplot(data = ras_df) +
 
 </center>
 
----
-# Why a new R package was needed
+<!-- --- -->
+<!-- # Why a new R package was needed -->
 
---
-- *FRAGSTATS*  <font size="3" color="grey"> (McGarigal et al., 2012) </font> 
-  
-  - <font color = "#63C03C"> Comprehensive collection of metrics </font> 
-  - <font color = "#64AAC5"> Only on Windows, not open source </font> 
-  - <font color = "#64AAC5"> Need to import/export data </font> 
-  - <font color = "#64AAC5"> Hard to integrate into larger workflows </font> 
+<!-- -- -->
+<!-- - *FRAGSTATS*  <font size="3" color="grey"> (McGarigal et al., 2012) </font>  -->
 
-
---
-- *SDMTools* (R package) <font size="3" color="grey"> (VanDerWal et al., 2019) </font> 
-  
-  - <font color = "#63C03C"> Multiplatform, open source </font>
-  - <font color = "#64AAC5"> Only set of metrics, no metrics on landscape level </font> 
-  - <font color = "#64AAC5"> Hard to integrate into larger workflows </font> 
-  - <font color = "#64AAC5"> Not on CRAN anymore (archived on 12.01.2020) </font> 
+<!--   - <font color = "#63C03C"> Comprehensive collection of metrics </font>  -->
+<!--   - <font color = "#64AAC5"> Only on Windows, not open source </font>  -->
+<!--   - <font color = "#64AAC5"> Need to import/export data </font>  -->
+<!--   - <font color = "#64AAC5"> Hard to integrate into larger workflows </font>  -->
 
 
---
-- Several GIS add-ons (e.g. *r.li* <font size="3" color="grey"> (Porta et al., 2017) </font>))
-  
-  - <font color = "#63C03C"> Multiplatform, open source </font>
-  - <font color = "#64AAC5"> Need to use GIS software </font>
+<!-- -- -->
+<!-- - *SDMTools* (R package) <font size="3" color="grey"> (VanDerWal et al., 2019) </font>  -->
+
+<!--   - <font color = "#63C03C"> Multiplatform, open source </font> -->
+<!--   - <font color = "#64AAC5"> Only set of metrics, no metrics on landscape level </font>  -->
+<!--   - <font color = "#64AAC5"> Hard to integrate into larger workflows </font>  -->
+<!--   - <font color = "#64AAC5"> Not on CRAN anymore (archived on 12.01.2020) </font>  -->
+
+
+<!-- -- -->
+<!-- - Several GIS add-ons (e.g. *r.li* <font size="3" color="grey"> (Porta et al., 2017) </font>)) -->
+
+<!--   - <font color = "#63C03C"> Multiplatform, open source </font> -->
+<!--   - <font color = "#64AAC5"> Need to use GIS software </font> -->
 
 ---
 layout: false
