@@ -128,8 +128,8 @@ elev_data
 ## dimensions : 550, 753, 414150  (nrow, ncol, ncell)
 ## resolution : 0.000322, 0.000266  (x, y)
 ## extent     : -82.41659, -82.17413, 33.45642, 33.60272  (xmin, xmax, ymin, ymax)
-## crs        : +proj=longlat +datum=WGS84 +no_defs  
-## source     : /home/jn/Science/conferences/2020/ialena-2020/data/example_elevation.tif 
+## crs        : +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+## source     : /Users/Maximilian/ownCloud/03_Lehre/IALE_Workshop/ialena-2020/data/example_elevation.tif 
 ## names      : example_elevation 
 ## values     : 57, 178.9385  (min, max)
 ```
@@ -140,8 +140,8 @@ elev_data
 # Spatial data representations: vector data
 
 .pull-left[
-<div id="htmlwidget-8d23e35eba91de204018" style="width:504px;height:504px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8d23e35eba91de204018">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"createMapPane","args":["tmap401",401]},{"method":"addProviderTiles","args":["Esri.WorldGrayCanvas",null,"Esri.WorldGrayCanvas",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["OpenStreetMap",null,"OpenStreetMap",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["Esri.WorldTopoMap",null,"Esri.WorldTopoMap",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addPolygons","args":[[[[{"lng":[-82.247983,-82.225345,-82.212312,-82.239751,-82.274736,-82.311779,-82.339904,-82.352937,-82.356367,-82.347449,-82.31658,-82.28091,-82.247983],"lat":[33.486435,33.514492,33.543112,33.559707,33.569433,33.572294,33.561995,33.539678,33.520217,33.496743,33.481854,33.47899,33.486435]}]]],"X1","study_area",{"interactive":false,"className":"","pane":"tmap401","stroke":true,"color":"#666666","weight":1,"opacity":1,"fill":true,"fillOpacity":0,"dashArray":"none","smoothFactor":1,"noClip":false},null,null,"1",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["Esri.WorldGrayCanvas","OpenStreetMap","Esri.WorldTopoMap"],"study_area",{"collapsed":true,"autoZIndex":true,"position":"topleft"}]}],"limits":{"lat":[33.47899,33.572294],"lng":[-82.356367,-82.212312]},"fitBounds":[33.47899,-82.356367,33.572294,-82.212312,[]]},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-2a286e07e4356fb04f37" style="width:504px;height:504px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2a286e07e4356fb04f37">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"createMapPane","args":["tmap401",401]},{"method":"addProviderTiles","args":["Esri.WorldGrayCanvas",null,"Esri.WorldGrayCanvas",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["OpenStreetMap",null,"OpenStreetMap",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["Esri.WorldTopoMap",null,"Esri.WorldTopoMap",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addPolygons","args":[[[[{"lng":[-82.247983,-82.225345,-82.212312,-82.239751,-82.274736,-82.311779,-82.339904,-82.352937,-82.356367,-82.347449,-82.31658,-82.28091,-82.247983],"lat":[33.4864349991314,33.514491999131,33.5431119991307,33.5597069991304,33.5694329991303,33.5722939991302,33.5619949991304,33.5396779991307,33.5202169991309,33.4967429991312,33.4818539991314,33.4789899991314,33.4864349991314]}]]],"X1","study_area",{"interactive":false,"className":"","pane":"tmap401","stroke":true,"color":"#666666","weight":1,"opacity":1,"fill":true,"fillOpacity":0,"dashArray":"none","smoothFactor":1,"noClip":false},null,null,"1",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["Esri.WorldGrayCanvas","OpenStreetMap","Esri.WorldTopoMap"],"study_area",{"collapsed":true,"autoZIndex":true,"position":"topleft"}]}],"limits":{"lat":[33.4789899991314,33.5722939991302],"lng":[-82.356367,-82.212312]},"fitBounds":[33.4789899991314,-82.356367,33.5722939991302,-82.212312,[]]},"evals":[],"jsHooks":[]}</script>
 
 ]
 
@@ -821,32 +821,32 @@ Department of Ecosystem Modelling, University of Goettingen, Germany
 
 &lt;/center&gt;
 
----
-# Why a new R package was needed
+&lt;!-- --- --&gt;
+&lt;!-- # Why a new R package was needed --&gt;
 
---
-- *FRAGSTATS*  &lt;font size="3" color="grey"&gt; (McGarigal et al., 2012) &lt;/font&gt; 
-  
-  - &lt;font color = "#63C03C"&gt; Comprehensive collection of metrics &lt;/font&gt; 
-  - &lt;font color = "#64AAC5"&gt; Only on Windows, not open source &lt;/font&gt; 
-  - &lt;font color = "#64AAC5"&gt; Need to import/export data &lt;/font&gt; 
-  - &lt;font color = "#64AAC5"&gt; Hard to integrate into larger workflows &lt;/font&gt; 
+&lt;!-- -- --&gt;
+&lt;!-- - *FRAGSTATS*  &lt;font size="3" color="grey"&gt; (McGarigal et al., 2012) &lt;/font&gt;  --&gt;
 
-
---
-- *SDMTools* (R package) &lt;font size="3" color="grey"&gt; (VanDerWal et al., 2019) &lt;/font&gt; 
-  
-  - &lt;font color = "#63C03C"&gt; Multiplatform, open source &lt;/font&gt;
-  - &lt;font color = "#64AAC5"&gt; Only set of metrics, no metrics on landscape level &lt;/font&gt; 
-  - &lt;font color = "#64AAC5"&gt; Hard to integrate into larger workflows &lt;/font&gt; 
-  - &lt;font color = "#64AAC5"&gt; Not on CRAN anymore (archived on 12.01.2020) &lt;/font&gt; 
+&lt;!--   - &lt;font color = "#63C03C"&gt; Comprehensive collection of metrics &lt;/font&gt;  --&gt;
+&lt;!--   - &lt;font color = "#64AAC5"&gt; Only on Windows, not open source &lt;/font&gt;  --&gt;
+&lt;!--   - &lt;font color = "#64AAC5"&gt; Need to import/export data &lt;/font&gt;  --&gt;
+&lt;!--   - &lt;font color = "#64AAC5"&gt; Hard to integrate into larger workflows &lt;/font&gt;  --&gt;
 
 
---
-- Several GIS add-ons (e.g. *r.li* &lt;font size="3" color="grey"&gt; (Porta et al., 2017) &lt;/font&gt;))
-  
-  - &lt;font color = "#63C03C"&gt; Multiplatform, open source &lt;/font&gt;
-  - &lt;font color = "#64AAC5"&gt; Need to use GIS software &lt;/font&gt;
+&lt;!-- -- --&gt;
+&lt;!-- - *SDMTools* (R package) &lt;font size="3" color="grey"&gt; (VanDerWal et al., 2019) &lt;/font&gt;  --&gt;
+
+&lt;!--   - &lt;font color = "#63C03C"&gt; Multiplatform, open source &lt;/font&gt; --&gt;
+&lt;!--   - &lt;font color = "#64AAC5"&gt; Only set of metrics, no metrics on landscape level &lt;/font&gt;  --&gt;
+&lt;!--   - &lt;font color = "#64AAC5"&gt; Hard to integrate into larger workflows &lt;/font&gt;  --&gt;
+&lt;!--   - &lt;font color = "#64AAC5"&gt; Not on CRAN anymore (archived on 12.01.2020) &lt;/font&gt;  --&gt;
+
+
+&lt;!-- -- --&gt;
+&lt;!-- - Several GIS add-ons (e.g. *r.li* &lt;font size="3" color="grey"&gt; (Porta et al., 2017) &lt;/font&gt;)) --&gt;
+
+&lt;!--   - &lt;font color = "#63C03C"&gt; Multiplatform, open source &lt;/font&gt; --&gt;
+&lt;!--   - &lt;font color = "#64AAC5"&gt; Need to use GIS software &lt;/font&gt; --&gt;
 
 ---
 layout: false
@@ -961,7 +961,7 @@ bind_rows(class_mean, lsm_total)
 ```
 ## # A tibble: 4 x 6
 ##   layer level     class    id metric    value
-## * &lt;int&gt; &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;
+##   &lt;int&gt; &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;
 ## 1     1 class         1    NA area_mn 0.00199
 ## 2     1 class         2    NA area_mn 0.00173
 ## 3     1 class         3    NA area_mn 0.0120 
@@ -1028,10 +1028,10 @@ class: left, middle, clear, nonum
 
 ##  First practical part
 
-Try to work through *Exercise_1_1.R*. The exercise will teach you how to calculate single and multiple landscape metrics.
+Try to work through *Exercise_2_1.R*. The exercise will teach you how to calculate single and multiple landscape metrics.
 Furthermore, you will learn how to integrate *landscapemetrics* into larger workflows using e.g. the *tidyverse* &lt;font size="3" color="grey"&gt; (Wickham et al. 2019) &lt;/font&gt;. 
 
-During the exercise there are part where you are supposed to code your own solution indicated by the following structure:
+During the exercise there are parts where you are supposed to code your own solution indicated by the following structure:
 
 
 ```r
@@ -1220,7 +1220,7 @@ expression                      mean        mem_alloc
 Try to work through *Exercise_2_2.R*.
 The exercise will teach you how to use all utility functions of the *landscapemetrics* package.
 
-During the exercise there are part where you are supposed to code your own solution indicated by the following structure:
+During the exercise there are parts where you are supposed to code your own solution indicated by the following structure:
 
 
 ```r
@@ -1238,6 +1238,8 @@ For a general overview of *landscapemetrics*, please see &lt;https://r-spatialec
 
 ---
 # Citation 
+
+- Questions, feature request bugs at [https://github.com/r-spatialecology/landscapemetrics/issues](https://github.com/r-spatialecology/landscapemetrics/issues)
 
 
 ```r
@@ -1300,13 +1302,13 @@ McGarigal, K., Cushman, S.A., Ene, E., 2012. FRAGSTATS v4: Spatial pattern analy
 
 Pebesma, E.J., Bivand, R.S., 2005. Classes and methods for spatial data in R. R News 5(2).
 
-Porta, C., Spano, L.D., Pontedera, F., 2017. r.li - Toolset for multiscale analysis of landscape structure.
+&lt;!-- Porta, C., Spano, L.D., Pontedera, F., 2017. r.li - Toolset for multiscale analysis of landscape structure. --&gt;
 
-VanDerWal, J., Falconi, L., Januchowski, S., Shoo, L., Storlie, C., 2019. SDMTools: Species distribution modelling tools: Tools for processing data associated with species distribution modelling exercises. R package version 1.1-221.1. &lt;https://CRAN.R-project.org/package=SDMTools&gt;.
+&lt;!-- VanDerWal, J., Falconi, L., Januchowski, S., Shoo, L., Storlie, C., 2019. SDMTools: Species distribution modelling tools: Tools for processing data associated with species distribution modelling exercises. R package version 1.1-221.1. &lt;https://CRAN.R-project.org/package=SDMTools&gt;. --&gt;
 
 Wickham, H., 2014. Tidy Data. J. Stat. Softw. 59, 1–23.
 
-Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T., Miller, E., Bache, S., Müller, K., Ooms, J., Robinson, D., Seidel, D., Spinu, V., Takahashi, K., Vaughan, D., Wilke, C., Woo, K., Yutani, H., 2019. Welcome to the Tidyverse. J. Open Source Softw. 4, 1686.
+&lt;!-- Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T., Miller, E., Bache, S., Müller, K., Ooms, J., Robinson, D., Seidel, D., Spinu, V., Takahashi, K., Vaughan, D., Wilke, C., Woo, K., Yutani, H., 2019. Welcome to the Tidyverse. J. Open Source Softw. 4, 1686. --&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
