@@ -1,8 +1,8 @@
 ---
 title: "Introduction to landscape ecology with R"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -29,6 +29,7 @@ install.packages("landscapemetrics")
 install.packages("usethis")
 install.packages("remotes")
 remotes::install_github("mtennekes/tmap", upgrade = TRUE)
+remotes::install_github("rspatial/raster", upgrade = TRUE)
 ```
 
 ### Check if it works
