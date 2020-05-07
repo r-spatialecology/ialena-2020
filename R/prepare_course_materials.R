@@ -9,7 +9,7 @@ purl(slides_rmd,
      documentation = 0)
 
 # creates pdf -------------------------------------------------------------
-pagedown::chrome_print(slides_rmd,
+pagedown::chrome_print("index.html",
                        output = "slides/slides.pdf",
                        wait = 10)
 
