@@ -306,10 +306,6 @@ tm_shape(study_area) #<<
 ```
 ]
 
-.right-plot[
-![](`r knitr::fig_chunk("tm1", "png")`)
-]
-
 ---
 # Making maps in R
 
