@@ -1,0 +1,51 @@
+---
+title: "Introduction to landscape ecology with R"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      dev = "png", 
+                      dev.args = list(type = "cairo-png"))
+```
+
+## Prerequisites
+
+### Equipment and software requirements
+
+Attendees are expected to use their own computers with a working version of R (version 3.6 or higher) and RStudio (version 1.2 or higher) installed.
+
+R and RStudio are supported by PC, Linux, and Mac OS and can be downloaded for free by following these links
+http://www.r-project.org/ and https://www.rstudio.com/products/rstudio/download/#download.
+
+### R packages
+
+Run the code below in R to install all of the required R packages.
+
+```r
+install.packages("landscapemetrics")
+install.packages("usethis")
+install.packages("remotes")
+remotes::install_github("mtennekes/tmap", upgrade = TRUE)
+```
+
+### Check if it works
+
+Afterwards, run the code below (you should see the map as a result):
+
+```{r}
+library(tmap)
+library(landscapemetrics)
+tm_shape(landscape) +
+  tm_graticules() +
+  tm_raster()
+```
+
+Please see https://datacarpentry.org/geospatial-workshop/setup.html for instructions on how to install geospatial library dependencies.
+
+<!-- ### Questionnaire -->
+
+<!-- Please also fill the form at https://forms.gle/sdvLXcqFaqHBGBZF8.  -->
+
