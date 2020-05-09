@@ -22,6 +22,10 @@
 }
 */
 
+.large { 
+  font-size: 180% 
+}
+
 .clear{
   border-top: 0px solid #FAFAFA;
 }

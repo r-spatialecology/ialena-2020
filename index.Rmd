@@ -829,10 +829,17 @@ class: inverse, left, bottom, clear, nonum
 
 # Break (30 minutes)
 
+---
+# Break (30 minutes)
+
+.large[
+- You can ask us any questions related to spatial data analysis in R and the *landscapemetrics* package during the workshop using https://www.sli.do/
+- The event code is `IALENA`
+ ]
+
 <!--We could ask for questions during the intro, and then during the break, we could look at them and prepare our answers.-->
 <!--we should use some online timer (or rmarkdown timer), visible to the participants-->
 <!-- MH: I assume there will be plenty of question coming up during the practical as well -->
-
 
 ---
 class: inverse, left, bottom, clear, nonum
