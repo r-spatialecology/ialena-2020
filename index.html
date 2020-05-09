@@ -5,7 +5,6 @@
     <meta charset="utf-8" />
     <meta name="author" content="Jakub Nowosad and Maximilian H.K. Hesselbarth" />
     <meta name="date" content="2020-05-14" />
-    <script src="libs/header-attrs-2.1/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
@@ -98,6 +97,8 @@ usethis::use_course("https://github.com/r-spatialecology/ialena-2020/raw/master/
     - You can ask us any questions related to spatial data analysis in R and the *landscapemetrics* package during the workshop using https://www.sli.do/
     - The event code is `IALENA`
 
+&lt;!-- MH: Do we need one more slide already here talking quickly about the structure of the exercises? Like...they should download the scripts without solutions and try to fill them out etc... ?--&gt;
+
 ---
 class: inverse, left, bottom, clear, nonum
 
@@ -129,6 +130,7 @@ Institute of Geoecology and Geoinformation, Adam Mickiewicz University, Poznan, 
 .rc[
 &lt;img src="figs/raster-intro-plot-1.png" height="200" style="display: block; margin: auto;" /&gt;
 
+&lt;!-- MH: The source will always be the path of the last person that knitted the slides. Is that a problem? Not really, right? --&gt;
 
 ```r
 library(raster)
@@ -142,7 +144,7 @@ elev_data
 ## resolution : 0.000322, 0.000266  (x, y)
 ## extent     : -82.41659, -82.17413, 33.45642, 33.60272  (xmin, xmax, ymin, ymax)
 ## crs        : +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
-## source     : /home/jn/Science/conferences/2020/ialena-2020/data/example_elevation.tif 
+## source     : /Users/Maximilian/ownCloud/03_Lehre/IALE_Workshop/ialena-2020/data/example_elevation.tif 
 ## names      : example_elevation 
 ## values     : 57, 178.9385  (min, max)
 ```
@@ -153,8 +155,8 @@ elev_data
 # Spatial data representations: vector data
 
 .pull-left[
-<div id="htmlwidget-f0bc41a0fee3da15248a" style="width:504px;height:504px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-f0bc41a0fee3da15248a">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"createMapPane","args":["tmap401",401]},{"method":"addProviderTiles","args":["Esri.WorldGrayCanvas",null,"Esri.WorldGrayCanvas",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["OpenStreetMap",null,"OpenStreetMap",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["Esri.WorldTopoMap",null,"Esri.WorldTopoMap",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addPolygons","args":[[[[{"lng":[-82.247983,-82.225345,-82.212312,-82.239751,-82.274736,-82.311779,-82.339904,-82.352937,-82.356367,-82.347449,-82.31658,-82.28091,-82.247983],"lat":[33.486435,33.514492,33.543112,33.559707,33.569433,33.572294,33.5619950000001,33.539678,33.520217,33.496743,33.481854,33.47899,33.486435]}]]],"X1","study_area",{"interactive":false,"className":"","pane":"tmap401","stroke":true,"color":"#666666","weight":1,"opacity":1,"fill":true,"fillOpacity":0,"dashArray":"none","smoothFactor":1,"noClip":false},null,null,"1",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["Esri.WorldGrayCanvas","OpenStreetMap","Esri.WorldTopoMap"],"study_area",{"collapsed":true,"autoZIndex":true,"position":"topleft"}]}],"limits":{"lat":[33.47899,33.572294],"lng":[-82.356367,-82.212312]},"fitBounds":[33.47899,-82.356367,33.572294,-82.212312,[]]},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-f92dcd926a13d2880527" style="width:504px;height:504px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f92dcd926a13d2880527">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"createMapPane","args":["tmap401",401]},{"method":"addProviderTiles","args":["Esri.WorldGrayCanvas",null,"Esri.WorldGrayCanvas",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["OpenStreetMap",null,"OpenStreetMap",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["Esri.WorldTopoMap",null,"Esri.WorldTopoMap",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addPolygons","args":[[[[{"lng":[-82.247983,-82.225345,-82.212312,-82.239751,-82.274736,-82.311779,-82.339904,-82.352937,-82.356367,-82.347449,-82.31658,-82.28091,-82.247983],"lat":[33.4864349991314,33.514491999131,33.5431119991307,33.5597069991304,33.5694329991303,33.5722939991302,33.5619949991304,33.5396779991307,33.5202169991309,33.4967429991312,33.4818539991314,33.4789899991314,33.4864349991314]}]]],"X1","study_area",{"interactive":false,"className":"","pane":"tmap401","stroke":true,"color":"#666666","weight":1,"opacity":1,"fill":true,"fillOpacity":0,"dashArray":"none","smoothFactor":1,"noClip":false},null,null,"1",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["Esri.WorldGrayCanvas","OpenStreetMap","Esri.WorldTopoMap"],"study_area",{"collapsed":true,"autoZIndex":true,"position":"topleft"}]}],"limits":{"lat":[33.4789899991314,33.5722939991302],"lng":[-82.356367,-82.212312]},"fitBounds":[33.4789899991314,-82.356367,33.5722939991302,-82.212312,[]]},"evals":[],"jsHooks":[]}</script>
 
 ]
 
@@ -172,7 +174,7 @@ head(study_area)
 ## geometry type:  POLYGON
 ## dimension:      XY
 ## bbox:           xmin: 1254413 ymin: 1247861 xmax: 1267196 ymax: 1258095
-## projected CRS:  unnamed
+## proj4string:    +proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
 ## # A tibble: 1 x 2
 ##      id                                                                     geom
 ##   &lt;dbl&gt;                                                            &lt;POLYGON [m]&gt;
@@ -627,78 +629,23 @@ lc_data
 
 ```
 ## Coordinate Reference System:
-##   User input: unnamed 
+##   No user input
 ##   wkt:
-## BOUNDCRS[
-##     SOURCECRS[
-##         PROJCRS["unnamed",
-##             BASEGEOGCRS["GRS 1980(IUGG, 1980)",
-##                 DATUM["unknown",
-##                     ELLIPSOID["GRS80",6378137,298.257222101,
-##                         LENGTHUNIT["metre",1,
-##                             ID["EPSG",9001]]]],
-##                 PRIMEM["Greenwich",0,
-##                     ANGLEUNIT["degree",0.0174532925199433]]],
-##             CONVERSION["unnamed",
-##                 METHOD["Albers Equal Area",
-##                     ID["EPSG",9822]],
-##                 PARAMETER["Latitude of 1st standard parallel",29.5,
-##                     ANGLEUNIT["degree",0.0174532925199433],
-##                     ID["EPSG",8823]],
-##                 PARAMETER["Latitude of 2nd standard parallel",45.5,
-##                     ANGLEUNIT["degree",0.0174532925199433],
-##                     ID["EPSG",8824]],
-##                 PARAMETER["Latitude of false origin",23,
-##                     ANGLEUNIT["degree",0.0174532925199433],
-##                     ID["EPSG",8821]],
-##                 PARAMETER["Longitude of false origin",-96,
-##                     ANGLEUNIT["degree",0.0174532925199433],
-##                     ID["EPSG",8822]],
-##                 PARAMETER["Easting at false origin",0,
-##                     LENGTHUNIT["Meter",1],
-##                     ID["EPSG",8826]],
-##                 PARAMETER["Northing at false origin",0,
-##                     LENGTHUNIT["Meter",1],
-##                     ID["EPSG",8827]]],
-##             CS[Cartesian,2],
-##                 AXIS["(E)",east,
-##                     ORDER[1],
-##                     LENGTHUNIT["Meter",1]],
-##                 AXIS["(N)",north,
-##                     ORDER[2],
-##                     LENGTHUNIT["Meter",1]]]],
-##     TARGETCRS[
-##         GEOGCRS["WGS 84",
-##             DATUM["World Geodetic System 1984",
-##                 ELLIPSOID["WGS 84",6378137,298.257223563,
-##                     LENGTHUNIT["metre",1]]],
-##             PRIMEM["Greenwich",0,
-##                 ANGLEUNIT["degree",0.0174532925199433]],
-##             CS[ellipsoidal,2],
-##                 AXIS["latitude",north,
-##                     ORDER[1],
-##                     ANGLEUNIT["degree",0.0174532925199433]],
-##                 AXIS["longitude",east,
-##                     ORDER[2],
-##                     ANGLEUNIT["degree",0.0174532925199433]],
-##             ID["EPSG",4326]]],
-##     ABRIDGEDTRANSFORMATION["Transformation from GRS 1980(IUGG, 1980) to WGS84",
-##         METHOD["Position Vector transformation (geog2D domain)",
-##             ID["EPSG",9606]],
-##         PARAMETER["X-axis translation",0,
-##             ID["EPSG",8605]],
-##         PARAMETER["Y-axis translation",0,
-##             ID["EPSG",8606]],
-##         PARAMETER["Z-axis translation",0,
-##             ID["EPSG",8607]],
-##         PARAMETER["X-axis rotation",0,
-##             ID["EPSG",8608]],
-##         PARAMETER["Y-axis rotation",0,
-##             ID["EPSG",8609]],
-##         PARAMETER["Z-axis rotation",0,
-##             ID["EPSG",8610]],
-##         PARAMETER["Scale difference",1,
-##             ID["EPSG",8611]]]]
+## PROJCS["unnamed",
+##     GEOGCS["GRS 1980(IUGG, 1980)",
+##         DATUM["unknown",
+##             SPHEROID["GRS80",6378137,298.257222101],
+##             TOWGS84[0,0,0,0,0,0,0]],
+##         PRIMEM["Greenwich",0],
+##         UNIT["degree",0.0174532925199433]],
+##     PROJECTION["Albers_Conic_Equal_Area"],
+##     PARAMETER["standard_parallel_1",29.5],
+##     PARAMETER["standard_parallel_2",45.5],
+##     PARAMETER["latitude_of_center",23],
+##     PARAMETER["longitude_of_center",-96],
+##     PARAMETER["false_easting",0],
+##     PARAMETER["false_northing",0],
+##     UNIT["Meter",1]]
 ```
 ]
 
@@ -714,7 +661,7 @@ lc_data
 
 ```
 ## CRS arguments:
-##  +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0
+##  +proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0
 ## +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
 ```
 ]
@@ -754,6 +701,7 @@ Method is important here:
 # Reprojecting spatial data
 
 &lt;!-- ?resample --&gt;
+&lt;!-- MH: Maybe that would be a bit too much? --&gt;
 
 .pull-left[
 
@@ -833,11 +781,9 @@ class: inverse, left, bottom, clear, nonum
 
 # Break (30 minutes)
 
----
-# Break (30 minutes)
-
 &lt;!--We could ask for questions during the intro, and then during the break, we could look at them and prepare our answers.--&gt;
 &lt;!--we should use some online timer (or rmarkdown timer), visible to the participants--&gt;
+&lt;!-- MH: I assume there will be plenty of question coming up during the practical as well --&gt;
 
 
 ---
@@ -867,7 +813,6 @@ Department of Ecosystem Modelling, University of Goettingen, Germany
 
   - Composition: number and abundance of land-cover classes
   - Configuration: spatial arrangement of land-cover classes
-
 
 --
 - Designed for discrete patches of different land-cover classes
@@ -922,16 +867,13 @@ background-size: 15%
 # The R package *landscapemetrics*
 
 --
-- Based on *raster* package &lt;font size="3" color="grey"&gt; (Hijmans 2017) &lt;/font&gt;
-
+- Based on [*raster*](https://CRAN.R-project.org/package=raster) package &lt;font size="3" color="grey"&gt; (Hijmans 2017) &lt;/font&gt;
 
 --
 - Allows to calculate landscape metrics in transparent and reproducible workflow
 
-
 --
 - Tidy &lt;font size="3" color="grey"&gt; (sensu Wickham 2014) &lt;/font&gt; and type-stable output of all metric functions
-
 
 --
 - Includes many utility functions for e.g. plotting or sampling
@@ -1093,8 +1035,7 @@ class: left, middle, clear, nonum
 ##  First practical part
 
 Try to work through *Exercise_2_1.R*. 
-The exercise will teach you how to calculate single and multiple landscape metrics.
-Furthermore, you will learn how to integrate *landscapemetrics* into larger workflows using e.g. the *tidyverse* &lt;font size="3" color="grey"&gt; (Wickham et al. 2019) &lt;/font&gt;. 
+The exercise will teach you how to calculate single and multiple landscape metrics and how to integrate *landscapemetrics* into larger workflows.
 
 During the exercise there are part where you are supposed to type your own solution indicated by the following structure:
 
@@ -1162,7 +1103,7 @@ show_lsm(augusta_nlcd, labels = FALSE,
 - Samples metrics in a buffer area (sample plot) around sample points 
 
 --
-- Also able to use sample lines or  *sp*-SpatialPolygons &lt;font size="3" color="grey"&gt; (Pebesma &amp; Bivand, 2005) &lt;/font&gt;. 
+- Also able to use sample lines or polygons (as [*sp*](https://CRAN.R-project.org/package=sp)-objects; &lt;font size="3" color="grey"&gt; Pebesma &amp; Bivand, 2005) &lt;/font&gt;. 
 
 --
 - Metrics can be specified identical to `list_lsm()` and `calculate_lsm()`
@@ -1205,7 +1146,7 @@ sample_lsm(landscape = augusta_nlcd, y = sample_points,
 - Use matrix to specify moving window and focal cell
 
 --
-
+&lt;img src="index_files/figure-html/moving_window_plot-1.gif" style="display: block; margin: auto;" /&gt;
 
 ---
 # Moving window
@@ -1226,7 +1167,6 @@ window_result &lt;- window_lsm(lc_data, window = window, what = "lsm_l_np")
 --
 Fast building blocks to create your own metrics
 
---
 .pull-left[
 
 *raster* package &lt;font size="3" color="grey"&gt; (Hijmans 2017) &lt;/font&gt;
@@ -1249,7 +1189,6 @@ adj_raster(lc_data)
 ```
 ]
 
---
 .pull-right[
 
 *landscapemetrics* package
@@ -1302,7 +1241,7 @@ For a general overview of *landscapemetrics*, please see &lt;https://r-spatialec
 ---
 # Citation 
 
-- Questions, feature request bugs at [https://github.com/r-spatialecology/landscapemetrics/issues](https://github.com/r-spatialecology/landscapemetrics/issues)
+- Questions, feature requests or bugs at [https://github.com/r-spatialecology/landscapemetrics/issues](https://github.com/r-spatialecology/landscapemetrics/issues)
 
 
 
@@ -1369,7 +1308,7 @@ https://mhesselbarth.rbind.io/
 
 Hijmans, R.J., 2019. raster: Geographic data analysis and modeling. R package version 2.9-5. &lt;https://cran.r-project.org/package=raster&gt;.
 
-McGarigal, K., Cushman, S.A., Ene, E., 2012. FRAGSTATS v4: Spatial pattern analysis program for categorical and continuous maps. Computer software program produced by the authors at the University of Massachusetts, Amherst. &lt;http://www.umass.edu/landeco/research/fragstats/fragstats.html&gt;. University of Massachusetts, Amherst.
+&lt;!-- McGarigal, K., Cushman, S.A., Ene, E., 2012. FRAGSTATS v4: Spatial pattern analysis program for categorical and continuous maps. Computer software program produced by the authors at the University of Massachusetts, Amherst. &lt;http://www.umass.edu/landeco/research/fragstats/fragstats.html&gt;. University of Massachusetts, Amherst. --&gt;
 
 Pebesma, E.J., Bivand, R.S., 2005. Classes and methods for spatial data in R. R News 5(2).
 

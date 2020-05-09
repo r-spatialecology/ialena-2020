@@ -100,6 +100,8 @@ usethis::use_course("https://github.com/r-spatialecology/ialena-2020/raw/master/
     - You can ask us any questions related to spatial data analysis in R and the *landscapemetrics* package during the workshop using https://www.sli.do/
     - The event code is `IALENA`
 
+<!-- MH: Do we need one more slide already here talking quickly about the structure of the exercises? Like...they should download the scripts without solutions and try to fill them out etc... ?-->
+
 ---
 class: inverse, left, bottom, clear, nonum
 
@@ -133,6 +135,7 @@ Institute of Geoecology and Geoinformation, Adam Mickiewicz University, Poznan, 
 knitr::include_graphics("figs/raster-intro-plot-1.png", dpi = NA)
 ```
 
+<!-- MH: The source will always be the path of the last person that knitted the slides. Is that a problem? Not really, right? -->
 ```{r, message=FALSE}
 library(raster)
 elev_data <- raster("data/example_elevation.tif")
@@ -733,6 +736,7 @@ Method is important here:
 # Reprojecting spatial data
 
 <!-- ?resample -->
+<!-- MH: Maybe that would be a bit too much? -->
 
 .pull-left[
 ```{r, eval=FALSE}
@@ -825,11 +829,9 @@ class: inverse, left, bottom, clear, nonum
 
 # Break (30 minutes)
 
----
-# Break (30 minutes)
-
 <!--We could ask for questions during the intro, and then during the break, we could look at them and prepare our answers.-->
 <!--we should use some online timer (or rmarkdown timer), visible to the participants-->
+<!-- MH: I assume there will be plenty of question coming up during the practical as well -->
 
 
 ---
@@ -861,7 +863,6 @@ lc_data <- raster("data/example_lndscp.tif")
 
   - Composition: number and abundance of land-cover classes
   - Configuration: spatial arrangement of land-cover classes
-
 
 --
 - Designed for discrete patches of different land-cover classes
@@ -928,16 +929,13 @@ background-size: 15%
 # The R package *landscapemetrics*
 
 --
-- Based on *raster* package <font size="3" color="grey"> (Hijmans 2017) </font>
-
+- Based on [*raster*](https://CRAN.R-project.org/package=raster) package <font size="3" color="grey"> (Hijmans 2017) </font>
 
 --
 - Allows to calculate landscape metrics in transparent and reproducible workflow
 
-
 --
 - Tidy <font size="3" color="grey"> (sensu Wickham 2014) </font> and type-stable output of all metric functions
-
 
 --
 - Includes many utility functions for e.g. plotting or sampling
@@ -1078,8 +1076,7 @@ class: left, middle, clear, nonum
 ##  First practical part
 
 Try to work through *Exercise_2_1.R*. 
-The exercise will teach you how to calculate single and multiple landscape metrics.
-Furthermore, you will learn how to integrate *landscapemetrics* into larger workflows using e.g. the *tidyverse* <font size="3" color="grey"> (Wickham et al. 2019) </font>. 
+The exercise will teach you how to calculate single and multiple landscape metrics and how to integrate *landscapemetrics* into larger workflows.
 
 During the exercise there are part where you are supposed to type your own solution indicated by the following structure:
 
@@ -1148,7 +1145,7 @@ show_lsm(augusta_nlcd, labels = FALSE,
 - Samples metrics in a buffer area (sample plot) around sample points 
 
 --
-- Also able to use sample lines or  *sp*-SpatialPolygons <font size="3" color="grey"> (Pebesma & Bivand, 2005) </font>. 
+- Also able to use sample lines or polygons (as [*sp*](https://CRAN.R-project.org/package=sp)-objects; <font size="3" color="grey"> Pebesma & Bivand, 2005) </font>. 
 
 --
 - Metrics can be specified identical to `list_lsm()` and `calculate_lsm()`
@@ -1214,7 +1211,7 @@ sample_lsm(landscape = augusta_nlcd, y = sample_points,
 - Use matrix to specify moving window and focal cell
 
 --
-```{r moving_window_plot, echo=FALSE, purl=FALSE, cache=TRUE}
+```{r moving_window_plot, echo=FALSE, cache=TRUE}
 focal_i <- cbind(ras_df[ ,c(1, 2)], id = 1:nrow(ras_df))
 
 focal_poly <- purrr::map_dfr(1:nrow(focal_i), function(i) {
@@ -1276,7 +1273,6 @@ ggplot(data = raster::as.data.frame(window_result[[1]]$lsm_l_np, xy = TRUE)) +
 --
 Fast building blocks to create your own metrics
 
---
 .pull-left[
 
 *raster* package <font size="3" color="grey"> (Hijmans 2017) </font>
@@ -1290,7 +1286,6 @@ adj_raster(lc_data)
 ```
 ]
 
---
 .pull-right[
 
 *landscapemetrics* package
@@ -1332,7 +1327,7 @@ For a general overview of *landscapemetrics*, please see <https://r-spatialecolo
 ---
 # Citation 
 
-- Questions, feature request bugs at [https://github.com/r-spatialecology/landscapemetrics/issues](https://github.com/r-spatialecology/landscapemetrics/issues)
+- Questions, feature requests or bugs at [https://github.com/r-spatialecology/landscapemetrics/issues](https://github.com/r-spatialecology/landscapemetrics/issues)
 
 
 ```{r citation}
@@ -1380,7 +1375,7 @@ https://mhesselbarth.rbind.io/
 
 Hijmans, R.J., 2019. raster: Geographic data analysis and modeling. R package version 2.9-5. <https://cran.r-project.org/package=raster>.
 
-McGarigal, K., Cushman, S.A., Ene, E., 2012. FRAGSTATS v4: Spatial pattern analysis program for categorical and continuous maps. Computer software program produced by the authors at the University of Massachusetts, Amherst. <http://www.umass.edu/landeco/research/fragstats/fragstats.html>. University of Massachusetts, Amherst.
+<!-- McGarigal, K., Cushman, S.A., Ene, E., 2012. FRAGSTATS v4: Spatial pattern analysis program for categorical and continuous maps. Computer software program produced by the authors at the University of Massachusetts, Amherst. <http://www.umass.edu/landeco/research/fragstats/fragstats.html>. University of Massachusetts, Amherst. -->
 
 Pebesma, E.J., Bivand, R.S., 2005. Classes and methods for spatial data in R. R News 5(2).
 
