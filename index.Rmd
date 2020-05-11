@@ -57,6 +57,25 @@ options(tibble.print_max = 5)
 ```
 
 ---
+# Rules of the workshop
+
+- Please set your microphones to **mute**
+- We encourage participants to use their **real names and a profile picture**
+- Participants will be split into **random groups during the practical parts**. 
+Feel free to discuss your problems and solutions with your group
+- **The workshop will be recorded** and the video will be publicly posted afterward
+
+```{r zoom, purl=FALSE, echo=FALSE}
+knitr::include_graphics("figs/zoom.png")
+```
+
+- There are **two ways to ask questions** during the workshop:
+    1. **The zoom chat** - this is a place to ask questions related to the currently discussed content and questions related to the practicals. 
+    We will try to answer these questions as soon as possible.
+    2. **The slido portal** - https://www.sli.do/IALENA - this is a place to ask questions related to overall spatial data analysis in R and landscape ecology with R.
+    We will answer these questions at the end of the workshop
+    
+---
 # Prerequisites
 
 **Packages:**
@@ -84,20 +103,19 @@ usethis::use_course("https://github.com/r-spatialecology/ialena-2020/raw/master/
 # Workshop agenda
 
 - **Part I** (90 minutes): Introduction to the spatial data analysis in R:
-    - Spatial data representations
-    - Spatial data reading
+    - Spatial data representations and reading
+    - *First practical part*
     - Making maps in R
-    - Vector-raster interactions
-    - Reprojecting spatial data
+    - R spatial processing power
+    - *Second practical part*
 - **Break** (30 minutes)
 - **Part II** (90 minutes): *landscapemetrics*: An open-source R tool to calculate landscape metrics:
-    - Introdution to landscape metrics
-    - How to calculate landscape metrics in R
-    - Sample metrics in buffer areas
-    - Moving window
-    - Building blocks
+    - Introdution to landscape metrics and how to calculate landscape metrics in R
+    - *First practical part*
+    - Sample metrics in buffer areas, moving window, and building blocks
+    - *Second practical part*
 - **Q and A**:
-    - You can ask us any questions related to spatial data analysis in R and the *landscapemetrics* package during the workshop using https://www.sli.do/
+    - You can ask us any questions related to spatial data analysis in R and the *landscapemetrics* package during the workshop using https://www.sli.do/IALENA
     - The event code is `IALENA`
 
 <!-- MH: Do we need one more slide already here talking quickly about the structure of the exercises? Like...they should download the scripts without solutions and try to fill them out etc... ?-->
