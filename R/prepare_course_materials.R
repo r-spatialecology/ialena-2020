@@ -9,9 +9,9 @@ purl(slides_rmd,
      documentation = 0)
 
 # creates pdf -------------------------------------------------------------
-pagedown::chrome_print("index.html",
-                       output = "slides/slides.pdf",
-                       wait = 10)
+# pagedown::chrome_print("index.html",
+#                        output = "slides/slides.pdf",
+#                        wait = 10)
 
 # creates a workshop zip --------------------------------------------------
 exercises = dir("exercises", full.names = TRUE)
@@ -21,7 +21,7 @@ file.remove("ialena-2020.zip")
 zip("ialena-2020.zip",
     files = c("ialena-2020.Rproj",
               "slides/slides_code.R",
-              "slides/slides.pdf",
+              # "slides/slides.pdf",
               exercises,
               data),
     extras = "")

@@ -1236,7 +1236,7 @@ sample_lsm(landscape = augusta_nlcd, y = sample_points,
 - Use matrix to specify moving window and focal cell
 
 --
-```{r moving_window_plot, echo=FALSE, cache=TRUE}
+```{r moving_window_plot, echo=FALSE, cache=TRUE, purl=FALSE}
 focal_i <- cbind(ras_df[ ,c(1, 2)], id = 1:nrow(ras_df))
 
 focal_poly <- purrr::map_dfr(1:nrow(focal_i), function(i) {
