@@ -28,6 +28,7 @@ Run the code below in R to install all of the required R packages.
 install.packages("landscapemetrics")
 install.packages("usethis")
 install.packages("remotes")
+remotes::install_github("mtennekes/tmaptools", upgrade = TRUE)
 remotes::install_github("mtennekes/tmap", upgrade = TRUE)
 remotes::install_github("rspatial/raster", upgrade = TRUE)
 ```

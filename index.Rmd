@@ -85,6 +85,7 @@ knitr::include_graphics("figs/zoom.png")
 install.packages("landscapemetrics")
 install.packages("usethis")
 install.packages("remotes")
+remotes::install_github("mtennekes/tmaptools", upgrade = TRUE)
 remotes::install_github("mtennekes/tmap", upgrade = TRUE)
 remotes::install_github("rspatial/raster", upgrade = TRUE)
 ```
@@ -1026,7 +1027,8 @@ Import and check data
 
 ```{r check_lsm}
 # install.packages("landscapemetrics")
-
+library(landscapemetrics)
+library(dplyr)
 lc_data <- raster("data/example_lndscp.tif") 
 check_landscape(lc_data)
 ```
