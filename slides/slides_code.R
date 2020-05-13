@@ -167,7 +167,7 @@ elev_data2 <- projectRaster(elev_data, #<<
 # install.packages("landscapemetrics")
 library(landscapemetrics)
 library(dplyr)
-lc_data <- raster("data/example_lndscp.tif") 
+lc_data <- raster("data/toy_landscape.tif") 
 check_landscape(lc_data)
 
 list_lsm()

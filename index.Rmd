@@ -852,7 +852,8 @@ class: inverse, left, bottom, clear, nonum
 # Break (30 minutes)
 
 .large[
-- You can ask us any questions related to spatial data analysis in R and the *landscapemetrics* package during the workshop using https://www.sli.do/
+- You can ask us any questions related to spatial data analysis in R and the *landscapemetrics* package during the workshop using https://www.sli.do/IALENA
+
 - The event code is `IALENA`
  ]
 
@@ -877,11 +878,12 @@ Maximilian H.K. Hesselbarth
 
 Department of Ecosystem Modelling, University of Goettingen, Germany
 
+
 ---
 # Introdution to landscape metrics
 
-```{r load_data_part_2, echo=FALSE, purl=FALSE, purl=FALSE}
-lc_data <- raster("data/example_lndscp.tif") 
+```{r load_data_part_2, echo = FALSE, purl = FALSE}
+lc_data <- raster("data/toy_landscape.tif") 
 ```
 
 --
@@ -897,17 +899,17 @@ lc_data <- raster("data/example_lndscp.tif")
 
 --
 .pull-left[
-```{r aerial_lsm, out.width = "75%", out.height = "75%", echo=FALSE, purl=FALSE, purl=FALSE}
+```{r aerial_lsm, out.width = "75%", out.height = "75%", echo = FALSE, purl = FALSE}
 knitr::include_graphics("figs/aerial_lsm.png")
 ```
 ]
 
 .pull-right[
-```{r example_lsm, out.width = "75%", out.height = "75%", echo=FALSE, purl=FALSE, purl=FALSE}
+```{r example_lsm, out.width = "75%", out.height = "75%", echo = FALSE, purl = FALSE}
 ras_df <- as.data.frame(lc_data, xy = TRUE)
 
 ggplot(data = ras_df) + 
-  geom_raster(aes(x = x, y = y, fill = as.factor(example_lndscp))) + 
+  geom_raster(aes(x = x, y = y, fill = as.factor(toy_landscape))) + 
   scale_fill_manual(values = c("#98D2E1", "#EAB8BD", "#9B9555")) +
   guides(fill = FALSE) +
   coord_equal() + 
@@ -918,32 +920,6 @@ ggplot(data = ras_df) +
 
 </center>
 
-<!-- --- -->
-<!-- # Why a new R package was needed -->
-
-<!-- -- -->
-<!-- - *FRAGSTATS*  <font size="3" color="grey"> (McGarigal et al., 2012) </font>  -->
-
-<!--   - <font color = "#63C03C"> Comprehensive collection of metrics </font>  -->
-<!--   - <font color = "#64AAC5"> Only on Windows, not open source </font>  -->
-<!--   - <font color = "#64AAC5"> Need to import/export data </font>  -->
-<!--   - <font color = "#64AAC5"> Hard to integrate into larger workflows </font>  -->
-
-
-<!-- -- -->
-<!-- - *SDMTools* (R package) <font size="3" color="grey"> (VanDerWal et al., 2019) </font>  -->
-
-<!--   - <font color = "#63C03C"> Multiplatform, open source </font> -->
-<!--   - <font color = "#64AAC5"> Only set of metrics, no metrics on landscape level </font>  -->
-<!--   - <font color = "#64AAC5"> Hard to integrate into larger workflows </font>  -->
-<!--   - <font color = "#64AAC5"> Not on CRAN anymore (archived on 12.01.2020) </font>  -->
-
-
-<!-- -- -->
-<!-- - Several GIS add-ons (e.g. *r.li* <font size="3" color="grey"> (Porta et al., 2017) </font>)) -->
-
-<!--   - <font color = "#63C03C"> Multiplatform, open source </font> -->
-<!--   - <font color = "#64AAC5"> Need to use GIS software </font> -->
 
 ---
 layout: false
@@ -970,7 +946,7 @@ background-size: 15%
 <center>
 
 --
-```{r levels_lsm, fig.hold = "hold", fig.align = "default", out.width="30%", echo=FALSE, purl=FALSE, purl=FALSE}
+```{r levels_lsm, fig.hold = "hold", fig.align = "default", out.width = "30%", echo = FALSE, purl = FALSE}
 lsm_patch <- get_patches(lc_data, class = 1)[[1]] %>% 
   as.data.frame(xy = TRUE) %>% 
   mutate(level = "patch") %>% 
@@ -988,10 +964,10 @@ lsm_patch <- get_patches(lc_data, class = 1)[[1]] %>%
           text = element_text(family = "Metropolis"))
 
 lsm_class <- ras_df %>% 
-  mutate(example_lndscp = case_when(example_lndscp == 1 ~ 1), 
+  mutate(toy_landscape = case_when(toy_landscape == 1 ~ 1), 
          level = "class") %>% 
   ggplot() + 
-    geom_raster(aes(x = x, y = y, fill = as.factor(example_lndscp))) + 
+    geom_raster(aes(x = x, y = y, fill = as.factor(toy_landscape))) + 
     scale_fill_manual(values = "#98D2E1", na.value = "grey75") +
     guides(fill = FALSE) +
     labs(title = "Class level") +
@@ -1003,7 +979,7 @@ lsm_class <- ras_df %>%
 lsm_landscape <- ras_df %>% 
   mutate(level = "landscape") %>% 
   ggplot() + 
-    geom_raster(aes(x = x, y = y, fill = as.factor(example_lndscp))) + 
+    geom_raster(aes(x = x, y = y, fill = as.factor(toy_landscape))) + 
     scale_fill_manual(values = c("#98D2E1", "#EAB8BD", "#9B9555")) +
     guides(fill = FALSE) +
     labs(title = "Landscape level") +
@@ -1019,6 +995,7 @@ lsm_landscape
 
 </center>
 
+
 ---
 # Getting ready to use *landscapemetrics*
 
@@ -1029,7 +1006,7 @@ Import and check data
 # install.packages("landscapemetrics")
 library(landscapemetrics)
 library(dplyr)
-lc_data <- raster("data/example_lndscp.tif") 
+lc_data <- raster("data/toy_landscape.tif") 
 check_landscape(lc_data)
 ```
 
@@ -1039,6 +1016,7 @@ List available metrics
 ```{r list_metrics}
 list_lsm()
 ```
+
 
 ---
 # How to calculate landscape metrics
@@ -1066,6 +1044,7 @@ bind_rows(class_mean, lsm_total)
 ```
 ]
 
+
 ---
 # Easy integration into larger workflows
 
@@ -1085,6 +1064,7 @@ sample(x = c(1, 2, 3), prob = c(0.5, 0.25, 0.25), size = 2500, replace = TRUE) %
   arrange(-n)
 ```
 
+
 ---
 # Calculation of multiple metrics
 
@@ -1097,6 +1077,7 @@ calculate_lsm(landscape = lc_data,
               classes_max = 5)
 ```
 
+
 ---
 class: left, middle, clear, nonum
 
@@ -1107,7 +1088,7 @@ The exercise will teach you how to calculate single and multiple landscape metri
 
 During the exercise there are part where you are supposed to type your own solution indicated by the following structure:
 
-```{r exercise_code_1, eval = FALSE, purl=FALSE}
+```{r exercise_code_1, eval = FALSE, purl = FALSE}
 # /Start Code/ #
 
 print("Hello World") # This would be your code contribution
@@ -1119,6 +1100,7 @@ In case you run into problems or have any questions, please contact us at any ti
 
 For a general overview of *landscapemetrics*, please see <https://r-spatialecology.github.io/landscapemetrics>.
 
+
 ---
 # Visualize patches
 
@@ -1128,6 +1110,7 @@ Easily visualize patches of several classes or the whole landscape
 ```{r, show_patches}
 show_patches(augusta_nlcd, labels = FALSE, class = 42)
 ```
+
 
 ---
 # Further visualization
@@ -1142,7 +1125,7 @@ show_cores(augusta_nlcd,
            labels = FALSE, class = 42)
 ```
 
-```{r, show_cores, echo=FALSE, purl=FALSE}
+```{r, show_cores, echo = FALSE, cache = TRUE, purl = FALSE}
 show_cores(augusta_nlcd, 
            labels = FALSE, class = 42, edge_depth = 5)
 ```
@@ -1158,12 +1141,13 @@ show_lsm(augusta_nlcd, labels = FALSE,
          class = 42, what = "lsm_p_area")
 ```
 
-```{r, show_lsm, echo=FALSE, purl=FALSE, cache=TRUE}
+```{r, show_lsm, echo = FALSE, cache = TRUE, purl = FALSE}
 show_lsm(augusta_nlcd, labels = FALSE, 
          class = 42, what = "lsm_p_area") + 
   theme(legend.position = "none")
 ```
 ]
+
 
 ---
 # Sample metrics in buffer areas
@@ -1178,7 +1162,7 @@ show_lsm(augusta_nlcd, labels = FALSE,
 - Metrics can be specified identical to `list_lsm()` and `calculate_lsm()`
 
 --
-```{r, plot_sample_points, echo=FALSE, purl=FALSE}
+```{r, plot_sample_points, echo = FALSE, cache = TRUE, purl = FALSE}
 sample_points <- matrix(c(1253709, 1249455, 
                           1261857, 1256055,
                           1252009, 1257055), ncol = 2, byrow = TRUE)
@@ -1213,6 +1197,7 @@ ggplot(data = raster::as.data.frame(augusta_nlcd, xy = TRUE)) +
   theme_void()
 ```
 
+
 ---
 # Sample metrics in buffer areas
 
@@ -1228,6 +1213,7 @@ sample_lsm(landscape = augusta_nlcd, y = sample_points,
            size = 1000, what = "lsm_l_np")
 ```
 
+
 ---
 # Moving window
 
@@ -1238,7 +1224,7 @@ sample_lsm(landscape = augusta_nlcd, y = sample_points,
 - Use matrix to specify moving window and focal cell
 
 --
-```{r moving_window_plot, echo=FALSE, cache=TRUE, purl=FALSE}
+```{r moving_window_plot, echo = FALSE, cache = TRUE, purl = FALSE}
 focal_i <- cbind(ras_df[ ,c(1, 2)], id = 1:nrow(ras_df))
 
 focal_poly <- purrr::map_dfr(1:nrow(focal_i), function(i) {
@@ -1259,7 +1245,7 @@ focal_i <- focal_i[1:250, ]
 focal_poly <- focal_poly[focal_poly$id %in% 1:250, ]
 
 gg_window <- ggplot(data = ras_df) + 
-  geom_raster(aes(x = x, y = y, fill = as.factor(example_lndscp))) + 
+  geom_raster(aes(x = x, y = y, fill = as.factor(toy_landscape))) + 
   geom_point(data = focal_i, aes(x = x, y = y), pch = 1) +
   geom_polygon(data = focal_poly, aes(x = x, y = y),
                fill = NA, col = "black") +
@@ -1274,17 +1260,18 @@ gg_window <- ggplot(data = ras_df) +
 gganimate::animate(gg_window, nframes = 250, fps = 5, duration = 50)
 ```
 
+
 ---
 # Moving window
 
 Results in list with *raster* objects
 
-```{r moving_window, cache=TRUE}
+```{r moving_window, cache = TRUE}
 window <- matrix(1, nrow = 5, ncol = 5)
 window_result <- window_lsm(lc_data, window = window, what = "lsm_l_np")
 ```
 
-```{r moving_window_result, echo=FALSE, purl=FALSE, out.width = "40%", cache=TRUE}
+```{r moving_window_result, echo = FALSE, out.width = "40%", cache = TRUE, purl=FALSE}
 ggplot(data = raster::as.data.frame(window_result[[1]]$lsm_l_np, xy = TRUE)) + 
   geom_raster(aes(x = x, y = y, fill = factor(layer))) + 
   scale_fill_viridis_d(option = "A") +
@@ -1293,6 +1280,7 @@ ggplot(data = raster::as.data.frame(window_result[[1]]$lsm_l_np, xy = TRUE)) +
   theme(legend.position = "none")
 
 ```
+
 
 ---
 # Building blocks
@@ -1323,13 +1311,14 @@ get_adjacencies(lc_data)
 ]
 
 --
-```{r bench, eval = FALSE, purl=FALSE}
+```{r bench, eval = FALSE, purl = FALSE}
 # A tibble: 2 x 3 
 expression                      mean        mem_alloc
 <chr>                           <bch:tm>    <bch:byt>
 1 adj_raster(landscape)         8900 μs     1470 KB
 2 get_adjacencies(landscape)    562 μs      6 KB
 ```
+
 
 ---
 ##  Second practical part
@@ -1339,7 +1328,7 @@ The exercise will teach you how to use all utility functions of the *landscapeme
 
 During the exercise there are parts where you are supposed to code your own solution indicated by the following structure:
 
-```{r exercise_code_2, eval = FALSE, purl=FALSE}
+```{r exercise_code_2, eval = FALSE, purl = FALSE}
 # /Start Code/ #
 
 print("Hello World") # This would be your code contribution
@@ -1351,6 +1340,7 @@ In case you run into problems or have any questions, please contact us at any ti
 
 For a general overview of *landscapemetrics*, please see <https://r-spatialecology.github.io/landscapemetrics>.
 
+
 ---
 # Citation 
 
@@ -1360,6 +1350,7 @@ For a general overview of *landscapemetrics*, please see <https://r-spatialecolo
 ```{r citation}
 citation("landscapemetrics")
 ```
+
 
 ---
 class: left, top, clear
