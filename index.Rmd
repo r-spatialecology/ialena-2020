@@ -82,9 +82,8 @@ knitr::include_graphics("figs/zoom.png")
 - You can install the packages used in the workshop as follows:
 
 ```{r, eval=FALSE, purl=FALSE}
-install.packages("landscapemetrics")
-install.packages("usethis")
-install.packages("remotes")
+install.packages(c("landscapemetrics", "sf", "dplyr", "spData", "usethis", "remotes")
+install.packages("spDataLarge", repos = "https://nowosad.github.io/drat/", type = "source")
 remotes::install_github("mtennekes/tmaptools", upgrade = TRUE)
 remotes::install_github("mtennekes/tmap", upgrade = TRUE)
 remotes::install_github("rspatial/raster", upgrade = TRUE)
