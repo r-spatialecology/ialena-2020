@@ -376,9 +376,8 @@ summary {
 <div id="r-packages" class="section level3">
 <h3>R packages</h3>
 <p>Run the code below in R to install all of the required R packages.</p>
-<pre class="r"><code>install.packages(&quot;landscapemetrics&quot;)
-install.packages(&quot;usethis&quot;)
-install.packages(&quot;remotes&quot;)
+<pre class="r"><code>install.packages(c(&quot;landscapemetrics&quot;, &quot;sf&quot;, &quot;dplyr&quot;, &quot;spData&quot;, &quot;usethis&quot;, &quot;remotes&quot;)
+install.packages(&quot;spDataLarge&quot;, repos = &quot;https://nowosad.github.io/drat/&quot;, type = &quot;source&quot;)
 remotes::install_github(&quot;mtennekes/tmaptools&quot;, upgrade = TRUE)
 remotes::install_github(&quot;mtennekes/tmap&quot;, upgrade = TRUE)
 remotes::install_github(&quot;rspatial/raster&quot;, upgrade = TRUE)</code></pre>

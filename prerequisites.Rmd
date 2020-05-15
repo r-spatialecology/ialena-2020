@@ -25,9 +25,8 @@ http://www.r-project.org/ and https://www.rstudio.com/products/rstudio/download/
 Run the code below in R to install all of the required R packages.
 
 ```r
-install.packages("landscapemetrics")
-install.packages("usethis")
-install.packages("remotes")
+install.packages(c("landscapemetrics", "sf", "dplyr", "spData", "usethis", "remotes")
+install.packages("spDataLarge", repos = "https://nowosad.github.io/drat/", type = "source")
 remotes::install_github("mtennekes/tmaptools", upgrade = TRUE)
 remotes::install_github("mtennekes/tmap", upgrade = TRUE)
 remotes::install_github("rspatial/raster", upgrade = TRUE)
