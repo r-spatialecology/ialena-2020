@@ -42,7 +42,7 @@ print("Hello World") # This would be your code contribution
 
 library(landscapemetrics)
 library(raster)
-library(tidyverse)
+library(dplyr)
 
 #### Visualise landscape #### 
 
